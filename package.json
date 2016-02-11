@@ -2,7 +2,7 @@
   "name": "leadconduit-generic",
   "description": "LeadConduit generic integration",
   "author": "Alex Wolfe <alex@activeprospect.com>",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "license": "CC-BY-NC-ND-4.0",
   "repository": {

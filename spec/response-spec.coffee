@@ -129,10 +129,12 @@ describe 'Response', ->
 
     it 'should find search term with case insensitive match', ->
       assert.deepEqual response(search_term: 'foo', {}, json(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(search_term: 'FOO', {}, json(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should find search term with case insensitive match at path', ->
       assert.deepEqual response(search_term: 'foo', search_path: 'baz', {}, json(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(search_term: 'FOO', search_path: 'baz', {}, json(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should not find match', ->
@@ -392,10 +394,12 @@ describe 'Response', ->
 
     it 'should find search term with case insensitive match', ->
       assert.deepEqual response(search_term: 'foo', {}, html('FOO')), outcome: 'success'
+      assert.deepEqual response(search_term: 'FOO', {}, html('foo')), outcome: 'success'
 
 
     it 'should find search term with case insensitive match at path', ->
       assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>FOO</div>')), outcome: 'success'
+      assert.deepEqual response(search_term: 'FOO', search_path: 'div', {}, html('<div>foo</div>')), outcome: 'success'
 
 
     it 'should not find match', ->
@@ -600,10 +604,12 @@ describe 'Response', ->
 
     it 'should find search term with case insensitive match', ->
       assert.deepEqual response(search_term: 'foo', {}, xml(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(search_term: 'FOO', {}, xml(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should find search term with case insensitive match at path', ->
       assert.deepEqual response(search_term: 'foo', search_path: '/baz', {}, xml(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(search_term: 'FOO', search_path: '/baz', {}, xml(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should not find match', ->

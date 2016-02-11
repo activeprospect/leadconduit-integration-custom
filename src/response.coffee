@@ -151,7 +151,7 @@ ensureArray = (val) ->
 
 
 toRegex = (expression) ->
-  expression = expression?.trim()
+  expression = expression?.trim().toLowerCase()
   return regexParser('.*') unless expression
   try
     regexParser(expression)

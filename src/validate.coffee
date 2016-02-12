@@ -27,10 +27,10 @@ module.exports =
 
 
   outcome: (vars) ->
-    return unless vars.search_outcome
+    return unless vars.outcome_on_match
 
-    unless vars.search_outcome == 'success' or vars.search_outcome == 'failure'
-      "Search outcome must be 'success' or 'failure'"
+    unless vars.outcome_on_match == 'success' or vars.outcome_on_match == 'failure'
+      "Outcome on match must be 'success' or 'failure'"
 
 
 

@@ -75,11 +75,11 @@ to the lead data so that it can be used later the flow.
 
 By default, all integrations treat the outcome of the integration as `success`. You can alter this behavior using the following mappings:
  
- * `search_term` &mdash; A string or regular expression to match the body of the response. Unless the term is found, the 
+ * `outcome_search_term` &mdash; A string or regular expression to match the body of the response. Unless the term is found, the 
     outcome will be `failure`. The default term is `.*`, which matches any response body.
- * `search_outcome` &mdash; Specifies the outcome to set when the search term is found. The default is "success". Setting
+ * `outcome_on_match` &mdash; Specifies the outcome to set when the search term is found. The default is "success". Setting
     this variable to "failure" will produce an outcome of `failure` when the search term is found.
- * `search_path` &mdash; If you wish to look only at a certain part of the response body when evaluating the `search_term`,
+ * `outcome_search_path` &mdash; If you wish to look only at a certain part of the response body when evaluating the `outcome_search_term`,
     this variable can be used. The value you put in this variable depends on the type of response you expect the target
     server to return. See the _Search Path_ section below.
        
@@ -88,12 +88,12 @@ then the search term will be used on the entire response body as though it were 
     
 #### Search path
     
-When a response is given in JSON, XML, or HTML, the `search_path` can be used to limit the scope of the request body being 
-evaluated against the `search_term`. Generally, it's OK to skip using this variable. You will know that you need it if 
-your `search_term` is being found when it shouldn't be due to the fact that it appears somewhere in the response body 
+When a response is given in JSON, XML, or HTML, the `outcome_search_path` can be used to limit the scope of the request body being 
+evaluated against the `outcome_search_term`. Generally, it's OK to skip using this variable. You will know that you need it if 
+your `outcome_search_term` is being found when it shouldn't be due to the fact that it appears somewhere in the response body 
 other than where you expect it.
 
-For example, assume the `search_term` is "true". Now consider the below JSON response. Notice that the term "true" appears
+For example, assume the `outcome_search_term` is "true". Now consider the below JSON response. Notice that the term "true" appears
 twice in the JSON document. You need to focus the search term on the "success" key of the document in order to correctly
 parse the outcome:
 
@@ -104,8 +104,8 @@ parse the outcome:
 }
 ```
 
-In this example, it's best to set `search_path` to "success". Another way to accomplish this same goal is by using 
-`"success": true` for your search term. Though, using the `search_path` is preferable.
+In this example, it's best to set `outcome_search_path` to "success". Another way to accomplish this same goal is by using 
+`"success": true` for your search term. Though, using the `outcome_search_path` is preferable.
 
 Depending on the response type given by the server, you can use different search paths. 
 
@@ -114,19 +114,19 @@ Depending on the response type given by the server, you can use different search
  * HTML &mdash; Use a CSS selector such as `div.content h1`
 
 Search paths only work with the structured response formats listed above. If a response body cannot be parsed as one
-of those content types, the `search_path` variable is ignored.
+of those content types, the `outcome_search_path` variable is ignored.
 
     
 ### Parsing failure reason
 
-When the outcome is `failure`, the reason for the failure can be parsed from the response body. Use the `reason_selector`
+When the outcome is `failure`, the reason for the failure can be parsed from the response body. Use the `reason_path`
 variable to set the path to the reason in a JSON, XML, or HTML document.
 
-Depending on the response type given by the server, you can use different reason selectors. 
+Depending on the response type given by the server, you can use different `reason_path` values. 
 
  * JSON &mdash; Use a dot-delimited path such as `submission.reason`
  * XML &mdash; Use an XPath location such as `/submission/reason/text()`
  * HTML &mdash; Use a CSS selector such as `div.content h2.error`
 
 If you would like to set a default failure reason, you can do so using the `default_reason` variable. This variable is 
-ignored if `reason_selector` matches something in the document. 
+ignored if `reason_path` matches something in the document. 

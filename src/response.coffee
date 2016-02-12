@@ -10,10 +10,10 @@ response = (vars, req, res) ->
     # HTTP error code
     return outcome: 'error', reason: 'Server error'
 
-  searchTerm = toRegex(vars.search_term)
-  searchOutcome = vars.search_outcome?.trim().toLowerCase() ? 'success'
-  searchPath = vars.search_path?.trim()
-  reasonSelector = vars.reason_selector?.trim()
+  searchTerm = toRegex(vars.outcome_search_term)
+  searchOutcome = vars.outcome_on_match?.trim().toLowerCase() ? 'success'
+  searchPath = vars.outcome_search_path?.trim()
+  reasonSelector = vars.reason_path?.trim()
 
   # parse the document
   doc = toDoc(res.body, res.headers['Content-Type'])
@@ -21,7 +21,7 @@ response = (vars, req, res) ->
   # narrow the search scope
   searchIn =
     if searchPath
-      # limit search_term to this path in the document
+      # limit outcome_search_term to this path in the document
 
       if _.isFunction(doc.xpath)
         # this is an XML document

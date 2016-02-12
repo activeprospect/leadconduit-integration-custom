@@ -11,6 +11,9 @@ describe 'Outbound Form POST request', ->
       form_field:
         fname: 'Mel'
         lname: 'Gibson'
+      header:
+        Whatever: 'foo'
+        Bar: 'baz'
 
     assert.equal integration.request(vars).url, 'http://foo.bar'
     assert.equal integration.request(vars).method, 'POST'
@@ -19,6 +22,8 @@ describe 'Outbound Form POST request', ->
       'Content-Type': 'application/x-www-form-urlencoded'
       'Content-Length': 22
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;0.6,text/plain;q=0.5'
+      'Whatever': 'foo'
+      'Bar': 'baz'
 
 
   it 'should support simple dot-notation', ->
@@ -91,3 +96,15 @@ describe 'Outbound Form POST validation', ->
 
   it 'should pass validation', ->
     assert.isUndefined integration.validate(url: 'http://foo')
+
+
+  it 'should not allow content-type header', ->
+    assert.equal integration.validate(url: 'http://foo', header: { 'Content-Type': 'foo' }), 'Content-Type header is not allowed'
+
+
+  it 'should not allow content-length header', ->
+    assert.equal integration.validate(url: 'http://foo', header: { 'Content-Length': '10' }), 'Content-Length header is not allowed'
+
+
+  it 'should not allow accept header', ->
+    assert.equal integration.validate(url: 'http://foo', header: { 'Accept': 'text/whatever' }), 'Accept header is not allowed'

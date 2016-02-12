@@ -5,6 +5,7 @@ response = require('./response')
 validate = require('./validate')
 normalize = require('./normalize')
 variables = require('./variables')
+headers = require('./headers')
 
 
 
@@ -25,7 +26,7 @@ request = (vars) ->
 
   url: vars.url
   method: 'POST'
-  headers:
+  headers: _.merge headers(vars.header),
     'Content-Type': 'application/x-www-form-urlencoded'
     'Content-Length': body.length
     'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;0.6,text/plain;q=0.5'
@@ -39,7 +40,7 @@ request = (vars) ->
 request.variables = ->
   [
     { name: 'url', description: 'Server URL', type: 'string', required: true }
-    { name: 'form_field.*', type: 'wildcard', required: false }
+    { name: 'form_field.*', description: 'Form field name', type: 'wildcard', required: false }
   ].concat(variables)
 
 
@@ -52,4 +53,4 @@ module.exports =
   request: request
   response: response
   validate: (vars) ->
-    validate.url(vars) ? validate.outcome(vars)
+    validate.url(vars) ? validate.outcome(vars) ? validate.headers(vars)

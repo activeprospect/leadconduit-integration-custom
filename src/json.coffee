@@ -18,7 +18,7 @@ request = (vars) ->
   url: vars.url
   method: vars.method?.toUpperCase() ? 'POST'
   headers: _.merge headers(vars.header),
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json; charset=utf-8'
     'Content-Length': body.length
     'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;0.6,text/plain;q=0.5'
   body: body

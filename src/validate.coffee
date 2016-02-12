@@ -1,3 +1,4 @@
+_ = require('lodash')
 u = require('url')
 
 isValidUrl = (url) ->
@@ -31,6 +32,17 @@ module.exports =
 
     unless vars.outcome_on_match == 'success' or vars.outcome_on_match == 'failure'
       "Outcome on match must be 'success' or 'failure'"
+
+
+  headers: (vars) ->
+    return unless _.isPlainObject(vars.header)
+
+    headers = _.mapKeys vars.header, (v, k) ->
+        k.toLowerCase()
+
+    for disallowedHeader in ['Content-Type', 'Content-Length', 'Accept']
+      return "#{disallowedHeader} header is not allowed" if headers[disallowedHeader.toLowerCase()]
+
 
 
 

@@ -14,39 +14,39 @@ describe 'Response', ->
       assert.deepEqual response({}, {}, json(foo: 'bar')), expected
 
 
-    it 'should default to failure per search outcome', ->
+    it 'should default to failure per outcome on match', ->
       expected =
         outcome: 'failure'
         foo: 'bar'
-      assert.deepEqual response(search_outcome: 'failure', {}, json(foo: 'bar')), expected
+      assert.deepEqual response(outcome_on_match: 'failure', {}, json(foo: 'bar')), expected
 
 
     it 'should find search term with exact match', ->
       expected =
         outcome: 'success'
         foo: 'bar'
-      assert.deepEqual response(search_term: 'foo', {}, json(foo: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: 'foo', {}, json(foo: 'bar')), expected
 
 
     it 'should find search term with exact match at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'foo', search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
 
 
     it 'should not find search term', ->
       expected =
         outcome: 'failure'
         foo: 'bar'
-      assert.deepEqual response(search_term: 'bip', {}, json(foo: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: 'bip', {}, json(foo: 'bar')), expected
 
 
     it 'should not find search term at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'bip', search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'bip', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
 
 
     it 'should not find search term at different path', ->
@@ -54,104 +54,104 @@ describe 'Response', ->
         outcome: 'failure'
         x: 'bip'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'bip', search_path: 'baz.bip', {}, json(x: 'bip', baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'bip', outcome_search_path: 'baz.bip', {}, json(x: 'bip', baz: { bip: 'foo'})), expected
 
 
-    it 'should return failure on match per search outcome', ->
+    it 'should return failure on match per outcome on match', ->
       expected =
         outcome: 'failure'
         foo: 'bar'
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', {}, json(foo: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', {}, json(foo: 'bar')), expected
 
 
-    it 'should return failure on match per search outcome at path', ->
+    it 'should return failure on match per outcome on match at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
 
 
     it 'should find search term with partial match', ->
       expected =
         outcome: 'success'
         barfoobaz: 'bip'
-      assert.deepEqual response(search_term: 'foo', {}, json(barfoobaz: 'bip')), expected
+      assert.deepEqual response(outcome_search_term: 'foo', {}, json(barfoobaz: 'bip')), expected
 
 
     it 'should find search term with partial match at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'barfoobaz' }
-      assert.deepEqual response(search_term: 'foo', search_path: 'baz.bip', {}, json(baz: { bip: 'barfoobaz' })), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'barfoobaz' })), expected
 
 
     it 'should find search term with regex', ->
       expected =
         outcome: 'success'
         barfoobaz: 'bar'
-      assert.deepEqual response(search_term: '[a-z]{3}foo[a-z]{3}', {}, json(barfoobaz: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', {}, json(barfoobaz: 'bar')), expected
 
 
     it 'should find search term with regex at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'barfoobaz' }
-      assert.deepEqual response(search_term: '[a-z]{3}foo[a-z]{3}', search_path: 'baz.bip', {}, json(baz: { bip: 'barfoobaz' })), expected
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'barfoobaz' })), expected
 
 
     it 'should find search term with regex including slashes', ->
       expected =
         outcome: 'success'
         barfoobaz: 'bar'
-      assert.deepEqual response(search_term: '/[a-z]{3}foo[a-z]{3}/', {}, json(barfoobaz: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', {}, json(barfoobaz: 'bar')), expected
 
 
     it 'should find search term with regex with slashes at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'barfoobaz' }
-      assert.deepEqual response(search_term: '/[a-z]{3}foo[a-z]{3}/', search_path: 'baz.bip', {}, json(baz: { bip: 'barfoobaz' })), expected
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'barfoobaz' })), expected
 
 
     it 'should not error on invalid regex search term', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: '/[/', {}, json(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: '/[/', {}, json(baz: { bip: 'foo'})), expected
 
 
     it 'should not error on invalid regex search term at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: '/[/', search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: '/[/', outcome_search_path: 'baz.bip', {}, json(baz: { bip: 'foo'})), expected
 
 
     it 'should find search term with case insensitive match', ->
-      assert.deepEqual response(search_term: 'foo', {}, json(baz: 'FOO')), outcome: 'success', baz: 'FOO'
-      assert.deepEqual response(search_term: 'FOO', {}, json(baz: 'foo')), outcome: 'success', baz: 'foo'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, json(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(outcome_search_term: 'FOO', {}, json(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should find search term with case insensitive match at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'baz', {}, json(baz: 'FOO')), outcome: 'success', baz: 'FOO'
-      assert.deepEqual response(search_term: 'FOO', search_path: 'baz', {}, json(baz: 'foo')), outcome: 'success', baz: 'foo'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'baz', {}, json(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(outcome_search_term: 'FOO', outcome_search_path: 'baz', {}, json(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should not find match', ->
-      assert.deepEqual response(search_term: 'foo', {}, json(baz: 'bar')), outcome: 'failure', baz: 'bar'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, json(baz: 'bar')), outcome: 'failure', baz: 'bar'
 
 
     it 'should not find match at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'bar' }
-      assert.deepEqual response(search_term: 'foo', {}, json(baz: { bip: 'bar' })), expected
+      assert.deepEqual response(outcome_search_term: 'foo', {}, json(baz: { bip: 'bar' })), expected
 
 
     it 'should parse reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'baz.bip'
+        outcome_search_term: 'foo'
+        reason_path: 'baz.bip'
       expected =
         outcome: 'failure'
         reason: 'the reason text!'
@@ -161,8 +161,8 @@ describe 'Response', ->
 
     it 'should discard empty reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'baz.bip'
+        outcome_search_term: 'foo'
+        reason_path: 'baz.bip'
       expected =
         outcome: 'failure'
         baz: { bip: '' }
@@ -171,8 +171,8 @@ describe 'Response', ->
 
     it 'should discard whitespace reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'baz.bip'
+        outcome_search_term: 'foo'
+        reason_path: 'baz.bip'
       expected =
         outcome: 'failure'
         baz: { bip: '     ' }
@@ -181,8 +181,8 @@ describe 'Response', ->
 
     it 'should parse multiple reasons', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'baz.bip'
+        outcome_search_term: 'foo'
+        reason_path: 'baz.bip'
       expected =
         outcome: 'failure'
         reason: 'another reason, the reason text!'
@@ -200,8 +200,8 @@ describe 'Response', ->
 
     it 'should fail to parse reason', ->
       vars =
-        search_term: 'bar'
-        reason_selector: 'baz.baz.baz'
+        outcome_search_term: 'bar'
+        reason_path: 'baz.baz.baz'
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
@@ -210,8 +210,8 @@ describe 'Response', ->
 
     it 'should use default reason on failure to parse reason', ->
       vars =
-        search_term: 'bar'
-        reason_selector: 'baz.baz.baz'
+        outcome_search_term: 'bar'
+        reason_path: 'baz.baz.baz'
         default_reason: 'just because'
       expected =
         outcome: 'failure'
@@ -221,7 +221,7 @@ describe 'Response', ->
 
 
     it 'should revert to string search on non-JSON body', ->
-      vars = search_term: 'bar'
+      vars = outcome_search_term: 'bar'
       res = xml(foo: 'bar')
       res.headers['Content-Type'] = 'application/json'
       assert.deepEqual response(vars, {}, res), outcome: 'success'
@@ -235,57 +235,57 @@ describe 'Response', ->
       assert.deepEqual response({}, {}, text('foo')), outcome: 'success'
 
 
-    it 'should default to failure per search outcome', ->
-      assert.deepEqual response(search_outcome: 'failure', {}, text('foo')), outcome: 'failure'
+    it 'should default to failure per outcome on match', ->
+      assert.deepEqual response(outcome_on_match: 'failure', {}, text('foo')), outcome: 'failure'
 
 
     it 'should find search term with exact match', ->
-      assert.deepEqual response(search_term: 'foo', {}, text('foo')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('foo')), outcome: 'success'
 
 
     it 'should not find search term', ->
-      assert.deepEqual response(search_term: 'bip', {}, text('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'bip', {}, text('foo')), outcome: 'failure'
 
 
-    it 'should return failure on match per search outcome', ->
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', {}, text('foo')), outcome: 'failure'
+    it 'should return failure on match per outcome on match', ->
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', {}, text('foo')), outcome: 'failure'
 
 
     it 'should find search term with partial match', ->
-      assert.deepEqual response(search_term: 'foo', {}, text('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('barfoobaz')), outcome: 'success'
 
 
     it 'should find search term with regex', ->
-      assert.deepEqual response(search_term: '[a-z]{3}foo[a-z]{3}', {}, text('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', {}, text('barfoobaz')), outcome: 'success'
 
 
     it 'should find search term with regex including slashes', ->
-      assert.deepEqual response(search_term: '/[a-z]{3}foo[a-z]{3}/', {}, text('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', {}, text('barfoobaz')), outcome: 'success'
 
 
     it 'should not error on invalid regex search term', ->
-      assert.deepEqual response(search_term: '/[/', {}, text('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: '/[/', {}, text('foo')), outcome: 'failure'
 
 
     it 'should find search term with case insensitve match', ->
-      assert.deepEqual response(search_term: 'foo', {}, text('FOO')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('FOO')), outcome: 'success'
 
 
     it 'should not find match', ->
-      assert.deepEqual response(search_term: 'foo', {}, text('bar')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('bar')), outcome: 'failure'
 
 
     it 'should parse reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: '[a-z]+:(.*)'
+        outcome_search_term: 'foo'
+        reason_path: '[a-z]+:(.*)'
       assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'the reason text!'
 
 
     it 'should discard empty reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: '[a-z]+:(.*)'
+        outcome_search_term: 'foo'
+        reason_path: '[a-z]+:(.*)'
       assert.deepEqual response(vars, {}, text('bad:')), outcome: 'failure'
       assert.deepEqual response(vars, {}, text('bad:     ')), outcome: 'failure'
 
@@ -296,21 +296,21 @@ describe 'Response', ->
 
     it 'should fail to parse reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'whatever:(.*)'
+        outcome_search_term: 'foo'
+        reason_path: 'whatever:(.*)'
       assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure'
 
 
     it 'should use default reason on failure to parse reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'whatever:(.*)'
+        outcome_search_term: 'foo'
+        reason_path: 'whatever:(.*)'
         default_reason: 'just because'
       assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'just because'
 
 
     it 'should revert to string search on non-text body', ->
-      vars = search_term: 'bar'
+      vars = outcome_search_term: 'bar'
       res = json(foo: 'bar')
       res.headers['Content-Type'] = 'plain/text'
       assert.deepEqual response(vars, {}, res), outcome: 'success'
@@ -323,101 +323,101 @@ describe 'Response', ->
       assert.deepEqual response({}, {}, html('<div>foo</div>')), outcome: 'success'
 
 
-    it 'should default to failure per search outcome', ->
-      assert.deepEqual response(search_outcome: 'failure', {}, html('<div>foo</div>')), outcome: 'failure'
+    it 'should default to failure per outcome on match', ->
+      assert.deepEqual response(outcome_on_match: 'failure', {}, html('<div>foo</div>')), outcome: 'failure'
 
 
     it 'should find search term with exact match', ->
-      assert.deepEqual response(search_term: 'foo', {}, html('<div>foo</div>')), outcome: 'success'
-      assert.deepEqual response(search_term: 'foo', {}, html('<foo>bar</foo>')), outcome: 'success'
-      assert.deepEqual response(search_term: 'foo', {}, html('<div id="foo">bar</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('<div>foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('<foo>bar</foo>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('<div id="foo">bar</div>')), outcome: 'success'
 
 
     it 'should find search term with exact match at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>foo</div>')), outcome: 'success'
-      assert.deepEqual response(search_term: 'foo', search_path: 'div span', {}, html('<div><span>foo</span></foo>')), outcome: 'success'
-      assert.deepEqual response(search_term: 'foo', search_path: 'div[id="bar"]', {}, html('<div id="bar">foo</div>')), outcome: 'success'
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>bar</div><div>foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<div>foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div span', {}, html('<div><span>foo</span></foo>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div[id="bar"]', {}, html('<div id="bar">foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<div>bar</div><div>foo</div>')), outcome: 'success'
 
 
     it 'should not find search term', ->
-      assert.deepEqual response(search_term: 'foo', {}, html('<div>bar</div>')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('<div>bar</div>')), outcome: 'failure'
 
 
     it 'should not find search term at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>bar</div>')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<div>bar</div>')), outcome: 'failure'
 
 
     it 'should not find search term at different path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div[id="one"]', {}, html('<div id="one">bar</div><div id="other">foo</div>')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div[id="one"]', {}, html('<div id="one">bar</div><div id="other">foo</div>')), outcome: 'failure'
 
 
-    it 'should return failure on match per search outcome', ->
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', {}, html('<div>foo</div>')), outcome: 'failure'
+    it 'should return failure on match per outcome on match', ->
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', {}, html('<div>foo</div>')), outcome: 'failure'
 
 
-    it 'should return failure on match per search outcome at path', ->
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', search_path: 'div', {}, html('<div>foo</div>')), outcome: 'failure'
+    it 'should return failure on match per outcome on match at path', ->
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: 'div', {}, html('<div>foo</div>')), outcome: 'failure'
 
 
     it 'should find search term with partial match', ->
-      assert.deepEqual response(search_term: 'foo', {}, html('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('barfoobaz')), outcome: 'success'
 
 
     it 'should find search term with partial match at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>barfoobaz</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<div>barfoobaz</div>')), outcome: 'success'
 
 
     it 'should find search term with regex', ->
-      assert.deepEqual response(search_term: '[a-z]{3}foo[a-z]{3}', {}, html('bazfoobar')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', {}, html('bazfoobar')), outcome: 'success'
 
 
     it 'should find search term with regex at path', ->
-      assert.deepEqual response(search_term: 'id="[a-z]+">foo<', search_path: 'body', {}, html('<div id="bar">foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'id="[a-z]+">foo<', outcome_search_path: 'body', {}, html('<div id="bar">foo</div>')), outcome: 'success'
 
 
     it 'should find search term with regex including slashes', ->
-      assert.deepEqual response(search_term: '/[a-z]{3}foo[a-z]{3}/', {}, html('bazfoobar')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', {}, html('bazfoobar')), outcome: 'success'
 
 
     it 'should find search term with regex including slashes at path', ->
-      assert.deepEqual response(search_term: '/id="[a-z]+">foo</', search_path: 'body', {}, html('<div id="bar">foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '/id="[a-z]+">foo</', outcome_search_path: 'body', {}, html('<div id="bar">foo</div>')), outcome: 'success'
 
 
     it 'should not error on invalid regex search term', ->
-      assert.deepEqual response(search_term: '/[/', {}, html('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: '/[/', {}, html('foo')), outcome: 'failure'
 
 
     it 'should not error on invalid regex search term at path', ->
-      assert.deepEqual response(search_term: '/[/', search_path: 'div', {}, html('<div>foo</div>')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: '/[/', outcome_search_path: 'div', {}, html('<div>foo</div>')), outcome: 'failure'
 
 
     it 'should find search term with case insensitive match', ->
-      assert.deepEqual response(search_term: 'foo', {}, html('FOO')), outcome: 'success'
-      assert.deepEqual response(search_term: 'FOO', {}, html('foo')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('FOO')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'FOO', {}, html('foo')), outcome: 'success'
 
 
     it 'should find search term with case insensitive match at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>FOO</div>')), outcome: 'success'
-      assert.deepEqual response(search_term: 'FOO', search_path: 'div', {}, html('<div>foo</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<div>FOO</div>')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'FOO', outcome_search_path: 'div', {}, html('<div>foo</div>')), outcome: 'success'
 
 
     it 'should not find match', ->
-      assert.deepEqual response(search_term: 'foo', {}, html('baz')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, html('baz')), outcome: 'failure'
 
 
     it 'should not find match at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<div>baz</div>')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<div>baz</div>')), outcome: 'failure'
 
 
     it 'should not error on broken html', ->
-      assert.deepEqual response(search_term: 'foo', search_path: 'div', {}, html('<dibaz</div>')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: 'div', {}, html('<dibaz</div>')), outcome: 'failure'
 
 
     it 'should parse reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'div[id="message"]'
+        outcome_search_term: 'foo'
+        reason_path: 'div[id="message"]'
       expected =
         outcome: 'failure'
         reason: 'just because'
@@ -426,22 +426,22 @@ describe 'Response', ->
 
     it 'should discard empty reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'div[id="message"]'
+        outcome_search_term: 'foo'
+        reason_path: 'div[id="message"]'
       assert.deepEqual response(vars, {}, html('<div>bar</div><div id="message"></div>')), outcome: 'failure'
 
 
     it 'should discard whitespace reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'div[id="message"]'
+        outcome_search_term: 'foo'
+        reason_path: 'div[id="message"]'
       assert.deepEqual response(vars, {}, html('<div>bar</div><div id="message">      </div>')), outcome: 'failure'
 
 
     it 'should parse multiple reasons', ->
       vars =
-        search_term: 'foo'
-        reason_selector: 'div.message'
+        outcome_search_term: 'foo'
+        reason_path: 'div.message'
       expected =
         outcome: 'failure'
         reason: 'another reason, the reason text!'
@@ -457,21 +457,21 @@ describe 'Response', ->
 
     it 'should fail to parse reason', ->
       vars =
-        search_term: 'bar'
-        reason_selector: 'div.message'
+        outcome_search_term: 'bar'
+        reason_path: 'div.message'
       assert.deepEqual response(vars, {}, html('foo')), outcome: 'failure'
 
 
     it 'should use default reason on failure to parse reason', ->
       vars =
-        search_term: 'bar'
-        reason_selector: 'div.message'
+        outcome_search_term: 'bar'
+        reason_path: 'div.message'
         default_reason: 'just because'
       assert.deepEqual response(vars, {}, html('foo')), outcome: 'failure', reason: 'just because'
 
 
     it 'should revert to string search on non-HTML body', ->
-      vars = search_term: 'bar'
+      vars = outcome_search_term: 'bar'
       res = json(foo: 'bar')
       res.headers['Content-Type'] = 'text/html'
       assert.deepEqual response(vars, {}, res), outcome: 'success'
@@ -488,39 +488,39 @@ describe 'Response', ->
       assert.deepEqual response({}, {}, json(foo: 'bar')), expected
 
 
-    it 'should default to failure per search outcome', ->
+    it 'should default to failure per outcome on match', ->
       expected =
         outcome: 'failure'
         foo: 'bar'
-      assert.deepEqual response(search_outcome: 'failure', {}, xml(foo: 'bar')), expected
+      assert.deepEqual response(outcome_on_match: 'failure', {}, xml(foo: 'bar')), expected
 
 
     it 'should find search term with exact match', ->
       expected =
         outcome: 'success'
         foo: 'bar'
-      assert.deepEqual response(search_term: 'foo', {}, xml(foo: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: 'foo', {}, xml(foo: 'bar')), expected
 
 
     it 'should find search term with exact match at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'foo', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
 
 
     it 'should not find search term', ->
       expected =
         outcome: 'failure'
         foo: 'bar'
-      assert.deepEqual response(search_term: 'bip', {}, xml(foo: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: 'bip', {}, xml(foo: 'bar')), expected
 
 
     it 'should not find search term at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'bip', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'bip', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
 
 
     it 'should not find search term at different path', ->
@@ -529,104 +529,104 @@ describe 'Response', ->
         y:
           x: 'bip'
           baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'bip', search_path: '/baz/bip/text()', {}, xml(y: { x: 'bip', baz: { bip: 'foo'}})), expected
+      assert.deepEqual response(outcome_search_term: 'bip', outcome_search_path: '/baz/bip/text()', {}, xml(y: { x: 'bip', baz: { bip: 'foo'}})), expected
 
 
-    it 'should return failure on match per search outcome', ->
+    it 'should return failure on match per outcome on match', ->
       expected =
         outcome: 'failure'
         foo: 'bar'
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', {}, xml(foo: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', {}, xml(foo: 'bar')), expected
 
 
-    it 'should return failure on match per search outcome at path', ->
+    it 'should return failure on match per outcome on match at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: 'foo', search_outcome: 'failure', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
 
 
     it 'should find search term with partial match', ->
       expected =
         outcome: 'success'
         barfoobaz: 'bip'
-      assert.deepEqual response(search_term: 'foo', {}, xml(barfoobaz: 'bip')), expected
+      assert.deepEqual response(outcome_search_term: 'foo', {}, xml(barfoobaz: 'bip')), expected
 
 
     it 'should find search term with partial match at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'barfoobaz' }
-      assert.deepEqual response(search_term: 'foo', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'barfoobaz' })), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'barfoobaz' })), expected
 
 
     it 'should find search term with regex', ->
       expected =
         outcome: 'success'
         barfoobaz: 'bar'
-      assert.deepEqual response(search_term: '[a-z]{3}foo[a-z]{3}', {}, xml(barfoobaz: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', {}, xml(barfoobaz: 'bar')), expected
 
 
     it 'should find search term with regex at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'barfoobaz' }
-      assert.deepEqual response(search_term: '[a-z]{3}foo[a-z]{3}', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'barfoobaz' })), expected
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'barfoobaz' })), expected
 
 
     it 'should find search term with regex including slashes', ->
       expected =
         outcome: 'success'
         barfoobaz: 'bar'
-      assert.deepEqual response(search_term: '/[a-z]{3}foo[a-z]{3}/', {}, xml(barfoobaz: 'bar')), expected
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', {}, xml(barfoobaz: 'bar')), expected
 
 
     it 'should find search term with regex with slashes at path', ->
       expected =
         outcome: 'success'
         baz: { bip: 'barfoobaz' }
-      assert.deepEqual response(search_term: '/[a-z]{3}foo[a-z]{3}/', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'barfoobaz' })), expected
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'barfoobaz' })), expected
 
 
     it 'should not error on invalid regex search term', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: '/[/', {}, xml(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: '/[/', {}, xml(baz: { bip: 'foo'})), expected
 
 
     it 'should not error on invalid regex search term at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
-      assert.deepEqual response(search_term: '/[/', search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
+      assert.deepEqual response(outcome_search_term: '/[/', outcome_search_path: '/baz/bip/text()', {}, xml(baz: { bip: 'foo'})), expected
 
 
     it 'should find search term with case insensitive match', ->
-      assert.deepEqual response(search_term: 'foo', {}, xml(baz: 'FOO')), outcome: 'success', baz: 'FOO'
-      assert.deepEqual response(search_term: 'FOO', {}, xml(baz: 'foo')), outcome: 'success', baz: 'foo'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, xml(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(outcome_search_term: 'FOO', {}, xml(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should find search term with case insensitive match at path', ->
-      assert.deepEqual response(search_term: 'foo', search_path: '/baz', {}, xml(baz: 'FOO')), outcome: 'success', baz: 'FOO'
-      assert.deepEqual response(search_term: 'FOO', search_path: '/baz', {}, xml(baz: 'foo')), outcome: 'success', baz: 'foo'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: '/baz', {}, xml(baz: 'FOO')), outcome: 'success', baz: 'FOO'
+      assert.deepEqual response(outcome_search_term: 'FOO', outcome_search_path: '/baz', {}, xml(baz: 'foo')), outcome: 'success', baz: 'foo'
 
 
     it 'should not find match', ->
-      assert.deepEqual response(search_term: 'foo', {}, xml(baz: 'bar')), outcome: 'failure', baz: 'bar'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, xml(baz: 'bar')), outcome: 'failure', baz: 'bar'
 
 
     it 'should not find match at path', ->
       expected =
         outcome: 'failure'
         baz: { bip: 'bar' }
-      assert.deepEqual response(search_term: 'foo', search_path: '/bip/text()', {}, xml(baz: { bip: 'bar' })), expected
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_search_path: '/bip/text()', {}, xml(baz: { bip: 'bar' })), expected
 
 
     it 'should parse reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: '/baz/bip/text()'
+        outcome_search_term: 'foo'
+        reason_path: '/baz/bip/text()'
       expected =
         outcome: 'failure'
         reason: 'the reason text!'
@@ -636,8 +636,8 @@ describe 'Response', ->
 
     it 'should discard empty reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: '/baz/bip/text()'
+        outcome_search_term: 'foo'
+        reason_path: '/baz/bip/text()'
       expected =
         outcome: 'failure'
         baz: { bip: '' }
@@ -646,8 +646,8 @@ describe 'Response', ->
 
     it 'should discard whitespace reason', ->
       vars =
-        search_term: 'foo'
-        reason_selector: '/baz/bip/text()'
+        outcome_search_term: 'foo'
+        reason_path: '/baz/bip/text()'
       expected =
         outcome: 'failure'
         baz: { bip: '     ' }
@@ -656,8 +656,8 @@ describe 'Response', ->
 
     it 'should parse multiple reasons', ->
       vars =
-        search_term: 'foo'
-        reason_selector: '//bip/text()'
+        outcome_search_term: 'foo'
+        reason_path: '//bip/text()'
       expected =
         outcome: 'failure'
         reason: 'another reason, the reason text!'
@@ -675,8 +675,8 @@ describe 'Response', ->
 
     it 'should fail to parse reason', ->
       vars =
-        search_term: 'bar'
-        reason_selector: '/baz/baz/baz/text()'
+        outcome_search_term: 'bar'
+        reason_path: '/baz/baz/baz/text()'
       expected =
         outcome: 'failure'
         baz: { bip: 'foo' }
@@ -685,8 +685,8 @@ describe 'Response', ->
 
     it 'should use default reason on failure to parse reason', ->
       vars =
-        search_term: 'bar'
-        reason_selector: '/baz/baz/baz/text()'
+        outcome_search_term: 'bar'
+        reason_path: '/baz/baz/baz/text()'
         default_reason: 'just because'
       expected =
         outcome: 'failure'
@@ -697,8 +697,8 @@ describe 'Response', ->
 
     it 'should use default reason on failure with invalid reason selector', ->
       vars =
-        search_term: 'bar'
-        reason_selector: '[[[[[   '
+        outcome_search_term: 'bar'
+        reason_path: '[[[[[   '
         default_reason: 'just because'
       expected =
         outcome: 'failure'
@@ -708,7 +708,7 @@ describe 'Response', ->
 
 
     it 'should revert to string search on non-XML body', ->
-      vars = search_term: 'bar'
+      vars = outcome_search_term: 'bar'
       res = json(foo: { bar: 'baz'})
       res.headers['Content-Type'] = 'text/xml'
       assert.deepEqual response(vars, {}, res), outcome: 'success'

@@ -86,7 +86,7 @@ describe 'Outbound Form POST validation', ->
 
 
   it 'should require valid search outcome', ->
-    assert.equal integration.validate(url: 'http://foo', search_outcome: 'donkey'), "Search outcome must be 'success' or 'failure'"
+    assert.equal integration.validate(url: 'http://foo', outcome_on_match: 'donkey'), "Outcome on match must be 'success' or 'failure'"
 
 
   it 'should pass validation', ->

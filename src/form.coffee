@@ -49,7 +49,7 @@ request.variables = ->
 #
 
 module.exports =
-  name: 'Generic Form POST'
+  name: 'Custom Form POST'
   request: request
   response: response
   validate: (vars) ->

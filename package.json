@@ -1,13 +1,13 @@
 {
-  "name": "leadconduit-generic",
-  "description": "LeadConduit generic integration",
+  "name": "leadconduit-custom",
+  "description": "LeadConduit custom integration",
   "author": "Alex Wolfe <alex@activeprospect.com>",
   "version": "1.1.1",
   "main": "index.js",
   "license": "CC-BY-NC-ND-4.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/activeprospect/leadconduit-integration-generic.git"
+    "url": "https://github.com/activeprospect/leadconduit-integration-custom.git"
   },
   "engines": {
     "node": ">=0.10"

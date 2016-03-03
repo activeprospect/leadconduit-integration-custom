@@ -1,7 +1,11 @@
 _ = require('lodash')
 mimecontent = require('mime-content')
 parseMimeType = require('mimeparse').parseMimeType
-regexParser = require('regex-parser')
+
+helpers = require('./helpers')
+ensureArray = helpers.ensureArray
+inverseOutcome = helpers.inverseOutcome
+toRegex = helpers.toRegex
 
 
 response = (vars, req, res) ->
@@ -136,28 +140,6 @@ module.exports = response
 #
 # Helpers ----------------------------------------------------------------
 #
-
-inverseOutcome = (outcome) ->
-  switch outcome
-    when 'success' then 'failure'
-    when 'failure' then 'success'
-    else 'success'
-
-
-ensureArray = (val) ->
-  return [] unless val?
-  val = [val] if !_.isArray(val)
-  val
-
-
-toRegex = (expression) ->
-  expression = expression?.trim().toLowerCase()
-  return regexParser('.*') unless expression
-  try
-    regexParser(expression)
-  catch err
-    null
-
 
 toDoc = (body, contentType) ->
   # parse mime type

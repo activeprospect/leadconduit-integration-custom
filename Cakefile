@@ -10,7 +10,7 @@ task 'build', ->
     console.log('> skipping build because coffee-script is not installed')
 
 task 'test', ->
-  run 'NODE_ENV=test TZ=GMT ./node_modules/.bin/mocha spec/* --compilers coffee:coffee-script/register --reporter spec --colors'
+  run 'NODE_ENV=test TZ=GMT ./node_modules/.bin/mocha spec/*.coffee --compilers coffee:coffee-script/register --reporter spec --colors'
 
 task 'clean', ->
   run 'rm -fr ./lib'

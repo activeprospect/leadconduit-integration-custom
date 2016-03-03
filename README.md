@@ -1,4 +1,4 @@
-# LeadConduit Generic Integration
+# LeadConduit Custom Integration
 
 This module is for use on the [LeadConduit](http://activeprospect.com/products/leadconduit/) platform. Please see the [license agreement](http://creativecommons.org/licenses/by-nc-nd/4.0/)
 
@@ -44,7 +44,7 @@ Use the `method` property to set the HTTP method (`POST`, `PUT`, and `DELETE` ar
 
 ## Form POST
 
-The Form POST integration performs and HTTP POST with a URL encoded request body. The body of the request
+The Form POST integration performs an HTTP POST with a URL encoded request body. The body of the request
 is formed using `form_field.*` mappings. The mapping value is the HTTP parameter name. Parameter names that end in
 `.<digit>` (i.e. `.0` or `.1`) will be treated as an array element.
 
@@ -62,6 +62,30 @@ The above mappings might generate the request body below:
 ```
 lead_id=12345&email=bob%40hotmail.com&name=Bob%20Jones&phone=5127891111&phone=5127892222&timestamp=2016-02-10T17%3A46%3A58.971Z
 ``` 
+
+
+## SOAP
+
+The SOAP integration is for use with SOAP web services. The `url` mapping is used to specify the URL to the SOAP
+service WSDL document. The `function` and `arg` mappings are used to invoke a web service function over HTTP.
+ 
+For example, consider the following mappings.
+ 
+ * `url` -> `https://some.service.com/ws?WSDL`
+ * `function` -> `AddLead`
+ * `arg.Lead.FirstName` -> `{{lead.first_name}}`
+ * `arg.Lead.LastName` -> `{{lead.last_name}}`
+ * `arg.Lead.Email` -> `{{lead.email}}`
+ 
+The above mappings would invoke the `AddLead` function with a single argument named `Lead`:
+
+```
+{
+  FirstName: 'Bob',
+  LastName: 'Jones',
+  Email: 'bob%40hotmail.com'
+}
+```
 
 
 ## Parsing responses

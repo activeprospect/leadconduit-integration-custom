@@ -227,6 +227,15 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, res), outcome: 'success'
 
 
+    it 'should revert to regex on non-JSON body', ->
+      res =
+        status: 200
+        headers:
+          'Content-Type': 'text/html; charset=UTF-8'
+        body: '{"err":1,"message":"PhoneNumber is a required field."}'
+      assert.equal response({reason_path: '"message":"([^"]+)"'}, {}, res).reason, 'PhoneNumber is a required field.'
+
+
 
 
   describe 'with plain text body', ->

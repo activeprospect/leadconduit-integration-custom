@@ -150,7 +150,7 @@ toDoc = (body, contentType) ->
 
   # return doc based on mimetype
   try
-    mimecontent(body ? '', mimeType)
+    mimecontent(body ? '', mimeType) ? body
   catch err
     # content parsing error, fall back to string body
     body

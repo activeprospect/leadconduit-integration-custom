@@ -88,7 +88,8 @@ response = (vars, req, res) ->
 
     else if _.isString(doc)
       # this is a plain text. do a regex match and use the first match group
-      doc.match(reasonSelector)?[1]?.trim()
+      regex = toRegex(reasonSelector)
+      doc.match(regex)?[1]?.trim() if regex
 
 
   # trim and comma delimit reasons

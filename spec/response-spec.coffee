@@ -291,6 +291,13 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'the reason text!'
 
 
+    it 'should parse reason with slashes', ->
+      vars =
+        outcome_search_term: 'foo'
+        reason_path: '/[a-z]+:(.*)/'
+      assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'the reason text!'
+
+
     it 'should discard empty reason', ->
       vars =
         outcome_search_term: 'foo'

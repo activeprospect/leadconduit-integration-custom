@@ -167,7 +167,7 @@ responseVariables = ->
 
 
 module.exports =
-  name: 'Custom SOAP'
+  name: 'SOAP'
   handle: handle
   requestVariables: requestVariables
   responseVariables: responseVariables

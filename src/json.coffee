@@ -43,7 +43,7 @@ request.variables = ->
 #
 
 module.exports =
-  name: 'Custom JSON'
+  name: 'JSON'
   request: request
   response: response
   validate: (vars) ->

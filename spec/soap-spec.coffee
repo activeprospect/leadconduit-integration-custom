@@ -273,7 +273,7 @@ describe 'Outbound SOAP', ->
 
 
     it 'should not find search term', (done) ->
-      @vars.outcome_search_term = 'foo'
+      @vars.outcome_search_term = 'bar'
       soap.handle @vars, (err, event) =>
         return done(err) if err
         assert.equal event.outcome, 'failure'

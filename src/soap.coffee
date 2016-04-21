@@ -123,7 +123,7 @@ handle = (vars, callback) ->
 
 validateFunction = (vars) ->
   return 'Function is required' unless vars.function?
-  return 'Function must have valid name' unless vars.function.match(/^[a-zA-Z0-9_]+$/)
+  return 'Function must have valid name' unless vars.function.match(/^[a-zA-Z0-9_.]+$/)
 
 
 validateVersion = (vars) ->

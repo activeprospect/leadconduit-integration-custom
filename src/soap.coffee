@@ -20,7 +20,6 @@ handle = (vars, callback) ->
     value.valueOf()
   args = flat.unflatten(args)
 
-
   options =
     valueKey: '#value'
     forceSoap12Headers: vars.version?.trim() == '1.2'
@@ -29,7 +28,7 @@ handle = (vars, callback) ->
     return callback(err) if err
 
     # the SOAP function to execute
-    fxn = client[vars.function]
+    fxn = _.get(client, vars.function)
 
     # ensure the SOAP function is supported
     return callback(new Error('Unsupported SOAP function specified')) unless fxn
@@ -53,6 +52,7 @@ handle = (vars, callback) ->
 
     # the callback to handle the SOAP function response
     handleResponse = (err, result, body) ->
+      result ?= {}
       fault = err?.root?.Envelope?.Body?.Fault
       if fault?
         return callback null, outcome: 'error', reason: fault.faultstring ? fault.faultcode
@@ -75,7 +75,7 @@ handle = (vars, callback) ->
           body
 
       # look in all possible search scopes for the term
-      found = searchIn.match(searchTerm)
+      found = searchIn?.toLowerCase().match(searchTerm)
 
       # determine the outcome based on whether the search term was found
       outcome =

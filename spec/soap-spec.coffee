@@ -212,6 +212,43 @@ describe 'Outbound SOAP', ->
       done()
 
 
+  it 'should set headers', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<SessionHeader xmlns="urn:foo.bar"><sessionId>88774421</sessionId></SessionHeader>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      url: 'http://donkey/login/ws/ws.asmx?WSDL'
+      function: 'AddLead'
+      soap_header:
+        'SessionHeader.sessionId': 88774421
+        'SessionHeader@xmlns': 'urn:foo.bar'
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+  it 'should set multiple headers', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<SessionHeader xmlns="urn:foo.bar"><sessionId>88774421</sessionId></SessionHeader><OtherHeader xmlns="urn:foo.other"><Id>4321</Id></OtherHeader>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      url: 'http://donkey/login/ws/ws.asmx?WSDL'
+      function: 'AddLead'
+      soap_header:
+        'SessionHeader.sessionId': 88774421
+        'SessionHeader@xmlns': 'urn:foo.bar'
+        'OtherHeader.Id': 4321
+        'OtherHeader@xmlns': 'urn:foo.other'
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
 
   describe 'response', ->
 

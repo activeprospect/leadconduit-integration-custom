@@ -50,6 +50,27 @@ handle = (vars, callback) ->
     # set the security credentials
     client.setSecurity(security) if security
 
+    # set the headers
+    if vars.soap_header?
+      headers = {}
+      # create an object for each header with name, value, and xmlns attributes
+      for key, value of flat.flatten vars.soap_header
+        element = key.split(/[@.]/)[0]
+        property = key.split(/[@.]/)[1]
+        headers[element] ?= {}
+        if key.indexOf('.') > -1
+          headers[element].name = property
+          headers[element].value = value
+        else if property is 'xmlns'
+          headers[element].xmlns = value
+
+      for key, value of headers
+        if value.name?
+          soapHeader = {}
+          soapHeader[key] = {}
+          soapHeader[key][value.name] = value.value
+          client.addSoapHeader(soapHeader, '', '', value.xmlns or '')
+
     # the callback to handle the SOAP function response
     handleResponse = (err, result, body) ->
       result ?= {}
@@ -154,6 +175,7 @@ requestVariables = ->
     { name: 'outcome_on_match', description: 'The outcome when the search term is found - "success" or "failure" (default: success)', type: 'string', required: false }
     { name: 'reason_path', description: 'The dot-notation path used to find the failure reason', type: 'string', required: false }
     { name: 'default_reason', description: 'Failure reason when no reason can be found per the optional Reason Path setting', type: 'string', required: false }
+    { name: 'soap_header.*', description: 'Custom SOAP header in the format root_name.header_name or root_name@xmlns', type: 'wildcard', required: false }
   ]
 
 

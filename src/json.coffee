@@ -1,5 +1,4 @@
 _ = require('lodash')
-flat = require('flat')
 response = require('./response')
 validate = require('./validate')
 normalize = require('./normalize')

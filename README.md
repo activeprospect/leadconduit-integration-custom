@@ -64,6 +64,53 @@ lead_id=12345&email=bob%40hotmail.com&name=Bob%20Jones&phone=5127891111&phone=51
 ``` 
 
 
+## XML
+
+The XML integration performs an HTTP POST or PUT with a request body formatted as XML. The body of the XML
+to be sent is formed using `xml_path.*` mappings. The mapping value is the dot-notation path in the XML document
+where you would like the value to be set. 
+
+Because XML elements can have attributes, we have implemented an extension to the dot-notation convention. Any
+dot-notation path that contains the `@` character will be treated an an attribute value. 
+
+For example, consider the following mappings. 
+
+ * `xml_path.submission.email` -> `{{lead.email}}`
+ * `xml_path.submission.name` -> `{{lead.first_name}} {{lead.last_name}}` 
+ * `xml_path.submission.phones.phone.0` -> `{{lead.phone_1}}`
+ * `xml_path.submission.phones.phone.1` -> `{{lead.phone_2}}`
+ * `xml_path.submission.birthday@month` -> `{{format lead.dob format="MM"}}`
+ * `xml_path.submission.birthday@day` -> `{{format lead.dob format="DD"}}`
+ * `xml_path.submission.birthday@year` -> `{{format lead.dob format="YYYY"}}`
+ * `xml_path.submission.foo@bar` -> 'baz'
+ * `xml_path.submission.foo` -> `bip`
+ * `xml_path.submission.lead_id` -> `{{lead.id}}`
+ * `xml_path.submission.timestamp` -> `{{submission.timestamp}}`
+
+The above mappings might generate the XML document below:
+
+```xml
+<submission>
+  <email>bob@hotmail.com</email>
+  <name>Bob Jones</name>
+  <phones>
+    <phone>5127891111</phone>
+    <phone>5127892222</phone>
+  </phones>
+  <birthday month="10" day="12" year="1976"/>
+  <foo bar="baz">bip</foo>
+  <lead_id>12345</lead_id>
+  <timestamp>2016-02-10T17:46:58.971Z</timestamp>
+</submission>
+```
+
+Use the `method` property to set the HTTP method (`POST` and`PUT` are supported).
+
+Some XML endpoints require a Content-Type of `application/x-www-form-urlencoded` with the XML document submitted
+in a parameter. Use the `parameter` variable to set the name of the parameter to use. When this parameter is omitted
+the Content-Type will be `text/xml` and the XML document will be submitted in the body of the request.
+
+
 ## SOAP
 
 The SOAP integration is for use with SOAP web services. The `url` mapping is used to specify the URL to the SOAP

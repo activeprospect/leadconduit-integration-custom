@@ -61,7 +61,7 @@ request = (vars) ->
 request.variables = ->
   [
     { name: 'url', description: 'Server URL', type: 'string', required: true }
-    { name: 'method', description: 'HTTP method (POST, PUT)', type: 'string', required: true }
+    { name: 'method', description: 'HTTP method (POST, PUT)', type: 'string', required: false }
     { name: 'xml_path.*', description: 'XML path in dot notation', type: 'wildcard', required: false }
     { name: 'xml_parameter', description: 'To "stuff" the XML into a parameter and send as Form URL encoded, specify the parameter name', type: 'string', required: false }
   ].concat(variables)

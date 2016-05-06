@@ -9,7 +9,7 @@ module.exports = normalize = (obj) ->
   for key, value of flat.flatten(obj)
     # fields with undefined as the value are not included
     continue if typeof value == 'undefined'
-
+    
     # use valueOf to ensure the normal version is sent for all richly typed values
     value =
       if value?.valid == false

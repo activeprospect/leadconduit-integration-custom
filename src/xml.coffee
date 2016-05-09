@@ -1,7 +1,7 @@
 _ = require('lodash')
 querystring = require('querystring')
 builder = require('xmlbuilder')
-flat = require('flat')
+xmlDoc = require('./xml-doc')
 response = require('./response')
 validate = require('./validate')
 normalize = require('./normalize')
@@ -16,25 +16,12 @@ headers = require('./headers')
 
 request = (vars) ->
 
-  xmlPaths = flat.flatten(normalize(vars.xml_path))
-
-  xmlPaths =
-    _(xmlPaths)
-
-      # Keys that don't contain @ or # are added as element text
-      .mapKeys (value, key) ->
-        if key.match(/@|#/)
-          key
-        else
-          "#{key}#text"
-
-      # The @ or # should be treated as nested values
-      .mapKeys (value, key) ->
-        key.replace(/(@|#)/, '.$1')
-
-      .value()
-
-  body = builder.create(flat.unflatten(xmlPaths)).end(pretty: true)
+  obj = xmlDoc(vars.xml_path)
+  body =
+    if Object.keys(obj).length
+      builder.create(obj).end(pretty: true)
+    else
+      '<?xml version="1.0"?>'
 
   contentType = 'text/xml'
 

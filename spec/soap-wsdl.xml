@@ -638,6 +638,21 @@
                     <s:element minOccurs="1" maxOccurs="1" name="LeadId" type="s:int" />
                 </s:sequence>
             </s:complexType>
+
+            <s:element name="AddLeadXML">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="1" maxOccurs="1" name="LeadXML" nillable="true" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element name="AddLeadXMLResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="AddLeadXMLResult" type="s:string" />
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
             <s:element name="AddLeadLog">
                 <s:complexType>
                     <s:sequence>
@@ -945,6 +960,12 @@
     <wsdl:message name="AddLeadSoapOut">
         <wsdl:part name="parameters" element="tns:AddLeadResponse" />
     </wsdl:message>
+    <wsdl:message name="AddLeadXMLSoapIn">
+        <wsdl:part name="parameters" element="tns:AddLeadXML" />
+    </wsdl:message>
+    <wsdl:message name="AddLeadXMLSoapOut">
+        <wsdl:part name="parameters" element="tns:AddLeadXMLResponse" />
+    </wsdl:message>
     <wsdl:message name="AddLeadLogSoapIn">
         <wsdl:part name="parameters" element="tns:AddLeadLog" />
     </wsdl:message>
@@ -1029,6 +1050,10 @@
         <wsdl:operation name="AddLead">
             <wsdl:input message="tns:AddLeadSoapIn" />
             <wsdl:output message="tns:AddLeadSoapOut" />
+        </wsdl:operation>
+        <wsdl:operation name="AddLeadXML">
+            <wsdl:input message="tns:AddLeadXMLSoapIn" />
+            <wsdl:output message="tns:AddLeadXMLSoapOut" />
         </wsdl:operation>
         <wsdl:operation name="AddLeadLog">
             <wsdl:input message="tns:AddLeadLogSoapIn" />
@@ -1177,6 +1202,15 @@
         </wsdl:operation>
         <wsdl:operation name="AddLead">
             <soap:operation soapAction="http://donkey/ws.asmx/AddLead" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="AddLeadXML">
+            <soap:operation soapAction="http://donkey/ws.asmx/AddLeadXML" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
             </wsdl:input>
@@ -1351,6 +1385,15 @@
         </wsdl:operation>
         <wsdl:operation name="AddLead">
             <soap12:operation soapAction="http://donkey/ws.asmx/AddLead" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="AddLeadXML">
+            <soap12:operation soapAction="http://donkey/ws.asmx/AddLeadXML" style="document" />
             <wsdl:input>
                 <soap12:body use="literal" />
             </wsdl:input>

@@ -1,6 +1,10 @@
 _ = require('lodash')
 flat = require('flat')
 soap = require('soap')
+builder = require('xmlbuilder')
+mimecontent = require('mime-content')
+xmlDoc = require('./xml-doc')
+normalize = require('./normalize')
 validate = require('./validate')
 
 helpers = require('./helpers')
@@ -14,12 +18,6 @@ handle = (vars, callback) ->
 
   vars = flat.unflatten(vars)
 
-  # get SOAP function arguments
-  args = flat.flatten(vars.arg ? {})
-  args = _.mapValues args, (value) ->
-    value.valueOf()
-  args = flat.unflatten(args)
-
   options =
     valueKey: '#value'
     forceSoap12Headers: vars.version?.trim() == '1.2'
@@ -32,6 +30,31 @@ handle = (vars, callback) ->
 
     # ensure the SOAP function is supported
     return callback(new Error('Unsupported SOAP function specified')) unless fxn
+
+    # find function description
+    description = flat.flatten(client.describe())
+
+    # Some SOAP services want an object argument to be provided as XML encoded in a string
+    # This function provides a way to look up the type for a specific argument name.
+    lookupType = (argName) ->
+      key = _.findKey description, (value, key) ->
+        key.match(new RegExp("#{vars.function}.#{argName}$", 'i'))
+      # Return the type. Sometimes type values are namespaced: 's:string'. So we split to get rid of the namespace.
+      description[key].split(':')[1] if key
+
+    # get SOAP function arguments
+    args = normalize(vars.arg ? {})
+
+    # This routine converts each argument that is an object to an XML string, if the argument's type calls for it.
+    args = _.mapValues args, (value, key) ->
+      # when the argument is an object
+      if _.isPlainObject(value)
+        #  figure out type for this argument
+        type = lookupType("input.#{key}")
+        if type == 'string'
+          # when the argument should be a string, create XML document and convert to a string
+          value = builder.create(xmlDoc(value)).end(pretty: true)
+      value
 
     # build the security credentials
     security =
@@ -51,34 +74,36 @@ handle = (vars, callback) ->
     client.setSecurity(security) if security
 
     # set the headers
-    if vars.soap_header?
-      headers = {}
-      # create an object for each header with name, value, and xmlns attributes
-      for key, value of flat.flatten vars.soap_header
-        element = key.split(/[@.]/)[0]
-        property = key.split(/[@.]/)[1]
-        headers[element] ?= {}
-        if key.indexOf('.') > -1
-          headers[element].name = property
-          headers[element].value = value
-        else if property is 'xmlns'
-          headers[element].xmlns = value
-
-      for key, value of headers
-        if value.name?
-          soapHeader = {}
-          soapHeader[key] = {}
-          soapHeader[key][value.name] = value.value
-          client.addSoapHeader(soapHeader, '', '', value.xmlns or '')
+    if _.isPlainObject(vars.soap_header)
+      obj = xmlDoc(vars.soap_header)
+      for key, value of obj
+        client.addSoapHeader(builder.create(_.pick(obj, key)).toString())
 
     # the callback to handle the SOAP function response
     handleResponse = (err, result, body) ->
-      result ?= {}
       fault = err?.root?.Envelope?.Body?.Fault
       if fault?
         return callback null, outcome: 'error', reason: fault.faultstring ? fault.faultcode
       else if err
         return callback(err)
+
+      result ?= {}
+
+      # Sometimes, SOAP functions return a string that contains encoded XML.
+      # This routine tries to detect that scenario so that the XML can be parsed.
+      result = _.mapValues result, (value) ->
+        if _.isString(value)
+          openElementCount = (value.match(/</g) ? []).length
+          closeElementCount = (value.match(/>/g) ? []).length
+          if openElementCount > 0 and openElementCount == closeElementCount
+            # This seems like a well-formed XML string, so parse it as such
+            opts =
+              explicitArray: false
+              charkey: '#text'
+              mergeAttrs: true
+              trim: true
+            try return mimecontent(value, 'text/xml').toObject(opts) catch err
+        value
 
       searchTerm = toRegex(vars.outcome_search_term)
       searchOutcome = vars.outcome_on_match?.trim().toLowerCase() ? 'success'

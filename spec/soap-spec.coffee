@@ -6,6 +6,7 @@ fs = require('fs')
 wsdl = fs.readFileSync("#{__dirname}/soap-wsdl.xml")
 success = fs.readFileSync("#{__dirname}/soap-success.xml")
 failure = fs.readFileSync("#{__dirname}/soap-failure.xml")
+encoded = fs.readFileSync("#{__dirname}/soap-encoded.xml")
 
 
 describe 'Outbound SOAP', ->
@@ -115,13 +116,29 @@ describe 'Outbound SOAP', ->
       .reply 200, success, 'Content-Type': 'text/xml'
 
     vars =
-      url: 'http://donkey/login/ws/ws.asmx?WSDL'
-      function: 'AddLead'
-      arg:
-        Lead:
-          FirstName: 'Bob'
-          ZipCode: types.postal_code.parse('78704-1234')
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLead'
+      'arg.Lead.FirstName': 'Bob'
+      'arg.Lead.ZipCode': types.postal_code.parse('78704-1234')
 
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
+  it 'should encode XML into first string argument', (done) ->
+    @service = nock 'http://donkey'
+    .post '/login/ws/ws.asmx', (body) ->
+      body.indexOf('&lt;FirstName&gt;Bob&lt;/FirstName&gt;') >= 0 and
+        body.indexOf('&lt;ZipCode&gt;78704-1234&lt;/ZipCode&gt;') >= 0
+    .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLeadXML'
+      'arg.LeadXML.Lead.FirstName': 'Bob'
+      'arg.LeadXML.Lead.ZipCode': types.postal_code.parse('78704-1234')
 
     soap.handle vars, (err, event) ->
       return done(err) if err
@@ -148,9 +165,9 @@ describe 'Outbound SOAP', ->
 
   it 'should not timeout', (done) ->
     @service = nock 'http://donkey'
-    .post '/login/ws/ws.asmx'
-    .socketDelay 10000
-    .reply 200, success, 'Content-Type': 'text/xml'
+      .post '/login/ws/ws.asmx'
+      .socketDelay 10000
+      .reply 200, success, 'Content-Type': 'text/xml'
 
     vars =
       url: 'http://donkey/login/ws/ws.asmx?WSDL'
@@ -230,6 +247,7 @@ describe 'Outbound SOAP', ->
       assert.equal event.outcome, 'success'
       done()
 
+
   it 'should set multiple headers', (done) ->
     @service = nock 'http://donkey'
       .post '/login/ws/ws.asmx', (body) ->
@@ -249,6 +267,7 @@ describe 'Outbound SOAP', ->
       return done(err) if err
       assert.equal event.outcome, 'success'
       done()
+
 
   describe 'response', ->
 
@@ -272,7 +291,6 @@ describe 'Outbound SOAP', ->
           Multi:
             Foo: [ '1', '2' ]
         done()
-
 
     it 'should default to success without search term', (done) ->
       soap.handle @vars, (err, event) =>
@@ -531,6 +549,34 @@ describe 'Outbound SOAP', ->
         return done(err) if err
         assert.equal event.outcome, 'failure'
         assert.equal event.reason, 'just because'
+        done()
+
+
+    it 'should parse encoded XML encoded in string result', (done) ->
+      nock.cleanAll()
+
+      @service = nock 'http://donkey'
+        .post '/login/ws/ws.asmx'
+        .reply 200, encoded, 'Content-Type': 'text/xml'
+
+      @vars =
+        url: 'http://donkey/login/ws/ws.asmx?WSDL'
+        function: 'AddLead'
+
+      soap.handle @vars, (err, event) =>
+        return done(err) if err
+        # Normally, SOAP would take care of making sure all the response data is typed correctly.
+        # But since this tests for the case where the service encodes response XML into a single string
+        # return value, there's no way for SOAP to do the type conversion, and we wind up with all strings.
+        # Compare this behavior to the 'should append data' spec to see the difference.
+        assert.deepEqual event.AddLeadXMLResult,
+          Response:
+            Result: 'true'
+            Message: 'some message'
+            LeadId: '12345'
+            Empty: ''
+            Multi:
+              Foo: [ '1', '2' ]
         done()
 
 

@@ -33,6 +33,21 @@ describe 'Outbound XML request', ->
       'Bar': 'baz'
 
 
+  it 'should handle empty xml path', ->
+    vars = xml_path: {}
+    assert.equal integration.request(vars).body, '<?xml version="1.0"?>'
+
+
+  it 'should handle undefined xml path', ->
+    vars = {}
+    assert.equal integration.request(vars).body, '<?xml version="1.0"?>'
+
+
+  it 'should handle null xml path', ->
+    vars = xml_path: undefined
+    assert.equal integration.request(vars).body, '<?xml version="1.0"?>'
+
+
   it 'should support simple dot-notation', ->
     vars =
       xml_path:

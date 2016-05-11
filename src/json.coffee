@@ -14,12 +14,14 @@ headers = require('./headers')
 request = (vars) ->
   body = JSON.stringify(normalize(vars.json_property))
 
-  url: vars.url
-  method: vars.method?.toUpperCase() ? 'POST'
-  headers: _.merge headers(vars.header),
+  defaultHeaders =
     'Content-Type': 'application/json; charset=utf-8'
     'Content-Length': body.length
     'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
+
+  url: vars.url
+  method: vars.method?.toUpperCase() ? 'POST'
+  headers: _.merge defaultHeaders, headers(vars.header)
   body: body
 
 
@@ -49,5 +51,5 @@ module.exports =
     validate.url(vars) ?
       validate.method(vars, ['POST', 'PUT', 'DELETE']) ?
       validate.outcome(vars) ?
-      validate.headers(vars)
+      validate.headers(vars, 'json')
 

@@ -49,4 +49,4 @@ module.exports =
   request: request
   response: response
   validate: (vars) ->
-    validate.url(vars) ? validate.outcome(vars) ? validate.headers(vars)
+    validate.url(vars) ? validate.outcome(vars) ? validate.headers(vars, 'No_Content_Type_allowed_for_GET')

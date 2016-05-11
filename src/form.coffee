@@ -24,12 +24,14 @@ request = (vars) ->
   # URL encoded post body
   body = querystring.encode(content)
 
-  url: vars.url
-  method: 'POST'
-  headers: _.merge headers(vars.header),
+  defaultHeaders =
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
     'Content-Length': body.length
     'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
+
+  url: vars.url
+  method: 'POST'
+  headers: _.merge defaultHeaders, headers(vars.header)
   body: body
 
 
@@ -53,4 +55,4 @@ module.exports =
   request: request
   response: response
   validate: (vars) ->
-    validate.url(vars) ? validate.outcome(vars) ? validate.headers(vars)
+    validate.url(vars) ? validate.outcome(vars) ? validate.headers(vars, 'form-urlencoded')

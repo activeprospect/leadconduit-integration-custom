@@ -23,7 +23,7 @@ request = (vars) ->
     else
       '<?xml version="1.0"?>'
 
-  contentType = 'text/xml'
+  contentType = vars.header?['Content-Type'] ? 'text/xml'
 
   if vars.xml_parameter
     b = {}
@@ -67,5 +67,5 @@ module.exports =
     validate.url(vars) ?
       validate.method(vars, ['POST', 'PUT']) ?
       validate.outcome(vars) ?
-      validate.headers(vars)
+      validate.headers(vars, 'xml')
 

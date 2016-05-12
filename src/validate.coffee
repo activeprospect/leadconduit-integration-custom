@@ -34,15 +34,17 @@ module.exports =
       "Outcome on match must be 'success' or 'failure'"
 
 
-  headers: (vars) ->
+  headers: (vars, contentTypeBase = '') ->
     return unless _.isPlainObject(vars.header)
 
     headers = _.mapKeys vars.header, (v, k) ->
         k.toLowerCase()
 
-    for disallowedHeader in ['Content-Type', 'Content-Length', 'Accept']
+    for disallowedHeader in ['Content-Length', 'Accept']
       return "#{disallowedHeader} header is not allowed" if headers[disallowedHeader.toLowerCase()]
 
-
+    # ensure that user-specified Content-Type is similar to what's allowed
+    if headers['content-type']? and !headers['content-type']?.match(new RegExp(contentTypeBase, 'i'))
+      return "Invalid Content-Type header value"
 
 

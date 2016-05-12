@@ -94,7 +94,7 @@ describe 'Outbound GET Query validation', ->
 
 
   it 'should not allow content-type header', ->
-    assert.equal integration.validate(url: 'http://foo', header: { 'Content-Type': 'foo' }), 'Content-Type header is not allowed'
+    assert.equal integration.validate(url: 'http://foo', header: { 'Content-Type': 'foo' }), 'Invalid Content-Type header value'
 
 
   it 'should not allow content-length header', ->

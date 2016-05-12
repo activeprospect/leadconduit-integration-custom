@@ -26,6 +26,18 @@ describe 'Outbound JSON request', ->
       'Bar': 'baz'
 
 
+  it 'should allow Content-Type override', ->
+    vars =
+      url: 'http://foo.bar'
+      header:
+        'Content-Type': 'application/json'
+
+    assert.deepEqual integration.request(vars).headers,
+      'Content-Type': 'application/json'
+      'Content-Length': 2
+      'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
+
+
   it 'should support simple dot-notation', ->
     vars =
       json_property:
@@ -106,9 +118,11 @@ describe 'JSON validation', ->
   it 'should pass validation', ->
     assert.isUndefined integration.validate(url: 'http://foo')
 
+  it 'should allow valid content-type header', ->
+    assert.isUndefined integration.validate(url: 'http://foo', header: { 'Content-Type': 'application/json' })
 
-  it 'should not allow content-type header', ->
-    assert.equal integration.validate(url: 'http://foo', header: { 'Content-Type': 'foo' }), 'Content-Type header is not allowed'
+  it 'should not allow invalid content-type header', ->
+    assert.equal integration.validate(url: 'http://foo', header: { 'Content-Type': 'text/xml' }), 'Invalid Content-Type header value'
 
 
   it 'should not allow content-length header', ->

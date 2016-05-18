@@ -145,6 +145,21 @@ describe 'Outbound SOAP', ->
       assert.equal event.outcome, 'success'
       done()
 
+  it 'should not encode text in a CDATA section', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<![CDATA[Hello World! & <Hello Me!>]]>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLeadXML'
+      'arg.LeadXML': '<![CDATA[Hello World! & <Hello Me!>]]>'
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
 
   it 'should timeout', (done) ->
     @service = nock 'http://donkey'

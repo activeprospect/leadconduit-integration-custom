@@ -23,7 +23,7 @@
     "mime-content": ">=0.0.7",
     "mimeparse": "*",
     "regex-parser": "^2.2.1",
-    "soap": "^0.13.0",
+    "soap": "~0.15.0",
     "xml2js": "^0.4.16",
     "xmlbuilder": "^7.0.0"
   },

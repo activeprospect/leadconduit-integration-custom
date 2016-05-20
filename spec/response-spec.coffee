@@ -439,6 +439,16 @@ describe 'Response', ->
         reason: 'just because'
       assert.deepEqual response(vars, {}, html('<div>bar</div><div id="message">just because</div>')), expected
 
+      
+    it 'should parse reason from attribute', ->
+      vars =
+        outcome_search_term: 'foo'
+        reason_path: '#message @reason'
+      expected =
+        outcome: 'failure'
+        reason: 'just because'
+      assert.deepEqual response(vars, {}, html('<div>bar</div><div id="message" reason="just because"></div>')), expected
+
 
     it 'should discard empty reason', ->
       vars =

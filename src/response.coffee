@@ -77,10 +77,20 @@ response = (vars, req, res) ->
 
     else if _.isFunction(doc.html)
       # this is a HTML document
-      try
-        doc(reasonSelector).map(-> doc(this).text()).get()
-      catch err
-        [] # unmatched selector
+      if reasonSelector
+        attrRegex = /\s*\@([a-z_:]+[-a-z0-9_:.]]?)/i
+        attrMatch = reasonSelector.match(attrRegex)
+        reasonSelector = reasonSelector.replace(attrRegex, '')
+        try
+          elements = doc(reasonSelector)
+          if attrMatch
+            elements.map(-> doc(this).attr(attrMatch[1])).get()
+          else
+            elements.map(-> doc(this).text()).get()
+        catch err
+          [] # unmatched selector
+      else
+        []
 
     else if _.isPlainObject(doc)
       # this is a JS object (JSON)

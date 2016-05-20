@@ -197,7 +197,10 @@ Depending on the response type given by the server, you can use different `reaso
 
  * JSON &mdash; Use a dot-delimited path such as `submission.reason`
  * XML &mdash; Use an XPath location such as `/submission/reason/text()`
- * HTML &mdash; Use a CSS selector such as `div.content h2.error`
+ * HTML &mdash; Use a CSS selector such as `div.content h2.error`. By default the matching elements' text will be extracted
+   for the reason. If you are interested instead in an attribute value, specify that using `@attrName` where attrName is the 
+   name of the attribute. For example `div.content h2.error @reason`, will find a div element with the "content" class
+   that contains an h2 element with the "error" class, and extract the "reason" attribute value.   
 
 If you would like to set a default failure reason, you can do so using the `default_reason` variable. This variable is 
 ignored if `reason_path` matches something in the document. 

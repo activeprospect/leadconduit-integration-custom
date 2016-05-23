@@ -1,6 +1,7 @@
 _ = require('lodash')
 querystring = require('querystring')
 builder = require('xmlbuilder')
+flat = require('flat')
 xmlDoc = require('./xml-doc')
 response = require('./response')
 validate = require('./validate')
@@ -29,6 +30,9 @@ request = (vars) ->
     b = {}
     b[vars.xml_parameter] = body
     body = querystring.stringify(b)
+    if vars.extra_parameter
+      params = flat.flatten(normalize(vars.extra_parameter), safe:true)
+      body = querystring.stringify(_.merge(b,params))
     contentType = 'application/x-www-form-urlencoded'
 
   url: vars.url
@@ -51,6 +55,7 @@ request.variables = ->
     { name: 'method', description: 'HTTP method (POST, PUT)', type: 'string', required: false }
     { name: 'xml_path.*', description: 'XML path in dot notation', type: 'wildcard', required: false }
     { name: 'xml_parameter', description: 'To "stuff" the XML into a parameter and send as Form URL encoded, specify the parameter name', type: 'string', required: false }
+    { name: 'extra_parameter.*', description: 'Extra parameters to include in URL, only used when XML Parameter is set', type: 'wildcard', required: false }
   ].concat(variables)
 
 

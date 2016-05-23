@@ -189,6 +189,18 @@ describe 'Outbound XML request', ->
     assert.equal req.headers['Content-Type'], 'application/x-www-form-urlencoded'
     assert.equal req.body, 'xmlData=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Clead%3E%0A%20%20%3Cfoo%3Ebar%3C%2Ffoo%3E%0A%20%20%3Cbaz%3Ebip%3C%2Fbaz%3E%0A%3C%2Flead%3E'
 
+  it 'should include additional url encoded body parameters if present', ->
+    vars =
+      xml_path:
+        'lead.foo': 'bar'
+        'lead.baz': 'bip'
+      xml_parameter: 'xmlData'
+      extra_parameter:
+        'authtoken': 'asdf1234asdf1234'
+        'scope': 'crmapi'
+    req = integration.request(vars)
+    assert.equal req.headers['Content-Type'], 'application/x-www-form-urlencoded'
+    assert.equal req.body, 'xmlData=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Clead%3E%0A%20%20%3Cfoo%3Ebar%3C%2Ffoo%3E%0A%20%20%3Cbaz%3Ebip%3C%2Fbaz%3E%0A%3C%2Flead%3E&authtoken=asdf1234asdf1234&scope=crmapi'
 
 describe 'XML validation', ->
 

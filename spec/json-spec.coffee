@@ -94,7 +94,23 @@ describe 'Outbound JSON request', ->
 
     assert.equal integration.request(vars).body, '{"number":"foo"}'
 
+  it 'should stuff JSON into url-encoded body parameter and include any additional parameters', ->
+    vars =
+      json_property:
+        postal_code: types.postal_code.parse('78704')
+        phone: types.phone.parse('512-789-1111 x123')
+        boolean: types.boolean.parse('T')
+        gender: types.gender.parse('F')
+        number: types.number.parse('$100,000.00')
+        range: types.range.parse('1,000-2,000')
+      json_parameter: 'element'
+      extra_parameter:
+        'sessionName': 'asdf1234asdf1234'
+        'operation': 'create'
+        'elementType': 'lead'
 
+    assert.equal integration.request(vars).headers['Content-Type'], 'application/x-www-form-urlencoded'
+    assert.equal integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead'
 
 
 describe 'JSON validation', ->

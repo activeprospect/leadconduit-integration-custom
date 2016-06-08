@@ -1,11 +1,9 @@
 _ = require('lodash')
-querystring = require('querystring')
 builder = require('xmlbuilder')
-flat = require('flat')
+helpers = require('./helpers')
 xmlDoc = require('./xml-doc')
 response = require('./response')
 validate = require('./validate')
-normalize = require('./normalize')
 variables = require('./variables')
 headers = require('./headers')
 
@@ -27,12 +25,7 @@ request = (vars) ->
   contentType = vars.header?['Content-Type'] ? 'text/xml'
 
   if vars.xml_parameter
-    b = {}
-    b[vars.xml_parameter] = body
-    body = querystring.stringify(b)
-    if vars.extra_parameter
-      params = flat.flatten(normalize(vars.extra_parameter), safe:true)
-      body = querystring.stringify(_.merge(b,params))
+    body = helpers.parameterize(vars.xml_parameter, body, vars.extra_parameter)
     contentType = 'application/x-www-form-urlencoded'
 
   url: vars.url

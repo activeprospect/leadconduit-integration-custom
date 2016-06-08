@@ -1,6 +1,5 @@
 _ = require('lodash')
-querystring = require('querystring')
-flat = require('flat')
+helpers = require('./helpers')
 response = require('./response')
 validate = require('./validate')
 normalize = require('./normalize')
@@ -18,18 +17,13 @@ request = (vars) ->
 
   defaultHeaders =
     'Content-Type': 'application/json; charset=utf-8'
-    'Content-Length': Buffer.byteLength(body)
     'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
 
   if vars.json_parameter
-    b = {}
-    b[vars.json_parameter] = body
-    body = querystring.stringify(b)
-    if vars.extra_parameter
-      params = flat.flatten(normalize(vars.extra_parameter), safe:true)
-      body = querystring.stringify(_.merge(b,params))
+    body = helpers.parameterize(vars.json_parameter, body, vars.extra_parameter)
     defaultHeaders['Content-Type'] = 'application/x-www-form-urlencoded'
-    defaultHeaders['Content-Length'] = Buffer.byteLength(body)
+
+  defaultHeaders['Content-Length'] = Buffer.byteLength(body)
 
   url: vars.url
   method: vars.method?.toUpperCase() ? 'POST'

@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.7.1] - 2016-06-09
+## [2.7.2] - 2016-06-09
 ### Fixed
 - responses are now always treated as success if no outcome on match and no search term are specified
 

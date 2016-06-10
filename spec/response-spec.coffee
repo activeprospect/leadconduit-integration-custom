@@ -782,6 +782,14 @@ describe 'Response', ->
         body: 'oh no!'
       assert.deepEqual response({}, {}, res), outcome: 'success'
 
+    it 'should return success on HTTP 200 if no outcome and search term are specified', ->
+      res =
+        status: 200
+        headers:
+          'Content-Type': 'text/html'
+          'Content-Length': 0
+        body: ''
+      assert.deepEqual response({outcome_search_term: null, outcome_on_match: null}, {}, res), outcome: 'success'
 
 
 

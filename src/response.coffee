@@ -22,52 +22,56 @@ response = (vars, req, res) ->
   # parse the document
   doc = toDoc(res.body, res.headers['Content-Type'])
 
-  # narrow the search scope
-  searchIn =
-    if searchPath
-      # limit outcome_search_term to this path in the document
+  # default to success if no search term and no outcome are specified
+  if !vars.outcome_search_term and !vars.outcome_on_match
+    outcome = 'success'
 
-      if _.isFunction(doc.xpath)
-        # this is an XML document
-        try doc.xpath(searchPath, true) catch
+  else
+    # narrow the search scope
+    searchIn =
+      if searchPath
+        # limit outcome_search_term to this path in the document
 
-      else if _.isFunction(doc.html)
-        # this is a HTML document
-        try
-          doc(searchPath).map(-> doc(this).html()).get()
-        catch err
-          [] # unmatched selector
+        if _.isFunction(doc.xpath)
+          # this is an XML document
+          try doc.xpath(searchPath, true) catch
 
-      else if _.isPlainObject(doc)
-        # this is a JS object (JSON)
-        _.get(doc, searchPath)
+        else if _.isFunction(doc.html)
+          # this is a HTML document
+          try
+            doc(searchPath).map(-> doc(this).html()).get()
+          catch err
+            [] # unmatched selector
 
-      else if _.isString(doc)
-        # this is plain text
-        doc
+        else if _.isPlainObject(doc)
+          # this is a JS object (JSON)
+          _.get(doc, searchPath)
 
-    else
-      # no search path was provided, so search the entire response body
-      res.body
+        else if _.isString(doc)
+          # this is plain text
+          doc
 
-
-  # look in all possible search scopes for the term
-  found =
-    _(ensureArray(searchIn))
-      .map _.trim
-      .map _.toLower
-      .compact()
-      .some (searchIn) ->
-        searchIn.match(searchTerm)
+      else
+        # no search path was provided, so search the entire response body
+        res.body
 
 
-  # determine the outcome based on whether the search term was found
-  outcome =
-    if found
-      searchOutcome
-    else
-      inverseOutcome(searchOutcome)
+    # look in all possible search scopes for the term
+    found =
+      _(ensureArray(searchIn))
+        .map _.trim
+        .map _.toLower
+        .compact()
+        .some (searchIn) ->
+          searchIn.match(searchTerm)
 
+
+    # determine the outcome based on whether the search term was found
+    outcome =
+      if found
+        searchOutcome
+      else
+        inverseOutcome(searchOutcome)
 
   # determine the reason based on the reason selector
   reasons =

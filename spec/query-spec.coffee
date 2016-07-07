@@ -21,6 +21,28 @@ describe 'Outbound GET Query request', ->
       'Whatever': 'foo'
 
 
+  it 'should send data as ASCII when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('true')
+      url: 'http://foo.bar'
+      parameter:
+        fname: 'Mêl'
+        lname: 'Gibson'
+
+    assert.equal integration.request(vars).url, 'http://foo.bar?fname=Mel&lname=Gibson'
+
+
+  it 'should send data as original UTF-8 when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('false')
+      url: 'http://foo.bar'
+      parameter:
+        fname: 'Mêl'
+        lname: 'Gibson'
+
+    assert.equal integration.request(vars).url, 'http://foo.bar?fname=M%C3%AAl&lname=Gibson'
+
+
   it 'should support simple dot-notation', ->
     vars =
       parameter:

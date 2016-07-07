@@ -32,6 +32,37 @@ describe 'Outbound XML request', ->
       'Whatever': 'foo'
       'Bar': 'baz'
 
+  it 'should send data as ASCII when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('true')
+      xml_path:
+        'lead.fname': 'Mêl'
+        'lead.lname': 'Gibson'
+
+    assert.equal integration.request(vars).body,
+      """
+      <?xml version="1.0"?>
+      <lead>
+        <fname>Mel</fname>
+        <lname>Gibson</lname>
+      </lead>
+      """
+
+  it 'should send data as original UTF-8 when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('false')
+      xml_path:
+        'lead.fname': 'Mêl'
+        'lead.lname': 'Gibson'
+
+    assert.equal integration.request(vars).body,
+      """
+      <?xml version="1.0"?>
+      <lead>
+        <fname>Mêl</fname>
+        <lname>Gibson</lname>
+      </lead>
+      """
 
   it 'should allow Content-Type override', ->
     vars =

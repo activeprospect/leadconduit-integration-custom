@@ -5,4 +5,5 @@ module.exports = [
   { name: 'reason_path', description: 'The dot-notation path (for JSON responses), XPath location (for XML responses), or regular expression with a single capture group, used to find the failure reason', type: 'string', required: false }
   { name: 'default_reason', description: 'Failure reason when no reason can be found per the optional Reason Path setting', type: 'string', required: false }
   { name: 'header.*', description: 'HTTP header to send in the request', type: 'wildcard', required: false }
+  { name: 'send_ascii', description: 'Set to true to ensure lead data is sent as ASCII for legacy recipients (default: false)', type: 'boolean', required: false }
 ]

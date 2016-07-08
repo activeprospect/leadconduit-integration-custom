@@ -15,7 +15,7 @@ headers = require('./headers')
 
 request = (vars) ->
 
-  obj = xmlDoc(vars.xml_path)
+  obj = xmlDoc(vars.xml_path, vars.send_ascii?.valueOf() ? false)
   body =
     if Object.keys(obj).length
       builder.create(obj).end(pretty: true)

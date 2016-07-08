@@ -13,7 +13,7 @@ headers = require('./headers')
 #
 
 request = (vars) ->
-  body = JSON.stringify(normalize(vars.json_property))
+  body = JSON.stringify(normalize(vars.json_property, vars.send_ascii?.valueOf() ? false))
 
   defaultHeaders =
     'Content-Type': 'application/json; charset=utf-8'

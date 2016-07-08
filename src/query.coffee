@@ -18,7 +18,7 @@ request = (vars) ->
   parameters = vars.parameter ? {}
 
   # build query content
-  content = flat.flatten(normalize(parameters), safe: true)
+  content = flat.flatten(normalize(parameters, vars.send_ascii?.valueOf() ? false), safe: true)
 
   # URL encoded post body
   query = querystring.encode(content)

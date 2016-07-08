@@ -26,6 +26,26 @@ describe 'Outbound Form POST request', ->
       'Bar': 'baz'
 
 
+  it 'should send data as ASCII when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('true')
+      form_field:
+        fname: 'Mêl'
+        lname: 'Gibson'
+
+    assert.equal integration.request(vars).body, 'fname=Mel&lname=Gibson'
+
+
+  it 'should send data as original UTF-8 when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('false')
+      form_field:
+        fname: 'Mêl'
+        lname: 'Gibson'
+
+    assert.equal integration.request(vars).body, 'fname=M%C3%AAl&lname=Gibson'
+
+
   it 'should allow Content-Type override', ->
     vars =
       url: 'http://foo.bar'

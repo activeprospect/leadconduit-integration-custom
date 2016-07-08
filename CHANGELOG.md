@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.8.0] - 2016-07-08
+### Added
+- support for request variable `send_ascii`: map "true" to this and all lead data will be transliterated to ASCII (e.g., ö -> o)
+
 ## [2.7.2] - 2016-06-09
 ### Fixed
 - responses are now always treated as success if no outcome on match and no search term are specified

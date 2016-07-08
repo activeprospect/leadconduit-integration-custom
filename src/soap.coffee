@@ -43,7 +43,7 @@ handle = (vars, callback) ->
       description[key].split(':')[1] if key
 
     # get SOAP function arguments
-    args = normalize(vars.arg ? {})
+    args = normalize(vars.arg ? {}, vars.send_ascii?.valueOf() ? false)
 
     # This routine converts each argument that is an object to an XML string, if the argument's type calls for it.
     args = _.mapValues args, (value, key) ->

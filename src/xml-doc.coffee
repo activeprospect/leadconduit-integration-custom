@@ -7,9 +7,9 @@ normalize = require('./normalize')
 # Convert an object into one that can be used by xmlbuilder to create a XML document.
 # Keys containing @ are treated as attributes.
 #
-module.exports = (obj) ->
+module.exports = (obj, toAscii = false) ->
 
-  xmlPaths = flat.flatten(normalize(obj))
+  xmlPaths = flat.flatten(normalize(obj, toAscii))
 
   xmlPaths =
     _(xmlPaths)

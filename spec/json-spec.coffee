@@ -26,6 +26,26 @@ describe 'Outbound JSON request', ->
       'Bar': 'baz'
 
 
+  it 'should send data as ASCII when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('true')
+      json_property:
+        fname: 'Mêl'
+        lname: 'Gibson'
+
+    assert.equal integration.request(vars).body, '{"fname":"Mel","lname":"Gibson"}'
+
+
+  it 'should send data as original UTF-8 when told to', ->
+    vars =
+      send_ascii: types.boolean.parse('false')
+      json_property:
+        fname: 'Mêl'
+        lname: 'Gibson'
+
+    assert.equal integration.request(vars).body, '{"fname":"Mêl","lname":"Gibson"}'
+
+
   it 'should allow Content-Type override', ->
     vars =
       url: 'http://foo.bar'

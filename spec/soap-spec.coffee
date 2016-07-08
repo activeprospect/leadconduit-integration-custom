@@ -127,6 +127,42 @@ describe 'Outbound SOAP', ->
       done()
 
 
+  it 'should send data as ASCII when told to', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<FirstName>Bob</FirstName>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLead'
+      'send_ascii': types.boolean.parse('true')
+      'arg.Lead.FirstName': 'Böb'
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
+  it 'should send data as original UTF-8 when told to', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<FirstName>Böb</FirstName>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLead'
+      'send_ascii': types.boolean.parse('false')
+      'arg.Lead.FirstName': 'Böb'
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
   it 'should encode XML into first string argument', (done) ->
     @service = nock 'http://donkey'
     .post '/login/ws/ws.asmx', (body) ->

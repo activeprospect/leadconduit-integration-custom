@@ -19,7 +19,7 @@ request = (vars) ->
   formFields = vars.form_field ? {}
 
   # build body content
-  content = flat.flatten(normalize(formFields), safe: true)
+  content = flat.flatten(normalize(formFields, vars.send_ascii?.valueOf() ? false), safe: true)
 
   # URL encoded post body
   body = querystring.encode(content)

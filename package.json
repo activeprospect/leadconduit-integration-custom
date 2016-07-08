@@ -24,6 +24,7 @@
     "mimeparse": "*",
     "regex-parser": "^2.2.1",
     "soap": "~0.15.0",
+    "unidecode": "^0.1.8",
     "xml2js": "^0.4.16",
     "xmlbuilder": "^7.0.0"
   },
@@ -32,7 +33,6 @@
     "coffee-script": ">= 1.7.0",
     "leadconduit-types": "^4.5.0",
     "mocha": ">= 1.17.0",
-    "nock": "^7.2.2",
-    "unidecode": "^0.1.8"
+    "nock": "^7.2.2"
   }
 }

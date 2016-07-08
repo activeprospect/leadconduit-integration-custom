@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.8.1] - 2016-07-09
+### Fixed
+- make `unidecode` a regular dependency (not devDependency)
+
 ## [2.8.0] - 2016-07-08
 ### Added
 - support for request variable `send_ascii`: map "true" to this and all lead data will be transliterated to ASCII (e.g., ö -> o)

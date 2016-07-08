@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.8.2] - 2016-07-09
+### Fixed
+- add `send_ascii` to SOAP integrations request variables
+
 ## [2.8.1] - 2016-07-09
 ### Fixed
 - make `unidecode` a regular dependency (not devDependency)

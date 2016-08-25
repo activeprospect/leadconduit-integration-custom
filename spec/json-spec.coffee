@@ -142,6 +142,15 @@ describe 'Outbound JSON request', ->
     assert.equal integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]'
 
 
+  it 'should build array with missing index', ->
+    vars =
+      json_property:
+        '0.foo.bar': 'baz'
+        '2.foo.bip': 'bap'
+        '2.foo.bar': 'bip'
+    assert.equal integration.request(vars).body, '[{"foo":{"bar":"baz"}},null,{"foo":{"bip":"bap","bar":"bip"}}]'
+
+
   it 'should build object even though a json property has a leading digit', ->
     vars =
       json_property:

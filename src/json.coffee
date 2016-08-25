@@ -13,7 +13,21 @@ headers = require('./headers')
 #
 
 request = (vars) ->
-  body = JSON.stringify(normalize(vars.json_property, vars.send_ascii?.valueOf() ? false))
+
+  json = normalize(vars.json_property, vars.send_ascii?.valueOf() ? false)
+
+  # test whether the mappings indicate that a root array is being requested
+  keys = Object.keys(json)
+  rootArray = _.every keys, (key) ->
+    key.match(/^\d+$/)
+
+  if rootArray
+    array = []
+    for key, value of json
+      array[key] = value
+    json = array
+
+  body = JSON.stringify(json)
 
   defaultHeaders =
     'Content-Type': 'application/json; charset=utf-8'

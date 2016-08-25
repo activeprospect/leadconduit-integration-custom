@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.8.3] - 2016-08-25
+### Fixed
+- When all `json_property` values have a leading digit, assume the user wants a root array.
+
 ## [2.8.2] - 2016-07-09
 ### Fixed
 - add `send_ascii` to SOAP integrations request variables

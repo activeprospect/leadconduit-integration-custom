@@ -142,6 +142,14 @@ describe 'Outbound JSON request', ->
     assert.equal integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]'
 
 
+  it 'should support brackets in key names', ->
+    vars =
+      json_property:
+        'foo.bar[what_is_your_interest]': 'astrophysics'
+
+    assert.equal integration.request(vars).body, '{"foo":{"bar[what_is_your_interest]":"astrophysics"}}'
+
+
   it 'should build array with missing index', ->
     vars =
       json_property:

@@ -12,7 +12,7 @@ module.exports = normalize = (obj, toAscii = false) ->
     continue if typeof value == 'undefined'
     
     # use valueOf to ensure the normal version is sent for all richly typed values
-    value =
+    content[key] =
       if value?.valid == false
         # invalid richly typed values should be set to the raw value
         if toAscii then unidecode(value.raw) else value.raw
@@ -22,6 +22,4 @@ module.exports = normalize = (obj, toAscii = false) ->
         else
           null
 
-    _.set(content, key, value)
-
-  content
+  flat.unflatten content

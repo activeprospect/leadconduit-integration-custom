@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.8.4] - 2016-08-29
+### Fixed
+- `form_field.*` field names with brackets are correctly preserved (issue #8)
+
 ## [2.8.3] - 2016-08-25
 ### Fixed
 - When all `json_property` values have a leading digit, assume the user wants a root array.

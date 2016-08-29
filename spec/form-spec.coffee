@@ -66,6 +66,14 @@ describe 'Outbound Form POST request', ->
     assert.equal integration.request(vars).body, 'foo.bar.baz=bip'
 
 
+  it 'should support simple bracket notation', ->
+    vars =
+      form_field:
+        'profile[what_is_your_interest]': 'whatever'
+
+    assert.equal integration.request(vars).body, 'profile%5Bwhat_is_your_interest%5D=whatever'
+
+
   it 'should support dot-notation arrays', ->
     vars =
       form_field:

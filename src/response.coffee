@@ -129,7 +129,11 @@ response = (vars, req, res) ->
         trim: true
       try doc.toObject(opts) catch
     else if _.isPlainObject(doc)
+      # This is a JSON object
       doc
+    else if not _.isFunction(doc.html)
+      # Response is plain text
+      {"body": doc}
 
   event ?= {}
   event.outcome = outcome

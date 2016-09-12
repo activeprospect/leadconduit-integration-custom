@@ -243,6 +243,13 @@ describe 'Response', ->
     it 'should include response body in event object', ->
       assert.deepEqual response({}, {}, text('foo')), outcome: 'success', body: 'foo'
 
+
+    it 'should truncate response bodies longer than 128 characters', ->
+      long_string = ""
+      long_string += Math.random().toString(36).substr(2) while long_string.length < 256
+      assert.deepEqual response({}, {}, text(long_string)), outcome: 'success', body: long_string.substring(0,128)
+
+
     it 'should default to success without search term', ->
       assert.deepEqual response({}, {}, text('foo')).outcome, 'success'
 

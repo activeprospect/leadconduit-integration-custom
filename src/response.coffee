@@ -131,9 +131,9 @@ response = (vars, req, res) ->
     else if _.isPlainObject(doc)
       # This is a JSON object
       doc
-    else if not _.isFunction(doc.html)
-      # Response is plain text
-      {"body": doc}
+    else if not _.isFunction(doc.html) and typeof doc is 'string'
+      # Response is plain text. Keep up to 128 characters.
+      {"body": doc.substring(0,128)}
 
   event ?= {}
   event.outcome = outcome

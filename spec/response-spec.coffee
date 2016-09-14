@@ -224,7 +224,7 @@ describe 'Response', ->
       vars = outcome_search_term: 'bar'
       res = xml(foo: 'bar')
       res.headers['Content-Type'] = 'application/json'
-      assert.deepEqual response(vars, {}, res), outcome: 'success'
+      assert.deepEqual response(vars, {}, res).outcome, 'success'
 
 
     it 'should revert to regex on non-JSON body', ->
@@ -240,48 +240,52 @@ describe 'Response', ->
 
   describe 'with plain text body', ->
 
-    it 'should default to success without search term', ->
+    it 'should include response body in event object', ->
       assert.deepEqual response({}, {}, text('foo')), outcome: 'success'
 
 
+    it 'should default to success without search term', ->
+      assert.deepEqual response({}, {}, text('foo')).outcome, 'success'
+
+
     it 'should default to failure per outcome on match', ->
-      assert.deepEqual response(outcome_on_match: 'failure', {}, text('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_on_match: 'failure', {}, text('foo')).outcome, 'failure'
 
 
     it 'should find search term with exact match', ->
-      assert.deepEqual response(outcome_search_term: 'foo', {}, text('foo')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('foo')).outcome, 'success'
 
 
     it 'should not find search term', ->
-      assert.deepEqual response(outcome_search_term: 'bip', {}, text('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'bip', {}, text('foo')).outcome, 'failure'
 
 
     it 'should return failure on match per outcome on match', ->
-      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', {}, text('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', outcome_on_match: 'failure', {}, text('foo')).outcome, 'failure'
 
 
     it 'should find search term with partial match', ->
-      assert.deepEqual response(outcome_search_term: 'foo', {}, text('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('barfoobaz')).outcome, 'success'
 
 
     it 'should find search term with regex', ->
-      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', {}, text('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '[a-z]{3}foo[a-z]{3}', {}, text('barfoobaz')).outcome, 'success'
 
 
     it 'should find search term with regex including slashes', ->
-      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', {}, text('barfoobaz')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', {}, text('barfoobaz')).outcome, 'success'
 
 
     it 'should not error on invalid regex search term', ->
-      assert.deepEqual response(outcome_search_term: '/[/', {}, text('foo')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: '/[/', {}, text('foo')).outcome, 'failure'
 
 
     it 'should find search term with case insensitve match', ->
-      assert.deepEqual response(outcome_search_term: 'foo', {}, text('FOO')), outcome: 'success'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('FOO')).outcome, 'success'
 
 
     it 'should not find match', ->
-      assert.deepEqual response(outcome_search_term: 'foo', {}, text('bar')), outcome: 'failure'
+      assert.deepEqual response(outcome_search_term: 'foo', {}, text('bar')).outcome, 'failure'
 
 
     it 'should parse reason', ->
@@ -325,11 +329,33 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'just because'
 
 
+    it 'should use capture groups', ->
+      vars =
+        outcome_on_match: 'failure'
+        capture:
+          bad: '/bad: (.*)$/m'
+          why: '/why: (.*)$/m'
+      expected =
+        outcome: 'failure'
+        bad: 'the reason text!'
+        why: 'just because'
+
+      assert.deepEqual response(vars, {}, text('bad: the reason text!\nwhy: just because')), expected
+
+
+    it 'should not choke on bad capture group', ->
+      vars =
+        outcome_on_match: 'failure'
+        capture:
+          bad: '/bad: (.*/x'
+      assert.deepEqual response(vars, {}, text('bad: the reason text!\nwhy: just because')), outcome: 'failure'
+
+
     it 'should revert to string search on non-text body', ->
       vars = outcome_search_term: 'bar'
       res = json(foo: 'bar')
       res.headers['Content-Type'] = 'plain/text'
-      assert.deepEqual response(vars, {}, res), outcome: 'success'
+      assert.deepEqual response(vars, {}, res).outcome, 'success'
 
 
 
@@ -439,7 +465,7 @@ describe 'Response', ->
         reason: 'just because'
       assert.deepEqual response(vars, {}, html('<div>bar</div><div id="message">just because</div>')), expected
 
-      
+
     it 'should parse reason from attribute', ->
       vars =
         outcome_search_term: 'foo'
@@ -500,7 +526,7 @@ describe 'Response', ->
       vars = outcome_search_term: 'bar'
       res = json(foo: 'bar')
       res.headers['Content-Type'] = 'text/html'
-      assert.deepEqual response(vars, {}, res), outcome: 'success'
+      assert.deepEqual response(vars, {}, res).outcome, 'success'
 
 
 
@@ -780,7 +806,7 @@ describe 'Response', ->
           'Content-Type': 'text/plain'
           'Content-Length': 6
         body: 'oh no!'
-      assert.deepEqual response({}, {}, res), outcome: 'success'
+      assert.deepEqual response({}, {}, res).outcome, 'success'
 
     it 'should return success on HTTP 200 if no outcome and search term are specified', ->
       res =
@@ -789,7 +815,7 @@ describe 'Response', ->
           'Content-Type': 'text/html'
           'Content-Length': 0
         body: ''
-      assert.deepEqual response({outcome_search_term: null, outcome_on_match: null}, {}, res), outcome: 'success'
+      assert.deepEqual response({outcome_search_term: null, outcome_on_match: null}, {}, res).outcome, 'success'
 
 
 

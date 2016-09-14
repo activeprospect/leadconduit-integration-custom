@@ -129,7 +129,15 @@ response = (vars, req, res) ->
         trim: true
       try doc.toObject(opts) catch
     else if _.isPlainObject(doc)
+      # This is a JSON object
       doc
+    else if not _.isFunction(doc.html) and typeof doc is 'string'
+      # Response is plain text. Use "capture" variables to capture parts of the text into properties.
+      e = {}
+      for property, regex of vars.capture ? {}
+        value = doc.match(toRegex(regex))?[1]
+        e[property] = value if value?
+      e
 
   event ?= {}
   event.outcome = outcome

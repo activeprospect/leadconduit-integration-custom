@@ -241,13 +241,7 @@ describe 'Response', ->
   describe 'with plain text body', ->
 
     it 'should include response body in event object', ->
-      assert.deepEqual response({}, {}, text('foo')), outcome: 'success', body: 'foo'
-
-
-    it 'should truncate response bodies longer than 128 characters', ->
-      long_string = ""
-      long_string += Math.random().toString(36).substr(2) while long_string.length < 256
-      assert.deepEqual response({}, {}, text(long_string)), outcome: 'success', body: long_string.substring(0,128)
+      assert.deepEqual response({}, {}, text('foo')), outcome: 'success'
 
 
     it 'should default to success without search term', ->
@@ -298,22 +292,22 @@ describe 'Response', ->
       vars =
         outcome_search_term: 'foo'
         reason_path: '[a-z]+:(.*)'
-      assert.deepEqual response(vars, {}, text('bad:the reason text!')), body: 'bad:the reason text!', outcome: 'failure', reason: 'the reason text!'
+      assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'the reason text!'
 
 
     it 'should parse reason with slashes', ->
       vars =
         outcome_search_term: 'foo'
         reason_path: '/[a-z]+:(.*)/'
-      assert.deepEqual response(vars, {}, text('bad:the reason text!')), body: 'bad:the reason text!', outcome: 'failure', reason: 'the reason text!'
+      assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'the reason text!'
 
 
     it 'should discard empty reason', ->
       vars =
         outcome_search_term: 'foo'
         reason_path: '[a-z]+:(.*)'
-      assert.deepEqual response(vars, {}, text('bad:')), body: 'bad:', outcome: 'failure'
-      assert.deepEqual response(vars, {}, text('bad:     ')), body: 'bad:     ', outcome: 'failure'
+      assert.deepEqual response(vars, {}, text('bad:')), outcome: 'failure'
+      assert.deepEqual response(vars, {}, text('bad:     ')), outcome: 'failure'
 
 
     it 'should return default reason', ->
@@ -324,7 +318,7 @@ describe 'Response', ->
       vars =
         outcome_search_term: 'foo'
         reason_path: 'whatever:(.*)'
-      assert.deepEqual response(vars, {}, text('bad:the reason text!')), body: 'bad:the reason text!', outcome: 'failure'
+      assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure'
 
 
     it 'should use default reason on failure to parse reason', ->
@@ -332,7 +326,21 @@ describe 'Response', ->
         outcome_search_term: 'foo'
         reason_path: 'whatever:(.*)'
         default_reason: 'just because'
-      assert.deepEqual response(vars, {}, text('bad:the reason text!')), body: 'bad:the reason text!', outcome: 'failure', reason: 'just because'
+      assert.deepEqual response(vars, {}, text('bad:the reason text!')), outcome: 'failure', reason: 'just because'
+
+
+    it 'should use capture groups', ->
+      vars =
+        outcome_on_match: 'failure'
+        capture:
+          bad: '/bad: (.*)$/m'
+          why: '/why: (.*)$/m'
+      expected =
+        outcome: 'failure'
+        bad: 'the reason text!'
+        why: 'just because'
+
+      assert.deepEqual response(vars, {}, text('bad: the reason text!\nwhy: just because')), expected
 
 
     it 'should revert to string search on non-text body', ->
@@ -449,7 +457,7 @@ describe 'Response', ->
         reason: 'just because'
       assert.deepEqual response(vars, {}, html('<div>bar</div><div id="message">just because</div>')), expected
 
-      
+
     it 'should parse reason from attribute', ->
       vars =
         outcome_search_term: 'foo'

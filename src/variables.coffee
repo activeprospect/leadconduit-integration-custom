@@ -6,4 +6,5 @@ module.exports = [
   { name: 'default_reason', description: 'Failure reason when no reason can be found per the optional Reason Path setting', type: 'string', required: false }
   { name: 'header.*', description: 'HTTP header to send in the request', type: 'wildcard', required: false }
   { name: 'send_ascii', description: 'Set to true to ensure lead data is sent as ASCII for legacy recipients (default: false)', type: 'boolean', required: false }
+  { name: 'capture.*', description: 'A named regular expression with a single capture group, used to capture values from plain text responses into the named property', type: 'wildcard' }
 ]

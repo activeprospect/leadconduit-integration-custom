@@ -132,8 +132,13 @@ response = (vars, req, res) ->
       # This is a JSON object
       doc
     else if not _.isFunction(doc.html) and typeof doc is 'string'
-      # Response is plain text. Keep up to 128 characters.
-      {"body": doc.substring(0,128)}
+      # Response is plain text. Use "capture" variables to capture parts of the text into properties.
+      e = {}
+      for property, regex of vars.capture ? {}
+        regex = toRegex(regex)
+        if value = doc.match(regex)?[1]
+          e[property] = value
+      e
 
   event ?= {}
   event.outcome = outcome

@@ -135,8 +135,7 @@ response = (vars, req, res) ->
       # Response is plain text. Use "capture" variables to capture parts of the text into properties.
       e = {}
       for property, regex of vars.capture ? {}
-        regex = toRegex(regex)
-        value = doc.match(regex)?[1]
+        value = doc.match(toRegex(regex))?[1]
         e[property] = value if value?
       e
 

@@ -21,6 +21,7 @@ handle = (vars, callback) ->
   options =
     valueKey: '#value'
     forceSoap12Headers: vars.version?.trim() == '1.2'
+    disableCache: true
 
   soap.createClient vars.url, options, (err, client) ->
     return callback(err) if err

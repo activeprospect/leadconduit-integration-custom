@@ -10,7 +10,7 @@ encoded = fs.readFileSync("#{__dirname}/soap-encoded.xml")
 
 
 describe 'Outbound SOAP', ->
-  before ->
+  beforeEach ->
     @wsdl = nock 'http://donkey'
       .get '/login/ws/ws.asmx?WSDL'
       .reply 200, wsdl, 'Content-Type': 'text/xml'
@@ -605,6 +605,10 @@ describe 'Outbound SOAP', ->
 
     it 'should parse encoded XML encoded in string result', (done) ->
       nock.cleanAll()
+
+      @wsdl = nock 'http://donkey'
+        .get '/login/ws/ws.asmx?WSDL'
+        .reply 200, wsdl, 'Content-Type': 'text/xml'
 
       @service = nock 'http://donkey'
         .post '/login/ws/ws.asmx'

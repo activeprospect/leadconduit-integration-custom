@@ -343,7 +343,6 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, text('bad: the reason text!\nwhy: just because')), expected
 
 
-
     it 'should not choke on bad capture group', ->
       vars =
         outcome_on_match: 'failure'

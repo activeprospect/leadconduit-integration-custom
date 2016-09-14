@@ -136,8 +136,8 @@ response = (vars, req, res) ->
       e = {}
       for property, regex of vars.capture ? {}
         regex = toRegex(regex)
-        if value = doc.match(regex)?[1]
-          e[property] = value
+        value = doc.match(regex)?[1]
+        e[property] = value if value?
       e
 
   event ?= {}

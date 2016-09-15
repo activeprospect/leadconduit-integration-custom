@@ -529,6 +529,15 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, res).outcome, 'success'
 
 
+    it 'should use capture groups', ->
+      vars =
+        capture:
+          number_records: 'matched (.*) records'
+      expected =
+        outcome: 'success'
+        number_records: '42'
+
+      assert.deepEqual response(vars, {}, html('<div>result: matched 42 records.</div>')), expected
 
 
   describe 'with xml body', ->

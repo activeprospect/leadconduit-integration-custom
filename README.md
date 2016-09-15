@@ -134,6 +134,40 @@ The above mappings would invoke the `AddLead` function with a single argument na
 }
 ```
 
+## Plain Text
+
+For plain text or HTML responses (but _not_ XML or JSON), string values can be extracted by mapping regular expressions
+to "capture" variables.
+
+For example, with these mappings:
+
+ * `matched (.*) records` -> `{{capture.number_records}}`
+
+And a response like:
+
+```
+Query matched 42 records.
+```
+
+This would result in an appended value, `number_records`, with a value of "42".
+
+The formulation of expression can be tricky, especially for long or multi-line responses.
+Mapped regular expression values are lowercased, so take that into consideration, or use syntax like `/.../i`.
+Line-separators in the response may not match anchors (`^` & `$`) as expected, so use of the "multiline" modifier may be needed (`/.../m`).
+
+Another example, which will result in `title` being set with "The Raven":
+
+Mapping: `/^Title: (.*)$/im` -> `{{capture.title}}`
+
+Response:
+
+```
+The Project Gutenberg EBook of The Raven, by Edgar Allan Poe
+
+Title: The Raven
+
+Author: Edgar Allen Poe
+```
 
 ## Parsing responses
 

@@ -132,10 +132,11 @@ response = (vars, req, res) ->
     else if _.isPlainObject(doc)
       # This is a JSON object
       doc
-    else if not _.isFunction(doc.html) and typeof doc is 'string'
-      # Response is plain text. Use "capture" variables to capture parts of the text into properties.
+    else if _.isPlainObject(vars.capture)
+      # Use any "capture" variables to capture parts of the text into properties from unstructured text
+      doc = doc.html() if _.isFunction(doc.html)
       e = {}
-      for property, regex of vars.capture ? {}
+      for property, regex of vars.capture
         value = doc.match(toRegex(regex))?[1]
         e[property] = value if value?
       e

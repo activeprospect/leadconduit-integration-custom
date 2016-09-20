@@ -108,6 +108,7 @@ response = (vars, req, res) ->
 
   # trim and comma delimit reasons
   reason = _(ensureArray(reasons))
+    .map extractCData
     .map _.trim
     .compact()
     .sort()
@@ -182,3 +183,9 @@ toDoc = (body, contentType) ->
 errorStatus = (statusCode) ->
   error = statusCode % 500
   error >= 0 and error < 100
+
+
+# if the given value is CDATA, extract that character data from the <![CDATA[...]]> wrapper
+extractCData = (value) ->
+  return unless value
+  value.nodeValue ? value.toString()

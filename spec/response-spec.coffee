@@ -686,6 +686,29 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, xml(baz: { bip: 'the reason text!'})), expected
 
 
+    it 'should parse reason from CDATA', ->
+      vars =
+        outcome_search_term: 'success'
+        reason_path: '/baz/bip/text()'
+
+      body = '<baz><bip><![CDATA[the reason character data!]]></bip></baz>'
+
+      res =
+        status: 200
+        headers:
+          'Content-Type': 'text/xml'
+          'Content-Length': body.length
+        body: body
+
+      expected =
+        outcome: 'failure'
+        reason: 'the reason text!'
+
+      event = response(vars, {}, res)
+      assert.equal event.outcome, 'failure'
+      assert.equal event.reason, 'the reason character data!'
+
+
     it 'should discard empty reason', ->
       vars =
         outcome_search_term: 'foo'

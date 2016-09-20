@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.9.1] - 2016-09-21
+### Fixed
+- support "capture" fields in HTML responses, too
+- clean up "reason" text extracted from XML CDATA
+
+## [2.9.0] - 2016-09-14
+### Added
+- Can now specify "capture" fields and mapped regular expressions with capture groups to populate them
+
 ## [2.8.4] - 2016-08-29
 ### Fixed
 - `form_field.*` field names with brackets are correctly preserved (issue #8)

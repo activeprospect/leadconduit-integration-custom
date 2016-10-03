@@ -19,8 +19,11 @@ response = (vars, req, res) ->
   searchPath = vars.outcome_search_path?.trim()
   reasonSelector = vars.reason_path?.trim()
 
-  # parse the document
-  doc = toDoc(res.body, res.headers['Content-Type'])
+  # parse the document. Use Content-Type override if provided.
+  if vars.response_content_type_override
+    doc = toDoc(res.body, vars.response_content_type_override)
+  else
+    doc = toDoc(res.body, res.headers['Content-Type'])
 
   # default to success if no search term and no outcome are specified
   if !vars.outcome_search_term and !vars.outcome_on_match

@@ -235,8 +235,23 @@ describe 'Response', ->
         body: '{"err":1,"message":"PhoneNumber is a required field."}'
       assert.equal response({reason_path: '"message":"([^"]+)"'}, {}, res).reason, 'PhoneNumber is a required field.'
 
-
-
+    it 'should override response Content-Type if override is specified in vars', ->
+      res =
+        status: 422
+        headers:
+          'Content-Type': 'text/html; charset=UTF-8'
+        body: '{"err":1,"message":"PhoneNumber is a required field."}'
+      vars =
+        outcome_search_term: 'success'
+        response_content_type_override: 'application/json'
+        reason_path: 'message'
+      expected =
+        outcome: 'failure'
+        err: 1
+        message: "PhoneNumber is a required field."
+        reason: "PhoneNumber is a required field."
+      assert.deepEqual response(vars, {}, res), expected
+ 
 
   describe 'with plain text body', ->
 

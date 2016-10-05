@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.10.0] - 2016-10-05
+### Added
+- added ability to override response `Content-Type` (issue #32)
+
 ## [2.9.1] - 2016-09-21
 ### Fixed
 - support "capture" fields in HTML responses, too

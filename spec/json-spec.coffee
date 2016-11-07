@@ -133,6 +133,16 @@ describe 'Outbound JSON request', ->
     assert.equal integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead'
 
 
+
+  it 'should compact array', ->
+    vars =
+      json_property:
+        'foo.0': 'baz'
+        'foo.1': null
+        'foo.2': 'bip'
+    assert.equal integration.request(vars).body, '{"foo":["baz","bip"]}'
+
+
   it 'should build array', ->
     vars =
       json_property:
@@ -150,13 +160,13 @@ describe 'Outbound JSON request', ->
     assert.equal integration.request(vars).body, '{"foo":{"bar[what_is_your_interest]":"astrophysics"}}'
 
 
-  it 'should build array with missing index', ->
+  it 'should compact array with missing index', ->
     vars =
       json_property:
         '0.foo.bar': 'baz'
         '2.foo.bip': 'bap'
         '2.foo.bar': 'bip'
-    assert.equal integration.request(vars).body, '[{"foo":{"bar":"baz"}},null,{"foo":{"bip":"bap","bar":"bip"}}]'
+    assert.equal integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]'
 
 
   it 'should build object even though a json property has a leading digit', ->

@@ -1,6 +1,7 @@
 _ = require('lodash')
 flat = require('flat')
 normalize = require('./normalize')
+compact = require('./compact')
 
 
 #
@@ -27,4 +28,4 @@ module.exports = (obj, toAscii = false) ->
 
     .value()
 
-  flat.unflatten(xmlPaths)
+  compact(flat.unflatten(xmlPaths))

@@ -60,6 +60,15 @@ describe 'Outbound GET Query request', ->
     assert.equal integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip&foo.bar.baz=bap'
 
 
+  it 'should compact array', ->
+    vars =
+      parameter:
+        'foo.0': 'bip'
+        'foo.2': 'bap'
+
+    assert.equal integration.request(vars).url.split('?')[1], 'foo=bip&foo=bap'
+
+
   it 'should support dot-notation array reference', ->
     vars =
       parameter:

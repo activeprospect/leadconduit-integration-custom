@@ -106,7 +106,6 @@ describe 'Outbound XML request', ->
       </foo>
       """
 
-
   it 'should support dot-notation arrays', ->
     vars =
       xml_path:
@@ -121,6 +120,22 @@ describe 'Outbound XML request', ->
           <baz>bip</baz>
           <baz>bap</baz>
         </bar>
+      </foo>
+      """
+
+
+  it 'should compact array', ->
+    vars =
+      xml_path:
+        'foo.bar.0': 'bip'
+        'foo.bar.2': 'bap'
+
+    assert.equal integration.request(vars).body,
+      """
+      <?xml version="1.0"?>
+      <foo>
+        <bar>bip</bar>
+        <bar>bap</bar>
       </foo>
       """
 

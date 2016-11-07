@@ -5,6 +5,7 @@ validate = require('./validate')
 normalize = require('./normalize')
 variables = require('./variables')
 headers = require('./headers')
+compact = require('./compact')
 
 
 
@@ -26,6 +27,9 @@ request = (vars) ->
     for key, value of json
       array[key] = value
     json = array
+
+  # compact all arrays
+  json = compact(json)
 
   body = JSON.stringify(json)
 

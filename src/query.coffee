@@ -6,6 +6,7 @@ validate = require('./validate')
 normalize = require('./normalize')
 variables = require('./variables')
 headers = require('./headers')
+compact = require('./compact')
 
 
 #
@@ -21,7 +22,7 @@ request = (vars) ->
   content = flat.flatten(normalize(parameters, vars.send_ascii?.valueOf() ? false), safe: true)
 
   # URL encoded post body
-  query = querystring.encode(content)
+  query = querystring.encode(compact(content))
 
   url: "#{vars.url}?#{query}"
   method: 'GET'

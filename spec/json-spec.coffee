@@ -83,6 +83,15 @@ describe 'Outbound JSON request', ->
     assert.equal integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}'
 
 
+  it 'should support numeric object properties', ->
+    vars =
+      json_property:
+        'foo.bar.baz{0}': 'bip'
+        'foo.bar.baz{1}': 'bap'
+
+    assert.equal integration.request(vars).body, '{"foo":{"bar":{"baz":{"0":"bip","1":"bap"}}}}'
+
+
   it 'should normalize rich types', ->
     vars =
       json_property:

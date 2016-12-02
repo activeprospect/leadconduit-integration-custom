@@ -157,6 +157,24 @@ describe 'Outbound XML request', ->
       """
 
 
+  it 'should not support numeric elements', ->
+    # xml doesn't support numeric element names
+    vars =
+      xml_path:
+        'foo.bar.baz{0}': 'bip'
+        'foo.bar.baz{1}': 'bap'
+
+    assert.equal integration.request(vars).body,
+      """
+      <?xml version="1.0"?>
+      <foo>
+        <bar>
+          <baz>bip</baz>
+          <baz>bap</baz>
+        </bar>
+      </foo>
+      """
+
   it 'should normalize rich types', ->
     vars =
       xml_path:

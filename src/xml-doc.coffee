@@ -10,7 +10,7 @@ compact = require('./compact')
 #
 module.exports = (obj, toAscii = false) ->
 
-  xmlPaths = flat.flatten(normalize(obj, toAscii))
+  xmlPaths = flat.flatten(normalize(obj, toAscii) ? {})
 
   xmlPaths =
     _(xmlPaths)

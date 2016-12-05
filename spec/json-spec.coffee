@@ -83,6 +83,33 @@ describe 'Outbound JSON request', ->
     assert.equal integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}'
 
 
+  it 'should support numeric object properties', ->
+    vars =
+      json_property:
+        'foo.bar.baz{0}': 'bip'
+        'foo.bar.baz{1}': 'bap'
+
+    assert.equal integration.request(vars).body, '{"foo":{"bar":{"baz":{"0":"bip","1":"bap"}}}}'
+
+
+  it 'should support intermediate numeric object properties', ->
+    vars =
+      json_property:
+        'foo.bar{0}.bip': true
+        'foo.bar{1}.bip': false
+
+    assert.equal integration.request(vars).body, '{"foo":{"bar":{"0":{"bip":true},"1":{"bip":false}}}}'
+
+
+  it 'should support multiple intermediate numeric object properties', ->
+    vars =
+      json_property:
+        'foo{0}.bar{0}.bip': true
+        'foo{1}.bar{1}.bip': false
+
+    assert.equal integration.request(vars).body, '{"foo":{"0":{"bar":{"0":{"bip":true}}},"1":{"bar":{"1":{"bip":false}}}}}'
+
+
   it 'should normalize rich types', ->
     vars =
       json_property:

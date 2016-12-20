@@ -320,6 +320,74 @@ describe 'Outbound SOAP', ->
       done()
 
 
+  it 'should have a request body with the root element namespace prefix and xlmns attributes when specified', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<cal:AddLead xmlns:cal="http://donkey/ws.asmx/"></cal:AddLead>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      url: 'http://donkey/login/ws/ws.asmx?WSDL'
+      function: 'AddLead'
+      root_namespace_prefix: 'cal'
+      root_xmlns_attribute_name: 'xmlns:cal'
+      root_xmlns_attribute_value: 'http://donkey/ws.asmx/'
+
+    soap.handle vars, (err, event) =>
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
+  it 'should not fail when the root element namespace prefix is defined but the xlmns attributes name/value pair are not specified', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<cal:AddLead xmlns="http://donkey/ws.asmx/"></cal:AddLead>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      url: 'http://donkey/login/ws/ws.asmx?WSDL'
+      function: 'AddLead'
+      root_namespace_prefix: 'cal'
+
+    soap.handle vars, (err, event) =>
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+  it 'should not fail when the root element namespace prefix is not defined but the root element xlmns attributes name/value pairs are specified', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<AddLead xmlns:cal="http://donkey/ws.asmx/"></AddLead>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      url: 'http://donkey/login/ws/ws.asmx?WSDL'
+      function: 'AddLead'
+      root_xmlns_attribute_name: 'xmlns:cal'
+      root_xmlns_attribute_value: 'http://donkey/ws.asmx/'
+
+    soap.handle vars, (err, event) =>
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+  it 'should not fail when the root element namespace prefix and xlmns attributes name/value pairs are not specified', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<AddLead xmlns="http://donkey/ws.asmx/"></AddLead>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      url: 'http://donkey/login/ws/ws.asmx?WSDL'
+      function: 'AddLead'
+
+    soap.handle vars, (err, event) =>
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
   describe 'response', ->
 
     beforeEach ->
@@ -657,7 +725,6 @@ describe 'Outbound SOAP', ->
 
     it 'should require valid SOAP version', ->
       assert.equal soap.validate(url: 'http://foo', function: 'whatever', version: '0'), 'Must be valid SOAP version: 1.1 or 1.2'
-
 
 
 

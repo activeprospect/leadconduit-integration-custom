@@ -872,7 +872,7 @@ describe 'Response', ->
         status: 200
         headers:
           'Set-Cookie': ['session_id=12345; path=/; domain=.fizzbuzz.com']
-      assert.deepEqual response(vars, {}, res), outcome: "success"
+      assert.deepEqual response({}, {}, res), outcome: "success"
 
     it 'should capture response cookies into named property if specified in vars, with proper types for each cookie attribute', ->
       res =
@@ -886,10 +886,10 @@ describe 'Response', ->
           name: "session_id"
           value: "12345"
           path: "/"
-          domain: ".fizzbuzz.com" //string
-          expires: Date("Sat, 01-Jan-2022 16:39:03 GMT") //Date object
-          maxAge: 155520000, //number
-          secure: true, //boolean
+          domain: ".fizzbuzz.com" #string
+          expires: Date("Sat, 01-Jan-2022 16:39:03 GMT") #Date object
+          maxAge: 155520000, #number
+          secure: true, #boolean
           httpOnly: true
       assert.deepEqual response(vars, {}, res).cookie_monster, expected 
 
@@ -909,16 +909,16 @@ describe 'Response', ->
           "value": "buzz"
       assert.deepEqual response(vars, {}, res).cookie_monster, expected
 
-    // RFC 6265 (4.1.1) says that multiple Set-Cookie headers with the same
-    // cookie-name is a no-no. RFC 6265 (5.3) also states that in such cases,
-    // the cookie user agents are to pick the latest Set-Cookie if more than
-    // one cookie has the same (cookie-name, domain-value, path-value) tuple.
-    // Otherwise, the user agent treats the two cookies (with same cookie-name)
-    // as different cookies.
+    # RFC 6265 (4.1.1) says that multiple Set-Cookie headers with the same
+    # cookie-name is a no-no. RFC 6265 (5.3) also states that in such cases,
+    # the cookie user agents are to pick the latest Set-Cookie if more than
+    # one cookie has the same (cookie-name, domain-value, path-value) tuple.
+    # Otherwise, the user agent treats the two cookies (with same cookie-name)
+    # as different cookies.
 
     it 'should handle multiple cookies with duplicate cookie-name, but different domain-value and/or path-value', ->
-      // The top-level cookie object name will then reference an array of cookie
-      // objects, rather than a cookie object directly.
+      # The top-level cookie object name will then reference an array of cookie
+      # objects, rather than a cookie object directly.
       res =
         status: 200
         headers:
@@ -930,13 +930,13 @@ describe 'Response', ->
         collect_cookies: "cookie_monster"
       expected =
         "foo": [
-          {"name":"fizz", path="/", domain=".fizzbuzz.com"},
-          {"name":"buzz", path="/somepath", domain=".fizzbuzz.com"}
+          {"name":"fizz", "path":"/", "domain":".fizzbuzz.com"},
+          {"name":"buzz", "path":"/somepath", "domain":".fizzbuzz.com"}
         ]
       assert.deepEqual response(vars, {}, res).cookie_monster, expected
 
     it 'should handle multiple cookies with duplicate cookie-name, domain-value, and path-value', ->
-      // The last Set-Cookie in the headers takes precedent.
+      # The last Set-Cookie in the headers takes precedent.
       res =
         status: 200
         headers:
@@ -954,18 +954,18 @@ describe 'Response', ->
           domain: ".fizzbuzz.com"
       assert.deepEqual response(vars, {}, res).cookie_monster, expected 
 
-    // RFC 6265 (4.1.1) specifies that arbitrary data in cookie-values SHOULD
-    // be encoded, but makes no requirement on the type of encoding (it only
-    // mentions Base64 as an example of an encoding). The grammar defined in
-    // section 4.1.1 for "cookie-octet" lends itself to most users utilizing
-    // the encodeURIComponent() function for the purpose of conforming to that
-    // grammar. The MDN also recommends encodeURIComponent:
-    //
-    // https://developer.mozilla.org/en-US/docs/Web/API/document/cookie
-    //
-    // and most projects involving cookie handling also conform to this
-    // convention (as does the underling set-cookie-parser library in use
-    // here).
+    # RFC 6265 (4.1.1) specifies that arbitrary data in cookie-values SHOULD
+    # be encoded, but makes no requirement on the type of encoding (it only
+    # mentions Base64 as an example of an encoding). The grammar defined in
+    # section 4.1.1 for "cookie-octet" lends itself to most users utilizing
+    # the encodeURIComponent() function for the purpose of conforming to that
+    # grammar. The MDN also recommends encodeURIComponent:
+    #
+    # https://developer.mozilla.org/en-US/docs/Web/API/document/cookie
+    #
+    # and most projects involving cookie handling also conform to this
+    # convention (as does the underling set-cookie-parser library in use
+    # here).
 
     it 'should URIdecode cookie-values by default', ->
       res =

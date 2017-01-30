@@ -17,11 +17,19 @@ toRegex = helpers.toRegex
 handle = (vars, callback) ->
 
   vars = flat.unflatten(vars)
-
   options =
     valueKey: '#value'
     forceSoap12Headers: vars.version?.trim() == '1.2'
     disableCache: true
+
+  if vars.root_namespace_prefix
+    _.set options, 'overrideRootElement.namespace', vars.root_namespace_prefix
+
+  if vars.root_xmlns_attribute_name and vars.root_xmlns_attribute_value
+    _.set options, 'overrideRootElement.xmlnsAttributes', [
+      name: vars.root_xmlns_attribute_name
+      value: vars.root_xmlns_attribute_value
+    ]
 
   soap.createClient vars.url, options, (err, client) ->
     return callback(err) if err
@@ -203,6 +211,9 @@ requestVariables = ->
     { name: 'default_reason', description: 'Failure reason when no reason can be found per the optional Reason Path setting', type: 'string', required: false }
     { name: 'soap_header.*', description: 'Custom SOAP header in the format root_name.header_name or root_name@xmlns', type: 'wildcard', required: false }
     { name: 'send_ascii', description: 'Set to true to ensure lead data is sent as ASCII for legacy recipients (default: false)', type: 'boolean', required: false }
+    { name: 'root_namespace_prefix', description: 'namespace prefix for the body element', type: 'string', required: false }
+    { name: 'root_xmlns_attribute_name', description: 'xmlns namespace attribute name for the body element', type: 'string', required: false }
+    { name: 'root_xmlns_attribute_value', description: 'xmlns namespace attribute value for the body element', type: 'string', required: false }
   ]
 
 

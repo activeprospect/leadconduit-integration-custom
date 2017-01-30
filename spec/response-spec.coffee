@@ -871,14 +871,14 @@ describe 'Response', ->
       res =
         status: 200
         headers:
-          'Set-Cookie': 'session_id=12345; path=/; domain=.fizzbuzz.com"
+          'Set-Cookie': ['session_id=12345; path=/; domain=.fizzbuzz.com']
       assert.deepEqual response(vars, {}, res), outcome: "success"
 
     it 'should capture response cookies into named property if specified in vars, with proper types for each cookie attribute', ->
       res =
         status: 200
         headers:
-          'Set-Cookie': 'session_id=12345; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly'
+          'Set-Cookie': ['session_id=12345; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly']
       vars = 
         collect_cookies: "cookie_monster"
       expected =
@@ -897,8 +897,7 @@ describe 'Response', ->
       res =
         status: 200
         headers:
-          'Set-Cookie': 'foo=fizz'
-          'Set-Cookie': 'bar=buzz'
+          'Set-Cookie': ['foo=fizz','bar=buzz']
       vars = 
         collect_cookies: "cookie_monster"
       expected =
@@ -918,17 +917,42 @@ describe 'Response', ->
     // as different cookies.
 
     it 'should handle multiple cookies with duplicate cookie-name, but different domain-value and/or path-value', ->
-
-    // The top-level cookie object name will then reference an array of cookie
-    // objects, rather than a cookie object directly.
-
-      return False
+      // The top-level cookie object name will then reference an array of cookie
+      // objects, rather than a cookie object directly.
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': [
+            'foo=fizz; path=/; domain=.fizzbuzz.com',
+            'foo=buzz; path=/somepath; domain=.fizzbuzz.com'
+          ]
+      vars =
+        collect_cookies: "cookie_monster"
+      expected =
+        "foo": [
+          {"name":"fizz", path="/", domain=".fizzbuzz.com"},
+          {"name":"buzz", path="/somepath", domain=".fizzbuzz.com"}
+        ]
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected
 
     it 'should handle multiple cookies with duplicate cookie-name, domain-value, and path-value', ->
-
-    // The last Set-Cookie in the headers takes precedent.
-
-      return False
+      // The last Set-Cookie in the headers takes precedent.
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': [
+            'session_id=12345; path=/; domain=.fizzbuzz.com',
+            'session_id=54321; path=/; domain=.fizzbuzz.com'
+          ]
+      vars = 
+        collect_cookies: "cookie_monster"
+      expected =
+        "session_id":
+          name: "session_id"
+          value: "54321"
+          path: "/"
+          domain: ".fizzbuzz.com"
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected 
 
     // RFC 6265 (4.1.1) specifies that arbitrary data in cookie-values SHOULD
     // be encoded, but makes no requirement on the type of encoding (it only
@@ -947,7 +971,7 @@ describe 'Response', ->
       res =
         status: 200
         headers:
-          'Set-Cookie': 'user_id=cookie_monster%40sesamestreet.com'
+          'Set-Cookie': ['user_id=cookie_monster%40sesamestreet.com']
       vars = 
         collect_cookies: "cookie_monster"
       expected =
@@ -960,7 +984,7 @@ describe 'Response', ->
       res =
         status: 200
         headers:
-          'Set-Cookie': 'foo=bar_%F'
+          'Set-Cookie': ['foo=bar_%F']
       vars = 
         collect_cookies: "cookie_monster"
       expected =
@@ -973,7 +997,7 @@ describe 'Response', ->
       res =
         status: 200
         headers:
-          'Set-Cookie': 'user_id=foo%40bar.com'
+          'Set-Cookie': ['user_id=foo%40bar.com']
       vars = 
         collect_cookies: "cookie_monster"
         collect_cookies_decode: false

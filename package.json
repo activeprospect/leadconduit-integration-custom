@@ -26,7 +26,8 @@
     "soap": "~0.17.0",
     "unidecode": "^0.1.8",
     "xml2js": "^0.4.16",
-    "xmlbuilder": "^7.0.0"
+    "xmlbuilder": "^7.0.0",
+    "set-cookie-parser": "^2.0.0"
   },
   "devDependencies": {
     "chai": ">= 1.9.0",

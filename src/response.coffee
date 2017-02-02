@@ -1,6 +1,7 @@
 _ = require('lodash')
 mimecontent = require('mime-content')
 parseMimeType = require('mimeparse').parseMimeType
+setCookie = require('set-cookie-parser')
 
 helpers = require('./helpers')
 ensureArray = helpers.ensureArray
@@ -145,6 +146,16 @@ response = (vars, req, res) ->
       e
 
   event ?= {}
+
+  # extract cookies and add to event
+  if vars.collect_cookies
+    cookies = _(res.headers['Set-Cookie'])
+      .map parseCookie 
+      .groupBy 'name'
+      .map processCookie 
+      .reduce formatCookie,{} 
+    event[vars.collect_cookies] = cookies
+
   event.outcome = outcome
   event.reason = reason if reason
 
@@ -193,3 +204,45 @@ errorStatus = (statusCode) ->
 extractCData = (value) ->
   return unless value
   value.nodeValue ? value.toString()
+
+
+# Perform initial parsing of cookies, exposing raw and decoded values as
+# possible.
+parseCookie = (value) ->
+  value = _(setCookie.parse(value,{decodeValues: false}))
+    .map (v) -> 
+      v['value_raw'] = v['value']
+      try
+        v['value'] = decodeURIComponent(v['value_raw'])
+      catch
+        v['value'] = null
+      v
+    .reduce (m,v,k) ->
+      m[k] = v
+      m
+  value
+
+
+# Process all cookies of a given cookie-name, handling RFC-breaking behaviour
+# according to spec/response-spec.coffee. 
+processCookie = (value) ->
+  # Normal cookie.
+  if value.length == 1
+    return value
+  # Cookies that don't conform to RFC 6265.
+  # Find duplicate (name,path,domain) cookies, and only keep the latest.
+  value = _(value)
+    .groupBy (v) ->
+      v.name+v.path+v.domain
+    .map (v) ->
+      _.last(v)
+    .value()
+  value;
+
+# Construct final form of cookie holder in event object.
+formatCookie = (r,v) ->
+  if v.length == 1
+    r[v[0]['name']]=v[0]
+  else
+    r[v[0]['name']]=v
+  r

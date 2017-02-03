@@ -251,7 +251,7 @@ describe 'Response', ->
         message: "PhoneNumber is a required field."
         reason: "PhoneNumber is a required field."
       assert.deepEqual response(vars, {}, res), expected
- 
+
 
   describe 'with plain text body', ->
 
@@ -864,6 +864,158 @@ describe 'Response', ->
         body: ''
       assert.deepEqual response({outcome_search_term: null, outcome_on_match: null}, {}, res).outcome, 'success'
 
+
+  describe 'cookie handling', ->
+
+    it 'should not capture response cookies if not requested by the user', ->
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': ['session_id=12345; path=/; domain=.fizzbuzz.com']
+      assert.deepEqual response({}, {}, res), outcome: "success"
+
+    it 'should capture response cookies into named property if specified in vars, with proper types for each cookie attribute', ->
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': ['session_id=12345; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly']
+      vars = 
+        collect_cookies: "cookie_monster"
+      expected =
+        "session_id":
+          name: "session_id"
+          value: "12345"
+          value_raw: "12345"
+          path: "/"
+          domain: ".fizzbuzz.com" #string
+          expires: new Date("Sat, 01-Jan-2022 16:39:03 GMT") #Date object
+          maxAge: 155520000, #number
+          secure: true, #boolean
+          httpOnly: true
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected 
+
+    it 'should handle multiple, unique cookies (cookies with distinct cookie-name)', ->
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': ['foo=fizz','bar=buzz']
+      vars = 
+        collect_cookies: "cookie_monster"
+      expected =
+        "foo":
+          "name": "foo"
+          "value": "fizz"
+          "value_raw": "fizz"
+        "bar":
+          "name": "bar"
+          "value": "buzz"
+          "value_raw": "buzz"
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected
+
+    # RFC 6265 (4.1.1) says that multiple Set-Cookie headers with the same
+    # cookie-name is a no-no. RFC 6265 (5.3) also states that in such cases,
+    # the cookie user agents are to pick the latest Set-Cookie if more than
+    # one cookie has the same (cookie-name, domain-value, path-value) tuple.
+    # Otherwise, the user agent treats the two cookies (with same cookie-name)
+    # as different cookies.
+
+    it 'should handle multiple cookies with duplicate cookie-name, but different domain-value and/or path-value', ->
+      # The top-level cookie object name will then reference an array of cookie
+      # objects, rather than a cookie object directly.
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': [
+            'foo=fizz; path=/; domain=.fizzbuzz.com',
+            'foo=buzz; path=/somepath; domain=.fizzbuzz.com'
+          ]
+      vars =
+        collect_cookies: "cookie_monster"
+      expected =
+        "foo": [
+          {"name":"foo", "value":"fizz", "value_raw":"fizz", "path":"/", "domain":".fizzbuzz.com"},
+          {"name":"foo", "value":"buzz", "value_raw":"buzz", "path":"/somepath", "domain":".fizzbuzz.com"}
+        ]
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected
+
+    it 'should handle multiple cookies with duplicate cookie-name, domain-value, and path-value', ->
+      # The last Set-Cookie in the headers takes precedent.
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': [
+            'session_id=12345; path=/; domain=.fizzbuzz.com',
+            'session_id=54321; path=/; domain=.fizzbuzz.com'
+          ]
+      vars = 
+        collect_cookies: "cookie_monster"
+      expected =
+        "session_id":
+          name: "session_id"
+          value: "54321"
+          value_raw: "54321"
+          path: "/"
+          domain: ".fizzbuzz.com"
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected 
+
+    it 'should handle multiple cookies with duplicate cookie-name, where some are indentical tuples and some have differing path-value and/or domain-value', ->
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': [
+            'session_id=12345; path=/; domain=.fizzbuzz.com',
+            'session_id=54321; path=/; domain=.fizzbuzz.com',
+            'session_id=abcde; path=/; domain=.fizz.com'
+          ]
+      vars =
+        collect_cookies: "cookie_monster"
+      expected =
+        "session_id": [
+          {"name":"session_id","value":"54321","value_raw":"54321","path":"/","domain":".fizzbuzz.com"},
+          {"name":"session_id","value":"abcde","value_raw":"abcde","path":"/","domain":".fizz.com"}
+        ]
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected
+
+    # RFC 6265 (4.1.1) specifies that arbitrary data in cookie-values SHOULD
+    # be encoded, but makes no requirement on the type of encoding (it only
+    # mentions Base64 as an example of an encoding). The grammar defined in
+    # section 4.1.1 for "cookie-octet" lends itself to most users utilizing
+    # the encodeURIComponent() function for the purpose of conforming to that
+    # grammar. The MDN also recommends encodeURIComponent:
+    #
+    # https://developer.mozilla.org/en-US/docs/Web/API/document/cookie
+    #
+    # and most projects involving cookie handling also conform to this
+    # convention (as does the underling set-cookie-parser library in use
+    # here).
+
+    it 'should URIdecode cookie-values into value, and leave raw in value_raw', ->
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': ['user_id=cookie_monster%40sesamestreet.com']
+      vars = 
+        collect_cookies: "cookie_monster"
+      expected =
+        "user_id":
+          "name": "user_id"
+          "value": "cookie_monster@sesamestreet.com"
+          "value_raw": "cookie_monster%40sesamestreet.com"
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected
+
+    it 'should only have value_raw if URIdecode fails (malformed URI)', ->
+      res =
+        status: 200
+        headers:
+          'Set-Cookie': ['foo=bar_%F']
+      vars = 
+        collect_cookies: "cookie_monster"
+      expected =
+        "foo":
+          "name": "foo"
+          "value": null
+          "value_raw": "bar_%F"
+      assert.deepEqual response(vars, {}, res).cookie_monster, expected
 
 
 xml = (obj) ->

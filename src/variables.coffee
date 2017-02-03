@@ -8,4 +8,5 @@ module.exports = [
   { name: 'send_ascii', description: 'Set to true to ensure lead data is sent as ASCII for legacy recipients (default: false)', type: 'boolean', required: false }
   { name: 'capture.*', description: 'A named regular expression with a single capture group, used to capture values from plain text responses into the named property', type: 'wildcard' }
   { name: 'response_content_type_override', description: "Override response's Content-Type header with custom value.", type: 'string', required: false }
+  { name: 'collect_cookies', description: "Gather cookies from response into named property.", type: 'string', required: false }
 ]

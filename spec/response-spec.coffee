@@ -865,6 +865,55 @@ describe 'Response', ->
       assert.deepEqual response({outcome_search_term: null, outcome_on_match: null}, {}, res).outcome, 'success'
 
 
+  describe 'cookie capture', ->
+
+    before ->
+      @cookie = 'session_id=678; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly'
+      @res =
+        status: 200
+        headers:
+          'Set-Cookie': @cookie
+
+    it 'should not capture anything with no search-term', ->
+      assert.deepEqual response({}, {}, @res), outcome: 'success'
+
+
+    it 'should not capture anything when search-term does not match', ->
+      assert.deepEqual response(cookie_search_term: 'login_info', {}, @res), outcome: 'success'
+
+
+    it 'should not capture anything when regex search-term does not match', ->
+      assert.deepEqual response(cookie_search_term: 'domain=.x[0-9]{7}', {}, @res), outcome: 'success'
+
+
+    it 'should capture a cookie that matches string search-term', ->
+      assert.deepEqual response(cookie_search_term: 'session_id', {}, @res), outcome: 'success', cookie: @cookie
+
+
+    it 'should capture a cookie that matches regex search-term', ->
+      assert.deepEqual response(cookie_search_term: 'session.*domain=.fizzbuzz', {}, @res), outcome: 'success', cookie: @cookie
+
+
+    it 'should capture the first cookie (sorted lexicographically) when multiples match string search-term', ->
+      cookie2 = 'session_id=123; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly'
+      cookie3 = 'session_id=9AB; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly'
+      @res.headers['Set-Cookie'] = [
+        @cookie
+        cookie2
+        cookie3
+      ]
+      assert.deepEqual response(cookie_search_term: 'session_id', {}, @res), outcome: 'success', cookie: cookie2
+
+    it 'should capture the first cookie (sorted lexicographically) when multiples match regex search-term', ->
+      cookie2 = 'session_id=123; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly'
+      cookie3 = 'session_id=9AB; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly'
+      @res.headers['Set-Cookie'] = [
+        @cookie
+        cookie2
+        cookie3
+      ]
+      assert.deepEqual response(cookie_search_term: 'session.*domain=.fizzbuzz', {}, @res), outcome: 'success', cookie: cookie2
+
 
 xml = (obj) ->
   body = xmlbuilder.create(obj).end({ pretty: true, indent: '  ', newline: '\n' })

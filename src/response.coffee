@@ -201,7 +201,7 @@ extractCookie = (cookieHeaders, searchTerm) ->
   cookieSearchTerm = toRegex(searchTerm)
 
   cookieHeaders.sort().find (header) ->
-    header.match cookieSearchTerm
+    header.toLowerCase().match cookieSearchTerm
 
 
 # if the given value is CDATA, extract that character data from the <![CDATA[...]]> wrapper

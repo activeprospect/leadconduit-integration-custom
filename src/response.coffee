@@ -14,6 +14,9 @@ response = (vars, req, res) ->
     # HTTP error code
     return outcome: 'error', reason: 'Server error'
 
+  if vars.cookie_search_term?
+    cookie = extractCookie(res.headers['Set-Cookie'], vars.cookie_search_term)
+
   searchTerm = toRegex(vars.outcome_search_term)
   searchOutcome = vars.outcome_on_match?.trim().toLowerCase() ? 'success'
   searchPath = vars.outcome_search_path?.trim()
@@ -109,7 +112,7 @@ response = (vars, req, res) ->
       doc.match(regex)?[1]?.trim() if regex
 
 
-  # trim and comma delimit reasons
+  # trim, sort, and comma delimit reasons
   reason = _(ensureArray(reasons))
     .map extractCData
     .map _.trim
@@ -147,6 +150,7 @@ response = (vars, req, res) ->
   event ?= {}
   event.outcome = outcome
   event.reason = reason if reason
+  event.cookie = cookie if cookie
 
   # return the event
   event
@@ -156,6 +160,7 @@ response.variables = ->
   [
     { name: 'outcome', type: 'string', description: 'The outcome of the transaction (default is success)' }
     { name: 'reason', type: 'string', description: 'If the outcome was a failure, this is the reason' }
+    { name: 'cookie', type: 'string', description: 'The full cookie header string captured via match with \'cookie_search_term\'' }
     { name: '*', type: 'wildcard' }
   ]
 
@@ -187,6 +192,16 @@ toDoc = (body, contentType) ->
 errorStatus = (statusCode) ->
   error = statusCode % 500
   error >= 0 and error < 100
+
+
+extractCookie = (cookieHeaders, searchTerm) ->
+  return unless cookieHeaders
+
+  cookieHeaders = new Array(cookieHeaders) unless _.isArray(cookieHeaders)
+  cookieSearchTerm = toRegex(searchTerm)
+
+  cookieHeaders.sort().find (header) ->
+    header.match cookieSearchTerm
 
 
 # if the given value is CDATA, extract that character data from the <![CDATA[...]]> wrapper

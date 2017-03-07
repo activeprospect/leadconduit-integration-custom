@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.14.1] - 2017-03-06
+### Fixed
+- fix to cookie header search to ignore case
+
 ## [2.14.0] - 2017-03-06
 ### Added
 - add ability to capture cookie headers via `cookie_search_term`

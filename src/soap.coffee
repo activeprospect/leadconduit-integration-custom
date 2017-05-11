@@ -6,6 +6,7 @@ mimecontent = require('mime-content')
 xmlDoc = require('./xml-doc')
 normalize = require('./normalize')
 validate = require('./validate')
+compact = require('./compact')
 
 helpers = require('./helpers')
 ensureArray = helpers.ensureArray
@@ -64,6 +65,9 @@ handle = (vars, callback) ->
           # when the argument should be a string, create XML document and convert to a string
           value = builder.create(xmlDoc(value)).end(pretty: true)
       value
+
+    # remove empty elements -- the SOAP library does not handle them well
+    args = compact(args)
 
     # build the security credentials
     security =

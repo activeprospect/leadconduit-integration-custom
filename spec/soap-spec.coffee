@@ -127,6 +127,27 @@ describe 'Outbound SOAP', ->
       done()
 
 
+  it 'should compact array arguments', (done) ->
+    vars =
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLead'
+      'arg.Lead.bar.0': 'bip'
+      'arg.Lead.bar.1': null
+      'arg.Lead.bar.2': 'bap'
+
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<bar>bip</bar>') >= 0 and
+        body.indexOf('<bar>bap</bar>') >= 0 and
+        body.match(/\<bar\>/g)?.length == 2
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
   it 'should send data as ASCII when told to', (done) ->
     @service = nock 'http://donkey'
       .post '/login/ws/ws.asmx', (body) ->

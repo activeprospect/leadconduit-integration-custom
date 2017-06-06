@@ -190,6 +190,27 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, json(baz: { bip: ['the reason text!', 'another reason']})), expected
 
 
+    it 'should parse single reason from array', ->
+      vars =
+        outcome_search_term: 'foo'
+        reason_path: 'baz.bip.1'
+      expected =
+        outcome: 'failure'
+        reason: 'another reason'
+        baz: { bip: ['the reason text!', 'another reason'] }
+      assert.deepEqual response(vars, {}, json(baz: { bip: ['the reason text!', 'another reason']})), expected
+
+
+    it 'should parse reason from array response', ->
+      vars =
+        outcome_search_term: 'foo'
+        reason_path: '0.bip'
+      expected =
+        outcome: 'failure'
+        reason: 'the reason text!'
+      assert.deepEqual response(vars, {}, json( [ {bip: 'the reason text!'} ] )), expected
+
+
     it 'should return default reason', ->
       expected =
         outcome: 'success'

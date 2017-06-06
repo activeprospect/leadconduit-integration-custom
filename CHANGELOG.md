@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.14.3] - 2017-06-06
+### Fixed
+- fix to parse reason text from JSON array response
+
+## [2.14.2] - 2017-05-11
+### Fixed
+- compact arrays for SOAP transactions
+
 ## [2.14.1] - 2017-03-06
 ### Fixed
 - fix to cookie header search to ignore case

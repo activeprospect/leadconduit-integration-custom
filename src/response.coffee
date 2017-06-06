@@ -102,7 +102,7 @@ response = (vars, req, res) ->
       else
         []
 
-    else if _.isPlainObject(doc)
+    else if _.isPlainObject(doc) or _.isArray(doc)
       # this is a JS object (JSON)
       _.get(doc, reasonSelector)
 

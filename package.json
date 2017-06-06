@@ -2,7 +2,7 @@
   "name": "leadconduit-custom",
   "description": "LeadConduit custom integration",
   "author": "Alex Wolfe <alex@activeprospect.com>",
-  "version": "2.14.2",
+  "version": "2.14.3",
   "main": "index.js",
   "license": "CC-BY-NC-ND-4.0",
   "repository": {

@@ -1,6 +1,7 @@
 _ = require('lodash')
 flat = require('flat')
 unidecode = require('unidecode')
+querystring = require('querystring')
 
 # use valueOf to ensure the normal version is sent for all richly typed values
 valueOf = (value, toAscii) ->
@@ -15,7 +16,7 @@ valueOf = (value, toAscii) ->
       null
 
 
-module.exports = normalize = (obj, toAscii = false) ->
+module.exports = normalize = (obj, toAscii = false, encodeValues = false) ->
   return obj unless obj?
 
   if _.isArray(obj)
@@ -25,7 +26,8 @@ module.exports = normalize = (obj, toAscii = false) ->
     rtn = {}
     for key, value of flat.unflatten(obj)
       value = normalize(value, toAscii)
-      rtn[key] = value
+      # encode values separately here in (less-common) case that the keys won't be encoded later
+      rtn[key] = if encodeValues then querystring.escape(value) else value
     rtn
   else
     valueOf(obj, toAscii)

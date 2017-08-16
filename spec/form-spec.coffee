@@ -123,6 +123,24 @@ describe 'Outbound Form POST request', ->
     assert.equal integration.request(vars).body, 'number=foo'
 
 
+  it 'should encode form_field names and values by default', ->
+    vars =
+      form_field:
+        'foo[bar]': 42
+        'foo[baz]': 'zippity[do]'
+
+    assert.equal integration.request(vars).body, 'foo%5Bbar%5D=42&foo%5Bbaz%5D=zippity%5Bdo%5D'
+
+
+  it 'should not encode form_field names when told not to', ->
+    vars =
+      encode_form_field_names: false
+      form_field:
+        'foo[bar]': 42
+        'foo[baz]': 'zippity[do]'
+
+    assert.equal integration.request(vars).body, 'foo[bar]=42&foo[baz]=zippity%5Bdo%5D'
+
 
 describe 'Outbound Form POST validation', ->
 

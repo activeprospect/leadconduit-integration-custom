@@ -18,11 +18,17 @@ request = (vars) ->
   # user-defined form field values
   formFields = vars.form_field ? {}
 
-  # build body content
-  content = flat.flatten(normalize(formFields, vars.send_ascii?.valueOf() ? false), safe: true)
+  encodeValuesOnly = vars.encode_form_field_names? and not vars.encode_form_field_names?.valueOf()
 
-  # URL encoded post body
-  body = querystring.encode(content)
+  # build body content
+  normalized = normalize(formFields, vars.send_ascii?.valueOf() ? false, encodeValuesOnly)
+  content = flat.flatten(normalized, safe: true)
+
+  # URL encode post body
+  if encodeValuesOnly
+    body = querystring.stringify(content, null, null, {encodeURIComponent: (component) => return component })
+  else
+    body = querystring.stringify(content)
 
   defaultHeaders =
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
@@ -42,6 +48,7 @@ request = (vars) ->
 request.variables = ->
   [
     { name: 'url', description: 'Server URL', type: 'string', required: true }
+    { name: 'encode_form_field_names', description: 'Whether form field names are URL-encoded (default: true)', type: 'boolean', required: false }
     { name: 'form_field.*', description: 'Form field name', type: 'wildcard', required: false }
   ].concat(variables)
 

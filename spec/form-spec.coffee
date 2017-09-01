@@ -83,6 +83,17 @@ describe 'Outbound Form POST request', ->
     assert.equal integration.request(vars).body, 'foo.bar.baz=bip&foo.bar.baz=bap'
 
 
+  it 'should compact dot-notation arrays', ->
+    vars =
+      form_field:
+        'foo.0': 'bip'
+        'foo.4': 'bap'
+        'bar.baz.2': 42
+        'bar.baz.9': 55
+
+    assert.equal integration.request(vars).body, 'foo=bip&foo=bap&bar.baz=42&bar.baz=55'
+
+
   it 'should support dot-notation array reference', ->
     vars =
       form_field:

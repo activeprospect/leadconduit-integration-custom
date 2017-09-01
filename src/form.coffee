@@ -5,6 +5,7 @@ response = require('./response')
 validate = require('./validate')
 normalize = require('./normalize')
 variables = require('./variables')
+compact = require('./compact')
 headers = require('./headers')
 
 
@@ -22,7 +23,7 @@ request = (vars) ->
 
   # build body content
   normalized = normalize(formFields, vars.send_ascii?.valueOf() ? false, encodeValuesOnly)
-  content = flat.flatten(normalized, safe: true)
+  content = flat.flatten(compact(normalized), safe: true)
 
   # URL encode post body
   if encodeValuesOnly

@@ -46,7 +46,8 @@ Use the `method` property to set the HTTP method (`POST`, `PUT`, and `DELETE` ar
 
 The Form POST integration performs an HTTP POST with a URL encoded request body. The body of the request
 is formed using `form_field.*` mappings. The mapping value is the HTTP parameter name. Parameter names that end in
-`.<digit>` (i.e. `.0` or `.1`) will be treated as an array element.
+`.<digit>` (i.e. `.0` or `.1`) will be treated as an array element (null values created by that array
+addressing are compacted out).
 
 For example, consider the following mappings. 
 
@@ -54,13 +55,14 @@ For example, consider the following mappings.
  * `form_field.name` -> `{{lead.first_name}} {{lead.last_name}}` 
  * `form_field.phone.0` -> `{{lead.phone_1}}`
  * `form_field.phone.1` -> `{{lead.phone_2}}`
+ * `form_field.phone.5` -> '5125551212'
  * `form_field.lead_id` -> `{{lead.id}}`
  * `form_field.timestamp` -> `{{submission.timestamp}}`
 
 The above mappings might generate the request body below:
 
 ```
-lead_id=12345&email=bob%40hotmail.com&name=Bob%20Jones&phone=5127891111&phone=5127892222&timestamp=2016-02-10T17%3A46%3A58.971Z
+lead_id=12345&email=bob%40hotmail.com&name=Bob%20Jones&phone=5127891111&phone=5127892222&phone=5125551212&timestamp=2016-02-10T17%3A46%3A58.971Z
 ``` 
 
 

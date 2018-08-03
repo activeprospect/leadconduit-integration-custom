@@ -127,6 +127,27 @@ describe 'Outbound SOAP', ->
       done()
 
 
+  it 'should pass arguments and set attribute', (done) ->
+    @service = nock 'http://donkey'
+      .post '/login/ws/ws.asmx', (body) ->
+        body.indexOf('<Lead SomethingSomethingId="42">') >= 0 and
+        body.indexOf('<FirstName>Bob</FirstName>') >= 0 and
+        body.indexOf('<ZipCode>78704-1234</ZipCode>') >= 0
+      .reply 200, success, 'Content-Type': 'text/xml'
+
+    vars =
+      'url': 'http://donkey/login/ws/ws.asmx?WSDL'
+      'function': 'AddLead'
+      'arg.Lead.attributes.SomethingSomethingId': '42'  #
+      'arg.Lead.FirstName': 'Bob'
+      'arg.Lead.ZipCode': types.postal_code.parse('78704-1234')
+
+    soap.handle vars, (err, event) ->
+      return done(err) if err
+      assert.equal event.outcome, 'success'
+      done()
+
+
   it 'should compact array arguments', (done) ->
     vars =
       'url': 'http://donkey/login/ws/ws.asmx?WSDL'

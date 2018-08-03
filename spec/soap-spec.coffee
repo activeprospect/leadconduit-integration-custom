@@ -344,7 +344,8 @@ describe 'Outbound SOAP', ->
   it 'should set multiple headers', (done) ->
     @service = nock 'http://donkey'
       .post '/login/ws/ws.asmx', (body) ->
-        body.indexOf('<SessionHeader xmlns="urn:foo.bar"><sessionId>88774421</sessionId></SessionHeader><OtherHeader xmlns="urn:foo.other"><Id>4321</Id></OtherHeader>') >= 0
+        body.indexOf('<SessionHeader xmlns="urn:foo.bar"><sessionId>88774421</sessionId></SessionHeader>') >= 0 and
+        body.indexOf('<OtherHeader xmlns="urn:foo.other"><Id>4321</Id></OtherHeader>') >= 0
       .reply 200, success, 'Content-Type': 'text/xml'
 
     vars =

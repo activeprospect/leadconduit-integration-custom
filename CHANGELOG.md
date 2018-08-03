@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased] - 2018-08-03
+### Added
+- test to verify and demonstrate setting SOAP attributes
+
+### Fixed
+- failing SOAP header test
+
 ## [2.16.0] - 2017-09-01
 ### Added
 - compact arrays created in "Form POST" `form_field` parameters

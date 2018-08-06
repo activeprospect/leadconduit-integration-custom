@@ -3,7 +3,7 @@ integration = require('../src/json')
 types = require('leadconduit-types')
 
 
-describe.only 'Outbound JSON request', ->
+describe 'Outbound JSON request', ->
 
   it 'should have url, method, headers, and body', ->
     vars =
@@ -26,13 +26,12 @@ describe.only 'Outbound JSON request', ->
       'Bar': 'baz'
 
 
-  it.only 'should send data as ASCII when told to', ->
+  it 'should send data as ASCII when told to', ->
     vars =
       send_ascii: types.boolean.parse('true')
       json_property:
         fname: 'Mêl'
         lname: 'Gibson'
-        "contact_data.dmi_data_source_code": 'bollocks'
 
     assert.equal integration.request(vars).body, '{"fname":"Mel","lname":"Gibson"}'
 

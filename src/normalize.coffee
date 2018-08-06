@@ -19,12 +19,20 @@ valueOf = (value, toAscii) ->
 module.exports = normalize = (obj, toAscii = false, encodeValues = false) ->
   return obj unless obj?
 
-  console.log('unflattened: ', flat.unflatten(obj))
   if _.isArray(obj)
     obj.map (val) ->
       normalize(val, toAscii)
   else if _.isPlainObject(obj)
     rtn = {}
+
+    for key, value of obj
+      # Prefix denotes bad json that will bonk under normal parsing conditions.
+      # So, if the prefix is present, we just add to the returned object as is
+      # and skip parsing entirely
+      if key.startsWith('__')
+        rtn[key] = if encodeValues then querystring.escape(value) else value
+        delete obj[key]
+
     for key, value of flat.unflatten(obj)
       value = normalize(value, toAscii)
       # encode values separately here in (less-common) case that the keys won't be encoded later

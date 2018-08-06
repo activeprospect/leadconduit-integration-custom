@@ -17,5 +17,10 @@ describe 'Normalize', ->
   it 'should leave character set as-is', ->
     assert.deepEqual normalize(obj), { first_name: 'Böb', address_1: '17 Kronprinzstraße', postal_code: 'Kölsch', something_null: null }
 
+  it 'should not attempt to parse wonky json property names', ->
+    obj["__contact_data.23.dmi_data_source_code"] = "abc123"
+    assert.deepEqual normalize(obj), { first_name: 'Böb', address_1: '17 Kronprinzstraße', postal_code: 'Kölsch', something_null: null, "__contact_data.23.dmi_data_source_code": "abc123" }
+
   it 'should change character set to ASCII', ->
     assert.deepEqual normalize(obj, true), { first_name: 'Bob', address_1: '17 Kronprinzstrasse', postal_code: 'Kolsch', something_null: null }
+  

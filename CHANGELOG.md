@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.16.1] - 2018-08-06
 ### Fixed
-- test to verify and demonstrate setting SOAP attributes
+- Handle JSON with convention-breaking property names
 
 ## [unreleased] - 2018-08-03
 ### Added

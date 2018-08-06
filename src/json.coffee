@@ -15,7 +15,11 @@ compact = require('./compact')
 
 request = (vars) ->
 
+  console.log('json: ', vars.json_property)
+
   json = normalize(vars.json_property, vars.send_ascii?.valueOf() ? false) ? {}
+
+  console.log('\nnormalized json: ', json)
 
   # test whether the mappings indicate that a root array is being requested
   keys = Object.keys(json)

@@ -19,6 +19,7 @@ valueOf = (value, toAscii) ->
 module.exports = normalize = (obj, toAscii = false, encodeValues = false) ->
   return obj unless obj?
 
+  console.log('unflattened: ', flat.unflatten(obj))
   if _.isArray(obj)
     obj.map (val) ->
       normalize(val, toAscii)

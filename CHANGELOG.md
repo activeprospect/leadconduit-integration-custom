@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.16.1] - 2018-08-06
+### Fixed
+- test to verify and demonstrate setting SOAP attributes
+
 ## [unreleased] - 2018-08-03
 ### Added
 - test to verify and demonstrate setting SOAP attributes

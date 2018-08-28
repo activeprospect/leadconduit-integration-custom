@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.17.10] - 2018-08-28
+### Added
+- Support wildcards in reason parsing
+
 ## [2.16.1] - 2018-08-16
 ### Fixed
 - update soap package to remove security vulns

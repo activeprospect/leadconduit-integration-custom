@@ -240,6 +240,34 @@ describe 'Response', ->
         baz: { bip: 'foo' }
       assert.deepEqual response(vars, {}, json(baz: { bip: 'foo' })), expected
 
+    it 'should successfully parse reason with wildcard in path', ->
+      vars =
+        outcome_search_term: 'bar'
+        reason_path: 'baz.*.details'
+      expected =
+        outcome: 'failure'
+        reason: 'bad data'
+        baz:
+          foo:
+            details: 'bad data'
+
+      assert.deepEqual response(vars, {}, json(baz: { foo: { details: 'bad data' }})), expected
+
+    it 'should successfully parse reason with multiple wildcards in path', ->
+      vars =
+        outcome_search_term: 'bar'
+        reason_path: 'baz.*.details.*.more_details'
+      expected =
+        outcome: 'failure'
+        reason: 'really bad data'
+        baz:
+          foo:
+            details:
+              bip:
+                more_details: 'really bad data'
+         
+      assert.deepEqual response(vars, {}, json(baz: { foo: { details: { bip: { more_details : 'really bad data'}}}})), expected
+
 
     it 'should revert to string search on non-JSON body', ->
       vars = outcome_search_term: 'bar'

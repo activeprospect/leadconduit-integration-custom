@@ -1,6 +1,7 @@
 _ = require('lodash')
 mimecontent = require('mime-content')
 parseMimeType = require('mimeparse').parseMimeType
+dotWild = require('dot-wild')
 
 helpers = require('./helpers')
 ensureArray = helpers.ensureArray
@@ -104,7 +105,7 @@ response = (vars, req, res) ->
 
     else if _.isPlainObject(doc) or _.isArray(doc)
       # this is a JS object (JSON)
-      _.get(doc, reasonSelector)
+      dotWild.get(doc, reasonSelector)
 
     else if _.isString(doc)
       # this is a plain text. do a regex match and use the first match group
@@ -119,7 +120,6 @@ response = (vars, req, res) ->
     .compact()
     .sort()
     .join(', ')
-
 
   # set the default reason, if necessary
   reason or= vars.default_reason?.trim()

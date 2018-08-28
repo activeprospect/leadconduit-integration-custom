@@ -17,6 +17,7 @@
     "prepublish": "cake build"
   },
   "dependencies": {
+    "dot-wild": "^3.0.1",
     "flat": "^1.6.1",
     "leadconduit-integration": "^0.1.0",
     "lodash": "^4.0.0",

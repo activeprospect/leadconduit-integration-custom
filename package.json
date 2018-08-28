@@ -9,9 +9,6 @@
     "type": "git",
     "url": "https://github.com/activeprospect/leadconduit-integration-custom.git"
   },
-  "engines": {
-    "node": ">=0.10"
-  },
   "scripts": {
     "test": "cake test",
     "prepublish": "cake build"

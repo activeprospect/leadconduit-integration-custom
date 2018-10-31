@@ -300,6 +300,13 @@ describe 'Response', ->
         message: "PhoneNumber is a required field."
         reason: "PhoneNumber is a required field."
       assert.deepEqual response(vars, {}, res), expected
+
+    it 'should capture price when vars.price is defined', ->
+      expected =
+        outcome: 'success'
+        foo: 'bar'
+        price: 1.5
+      assert.deepEqual response(cost: 1.5, {}, json(foo: 'bar')), expected
  
 
   describe 'with plain text body', ->
@@ -421,7 +428,12 @@ describe 'Response', ->
       res.headers['Content-Type'] = 'plain/text'
       assert.deepEqual response(vars, {}, res).outcome, 'success'
 
-
+    it 'should capture price when vars.cost is present', ->
+      vars = cost: 1.5
+      expected = 
+        outcome: 'success'
+        price: 1.5
+      assert.deepEqual response(vars, {}, text('foo')), expected
 
   describe 'with html', ->
 
@@ -603,6 +615,13 @@ describe 'Response', ->
 
       assert.deepEqual response(vars, {}, html('<div>result: matched 42 records.</div>')), expected
 
+    it 'should capture price when vars.cost is present', ->
+      vars = cost: 1.5
+      expected = 
+        outcome: 'success'
+        price: 1.5
+      assert.deepEqual response(vars, {}, html('<div>foo</div>')), expected
+
 
   describe 'with xml body', ->
 
@@ -610,7 +629,7 @@ describe 'Response', ->
       expected =
         outcome: 'success'
         foo: 'bar'
-      assert.deepEqual response({}, {}, json(foo: 'bar')), expected
+      assert.deepEqual response({}, {}, xml(foo: 'bar')), expected
 
 
     it 'should default to failure per outcome on match', ->
@@ -860,6 +879,14 @@ describe 'Response', ->
       res = json(foo: { bar: 'baz'})
       res.headers['Content-Type'] = 'text/xml'
       assert.deepEqual response(vars, {}, res), outcome: 'success'
+
+    it 'should default to success without search term', ->
+      vars = cost: 1.5
+      expected =
+        outcome: 'success'
+        price: 1.5
+        foo: 'bar'
+      assert.deepEqual response(vars, {}, xml(foo: 'bar')), expected
 
 
 

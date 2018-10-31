@@ -745,6 +745,14 @@ describe 'Outbound SOAP', ->
               Foo: [ '1', '2' ]
         done()
 
+    it 'should capture price when vars.cost is present', (done) ->
+      @vars.cost = 1.5
+      soap.handle @vars, (err, event) =>
+        return done(err) if err
+        assert.equal event.outcome, 'success'
+        assert.equal event.price, 1.5
+        done()
+
 
   describe 'validation', ->
 

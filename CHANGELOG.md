@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.18.0] - 2018-10-31
+### Added
+- Capture 'price' response variable
+
 ## [2.17.0] - 2018-08-28
 ### Added
 - Support wildcards in reason parsing

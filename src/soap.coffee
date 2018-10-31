@@ -164,6 +164,7 @@ handle = (vars, callback) ->
       event = result
       event.outcome = outcome
       event.reason = reason if reason
+      event.price = vars.cost.valueOf() if vars.cost?
 
       # return the event
       callback null, event
@@ -225,6 +226,7 @@ responseVariables = ->
   [
     { name: 'outcome', type: 'string', description: 'The outcome of the SOAP transaction (default is success)' }
     { name: 'reason', type: 'string', description: 'If the outcome was a failure, this is the reason' }
+    { name: 'price', type: 'number', description: 'The price of the lead' }
     { name: '*', type: 'wildcard' }
   ]
 

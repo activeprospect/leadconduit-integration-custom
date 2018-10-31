@@ -151,6 +151,7 @@ response = (vars, req, res) ->
   event.outcome = outcome
   event.reason = reason if reason
   event.cookie = cookie if cookie
+  event.price = vars.cost.valueOf() if vars.cost?
 
   # return the event
   event
@@ -161,6 +162,7 @@ response.variables = ->
     { name: 'outcome', type: 'string', description: 'The outcome of the transaction (default is success)' }
     { name: 'reason', type: 'string', description: 'If the outcome was a failure, this is the reason' }
     { name: 'cookie', type: 'string', description: 'The full cookie header string captured via match with \'cookie_search_term\'' }
+    { name: 'price', type: 'number', description: 'The price of the lead' }
     { name: '*', type: 'wildcard' }
   ]
 

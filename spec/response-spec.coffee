@@ -302,11 +302,12 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, res), expected
 
     it 'should capture price when vars.price is defined', ->
+      vars = cost: 1.5
       expected =
         outcome: 'success'
         foo: 'bar'
         price: 1.5
-      assert.deepEqual response(cost: 1.5, {}, json(foo: 'bar')), expected
+      assert.deepEqual response(vars, {}, json(foo: 'bar')), expected
  
 
   describe 'with plain text body', ->
@@ -880,7 +881,7 @@ describe 'Response', ->
       res.headers['Content-Type'] = 'text/xml'
       assert.deepEqual response(vars, {}, res), outcome: 'success'
 
-    it 'should default to success without search term', ->
+    it 'should capture price when vars.cost is present', ->
       vars = cost: 1.5
       expected =
         outcome: 'success'

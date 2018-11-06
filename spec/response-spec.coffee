@@ -301,13 +301,16 @@ describe 'Response', ->
         reason: "PhoneNumber is a required field."
       assert.deepEqual response(vars, {}, res), expected
 
-    it 'should capture price when vars.price is defined', ->
-      vars = cost: 1.5
+    it 'should capture price on success', ->
+      vars = 
+        price_path: 'baz.*.cost'
       expected =
         outcome: 'success'
-        foo: 'bar'
-        price: 1.5
-      assert.deepEqual response(vars, {}, json(foo: 'bar')), expected
+        price: '1.5'
+        baz:
+          foo:
+            cost: 1.5
+      assert.deepEqual response(vars, {}, json(baz: { foo: { cost: 1.5 }})), expected
  
 
   describe 'with plain text body', ->
@@ -430,11 +433,12 @@ describe 'Response', ->
       assert.deepEqual response(vars, {}, res).outcome, 'success'
 
     it 'should capture price when vars.cost is present', ->
-      vars = cost: 1.5
+      vars = 
+        price_path: '/cost=([0-9]\.[0-9])/'
       expected = 
         outcome: 'success'
-        price: 1.5
-      assert.deepEqual response(vars, {}, text('foo')), expected
+        price: '1.5'
+      assert.deepEqual response(vars, {}, text('foo&cost=1.5')), expected
 
   describe 'with html', ->
 
@@ -616,12 +620,13 @@ describe 'Response', ->
 
       assert.deepEqual response(vars, {}, html('<div>result: matched 42 records.</div>')), expected
 
-    it 'should capture price when vars.cost is present', ->
-      vars = cost: 1.5
+    it 'should capture price when price_path is present', ->
+      vars =
+        price_path: 'div.cost'
       expected = 
         outcome: 'success'
-        price: 1.5
-      assert.deepEqual response(vars, {}, html('<div>foo</div>')), expected
+        price: "1.5"
+      assert.deepEqual response(vars, {}, html('<div class="cost">1.5</div>')), expected
 
 
   describe 'with xml body', ->
@@ -881,13 +886,15 @@ describe 'Response', ->
       res.headers['Content-Type'] = 'text/xml'
       assert.deepEqual response(vars, {}, res), outcome: 'success'
 
-    it 'should capture price when vars.cost is present', ->
-      vars = cost: 1.5
+    it 'should capture price', ->
+      vars =
+        price_path: 'bar/cost/text()'
       expected =
+        price: '1.5'
+        bar:
+          cost: '1.5'
         outcome: 'success'
-        price: 1.5
-        foo: 'bar'
-      assert.deepEqual response(vars, {}, xml(foo: 'bar')), expected
+      assert.deepEqual response(vars, {}, xml(bar: { cost: '1.5'})), expected
 
 
 

@@ -122,6 +122,7 @@ handle = (vars, callback) ->
       searchOutcome = vars.outcome_on_match?.trim().toLowerCase() ? 'success'
       searchPath = vars.outcome_search_path?.trim()
       reasonSelector = vars.reason_path?.trim()
+      priceSelector = vars.price_path?.trim()
 
       # narrow the search scope
       searchIn =
@@ -142,6 +143,13 @@ handle = (vars, callback) ->
           searchOutcome
         else
           inverseOutcome(searchOutcome)
+
+      price = 
+        if outcome == 'success'
+          _.get(result, priceSelector)
+        else
+          0
+
 
       # determine the reason based on the reason selector
       reasons =
@@ -164,7 +172,7 @@ handle = (vars, callback) ->
       event = result
       event.outcome = outcome
       event.reason = reason if reason
-      event.price = vars.cost.valueOf() if vars.cost?
+      event.price = price if price
 
       # return the event
       callback null, event

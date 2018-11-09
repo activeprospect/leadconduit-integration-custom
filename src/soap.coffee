@@ -147,8 +147,6 @@ handle = (vars, callback) ->
       price = 
         if outcome == 'success'
           _.get(result, priceSelector)
-        else
-          0
 
 
       # determine the reason based on the reason selector
@@ -172,7 +170,7 @@ handle = (vars, callback) ->
       event = result
       event.outcome = outcome
       event.reason = reason if reason
-      event.price = price if price
+      event.price = price || 0
 
       # return the event
       callback null, event

@@ -69,8 +69,6 @@ response = (vars, req, res) ->
     
 
   else
-    # price is sent as 0 in non-success cases
-    price = 0
     # narrow the search scope
     searchIn =
       if searchPath
@@ -163,8 +161,6 @@ response = (vars, req, res) ->
 
   price = ensureArray(price)
     .map(extractCData)[0]
-    
-
 
   # build the event
   event =
@@ -190,7 +186,7 @@ response = (vars, req, res) ->
 
   event ?= {}
   event.outcome = outcome
-  event.price = price if price
+  event.price = price || 0
   event.reason = reason if reason
   event.cookie = cookie if cookie
 

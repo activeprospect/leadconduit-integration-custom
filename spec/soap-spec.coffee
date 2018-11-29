@@ -450,6 +450,7 @@ describe 'Outbound SOAP', ->
           Message: 'some message'
           LeadId: 12345
           Empty: null
+          Cost: "1.5"
           Multi:
             Foo: [ '1', '2' ]
         done()
@@ -743,6 +744,14 @@ describe 'Outbound SOAP', ->
             Empty: ''
             Multi:
               Foo: [ '1', '2' ]
+        done()
+
+    it 'should capture price', (done) ->
+      @vars.price_path = 'AddLeadResult.Cost'
+      soap.handle @vars, (err, event) =>
+        return done(err) if err
+        assert.equal event.outcome, 'success'
+        assert.equal event.price, 1.5
         done()
 
 

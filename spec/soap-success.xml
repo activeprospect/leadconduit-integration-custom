@@ -6,6 +6,7 @@
                 <Result>true</Result>
                 <Message>some message</Message>
                 <LeadId>12345</LeadId>
+                <Cost>1.5</Cost>
                 <Empty/>
                 <Multi>
                     <Foo>1</Foo>

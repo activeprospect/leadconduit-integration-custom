@@ -22,6 +22,7 @@ response = (vars, req, res) ->
   searchOutcome = vars.outcome_on_match?.trim().toLowerCase() ? 'success'
   searchPath = vars.outcome_search_path?.trim()
   reasonSelector = vars.reason_path?.trim()
+  priceSelector = vars.price_path?.trim()
 
   # parse the document. Use Content-Type override if provided.
   if vars.response_content_type_override
@@ -32,6 +33,40 @@ response = (vars, req, res) ->
   # default to success if no search term and no outcome are specified
   if !vars.outcome_search_term and !vars.outcome_on_match
     outcome = 'success'
+
+  # determine the price based on priceSelector
+    if priceSelector
+      price =
+        if _.isFunction(doc.xpath)
+          # this is a XML document
+          try doc.xpath(priceSelector, true) catch
+
+        else if _.isFunction(doc.html)
+          # this is a HTML document
+          if priceSelector
+            attrRegex = /\s*\@([a-z_:]+[-a-z0-9_:.]]?)/i
+            attrMatch = priceSelector.match(attrRegex)
+            priceSelector = priceSelector.replace(attrRegex, '')
+            try
+              elements = doc(priceSelector)
+              if attrMatch
+                elements.map(-> doc(this).attr(attrMatch[1])).get()
+              else
+                elements.map(-> doc(this).text()).get()
+            catch err
+              [] # unmatched selector
+          else
+            []
+
+        else if _.isPlainObject(doc) or _.isArray(doc)
+          # this is a JS object (JSON)
+          dotWild.get(doc, priceSelector)
+
+        else if _.isString(doc)
+          # this is a plain text. do a regex match and use the first match group
+          regex = toRegex(priceSelector)
+          doc.match(regex)?[1]?.trim() if regex
+    
 
   else
     # narrow the search scope
@@ -124,6 +159,8 @@ response = (vars, req, res) ->
   # set the default reason, if necessary
   reason or= vars.default_reason?.trim()
 
+  price = ensureArray(price)
+    .map(extractCData)[0]
 
   # build the event
   event =
@@ -149,6 +186,7 @@ response = (vars, req, res) ->
 
   event ?= {}
   event.outcome = outcome
+  event.price = price || 0
   event.reason = reason if reason
   event.cookie = cookie if cookie
 
@@ -161,6 +199,7 @@ response.variables = ->
     { name: 'outcome', type: 'string', description: 'The outcome of the transaction (default is success)' }
     { name: 'reason', type: 'string', description: 'If the outcome was a failure, this is the reason' }
     { name: 'cookie', type: 'string', description: 'The full cookie header string captured via match with \'cookie_search_term\'' }
+    { name: 'price', type: 'number', description: 'The price of the lead' }
     { name: '*', type: 'wildcard' }
   ]
 

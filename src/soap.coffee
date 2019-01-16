@@ -128,7 +128,7 @@ handle = (vars, callback) ->
       searchIn =
         if searchPath
           # limit outcome_search_term to this path in the document
-          _.get(result, searchPath).toString()
+          _.get(result, searchPath)?.toString()
 
         else
           # no search path was provided, so search the entire response body

@@ -506,6 +506,15 @@ describe 'Outbound SOAP', ->
         assert.equal event.outcome, 'failure'
         done()
 
+    it 'should not bonk with bogus search path', (done) ->
+      @vars.outcome_search_path = '0'
+      @vars.outcome_search_term = 'foo'
+
+      invokeHandle = () =>
+        soap.handle @vars, (err, event) => 
+
+      assert.doesNotThrow invokeHandle
+      done()
 
     it 'should not find search term at different path', (done) ->
       @vars.outcome_search_path = 'AddLeadResult.Result'

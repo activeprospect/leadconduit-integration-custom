@@ -189,6 +189,7 @@ response = (vars, req, res) ->
   event.price = price || 0
   event.reason = reason if reason
   event.cookie = cookie if cookie
+  event.headers = res.headers
 
   # return the event
   event

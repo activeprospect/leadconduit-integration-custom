@@ -201,6 +201,7 @@ response.variables = ->
     { name: 'reason', type: 'string', description: 'If the outcome was a failure, this is the reason' }
     { name: 'cookie', type: 'string', description: 'The full cookie header string captured via match with \'cookie_search_term\'' }
     { name: 'price', type: 'number', description: 'The price of the lead' }
+    { name: 'headers.*', type: 'wildcard', description: 'All headers from the response' }
     { name: '*', type: 'wildcard' }
   ]
 

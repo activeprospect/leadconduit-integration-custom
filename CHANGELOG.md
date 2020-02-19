@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.18.2] - 2020-02-19
+### Fixed
+- 'price' is now parsed regardless of presence of success vars
+
 ## [2.18.1] - 2018-08-28
 ### Fixed
 - Guard against bogus searchpath

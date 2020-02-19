@@ -340,7 +340,17 @@ describe 'Response', ->
           foo:
             cost: 1.5
       assert.deepInclude response(vars, {}, json(baz: { foo: { cost: 1.5 }})), expected
- 
+
+    it 'should capture price on success with outcome_search_term', ->
+      vars = 
+        price_path: 'price'
+        outcome_search_term: 'success'
+      expected =
+        outcome: 'success'
+        price: '18'
+        status: 'success'
+        auth_code: 'abc=='
+      assert.deepInclude response(vars, {}, json({ status:"success", price:18, auth_code:"abc==" })), expected
 
   describe 'with plain text body', ->
 

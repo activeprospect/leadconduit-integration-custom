@@ -34,40 +34,6 @@ response = (vars, req, res) ->
   if !vars.outcome_search_term and !vars.outcome_on_match
     outcome = 'success'
 
-  # determine the price based on priceSelector
-    if priceSelector
-      price =
-        if _.isFunction(doc.xpath)
-          # this is a XML document
-          try doc.xpath(priceSelector, true) catch
-
-        else if _.isFunction(doc.html)
-          # this is a HTML document
-          if priceSelector
-            attrRegex = /\s*\@([a-z_:]+[-a-z0-9_:.]]?)/i
-            attrMatch = priceSelector.match(attrRegex)
-            priceSelector = priceSelector.replace(attrRegex, '')
-            try
-              elements = doc(priceSelector)
-              if attrMatch
-                elements.map(-> doc(this).attr(attrMatch[1])).get()
-              else
-                elements.map(-> doc(this).text()).get()
-            catch err
-              [] # unmatched selector
-          else
-            []
-
-        else if _.isPlainObject(doc) or _.isArray(doc)
-          # this is a JS object (JSON)
-          dotWild.get(doc, priceSelector)
-
-        else if _.isString(doc)
-          # this is a plain text. do a regex match and use the first match group
-          regex = toRegex(priceSelector)
-          doc.match(regex)?[1]?.trim() if regex
-    
-
   else
     # narrow the search scope
     searchIn =
@@ -114,6 +80,39 @@ response = (vars, req, res) ->
         searchOutcome
       else
         inverseOutcome(searchOutcome)
+
+# determine the price based on priceSelector
+  if priceSelector
+    price =
+      if _.isFunction(doc.xpath)
+        # this is a XML document
+        try doc.xpath(priceSelector, true) catch
+
+      else if _.isFunction(doc.html)
+        # this is a HTML document
+        if priceSelector
+          attrRegex = /\s*\@([a-z_:]+[-a-z0-9_:.]]?)/i
+          attrMatch = priceSelector.match(attrRegex)
+          priceSelector = priceSelector.replace(attrRegex, '')
+          try
+            elements = doc(priceSelector)
+            if attrMatch
+              elements.map(-> doc(this).attr(attrMatch[1])).get()
+            else
+              elements.map(-> doc(this).text()).get()
+          catch err
+            [] # unmatched selector
+        else
+          []
+
+      else if _.isPlainObject(doc) or _.isArray(doc)
+        # this is a JS object (JSON)
+        dotWild.get(doc, priceSelector)
+
+      else if _.isString(doc)
+        # this is a plain text. do a regex match and use the first match group
+        regex = toRegex(priceSelector)
+        doc.match(regex)?[1]?.trim() if regex
 
   # determine the reason based on the reason selector
   reasons =

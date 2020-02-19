@@ -1,5 +1,8 @@
 language: node_js
 node_js:
-  - 10 
-  - node
+- 10
+- node
 sudo: false
+env:
+  global:
+    secure: gVYKGre58bSCBUddKaTvShZnO1ImjXpBITl4h0AYa0+51MPF+TB5QVc7ZMJBT6U1T7/Awp054FF90fWxp1nmf2U7XX1Ld7LDZsf91UqaLEcUz+Temb0CnAYX+cit7nxl4FM5JieijlcdUubUb3MDDc1IE5zcpW6T7g6cbHesggYLllU/VmRh6TqYC4F2jlTgeYCVaRy8jnzvURVkBvXtErrWDLivo9hmTd+KQ+7lMuip5mZYQcOJeaC3ENIPmTnjuWN3NIStNVGwTH45wHztwCC8Os8qozGYGwmyUzLUezQykLZ/BrSuInAn4/W3CYJAd9r7gm3yfuscZWAr/NoI7FmbfkrMkmY4slDDJnk78po9KA7d0awE22+V88TlanfGgf+TmiU7TrgH01yUZN+9EMRzi8qfLob2k3D4VQWdIbkbQbUimxcARUlUpLoiN4+9oM3CvLKgCkEzkzHOBdEFoeSsp9lZnQ8+KUmyZghtTDc13uvyLanzJ4IVV5HJm/maQ08xi8LKNAxzC9F/kebiQpjrRmMjNRdz1+pf5UDJwM4KDXyOqVVB8byGzooMMgkijMnlDR2Kb4NH+znwbQ37RDgMXKWt8HIzIEmu1M1CP6DV8VozCBS3AjFXO94uh8OkJVD8EDm9ym6dJx8w3F6zvMFQZ0O3WkePX7XO5qL+6DE=

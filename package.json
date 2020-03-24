@@ -2,7 +2,7 @@
   "name": "leadconduit-custom",
   "description": "LeadConduit custom integration",
   "author": "Alex Wolfe <alex@activeprospect.com>",
-  "version": "2.18.3",
+  "version": "2.18.4",
   "main": "index.js",
   "license": "CC-BY-NC-ND-4.0",
   "repository": {
@@ -11,6 +11,7 @@
   },
   "scripts": {
     "test": "cake test",
+    "jstest": "mocha",
     "prepublish": "cake build"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
     "coffee-script": ">= 1.7.0",
     "leadconduit-cakefile": "^0.3.1",
     "leadconduit-types": "^4.5.0",
+    "mocha": "^7.1.1",
     "nock": "^12.0.0"
   }
 }

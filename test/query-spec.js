@@ -1,14 +1,7 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const {
   assert
 } = require('chai');
-const integration = require('../src/query');
+const integration = require('../lib/query');
 const types = require('leadconduit-types');
 
 
@@ -28,7 +21,7 @@ describe('Outbound GET Query request', function() {
 
     assert.equal(integration.request(vars).url, 'http://foo.bar?fname=Mel&lname=Gibson');
     assert.equal(integration.request(vars).method, 'GET');
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5',
       'Whatever': 'foo'
     }
@@ -46,7 +39,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url, 'http://foo.bar?fname=Mel&lname=Gibson');
+    assert.equal(integration.request(vars).url, 'http://foo.bar?fname=Mel&lname=Gibson');
   });
 
 
@@ -60,7 +53,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url, 'http://foo.bar?fname=M%C3%AAl&lname=Gibson');
+    assert.equal(integration.request(vars).url, 'http://foo.bar?fname=M%C3%AAl&lname=Gibson');
   });
 
 
@@ -71,7 +64,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip');
+    assert.equal(integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip');
   });
 
 
@@ -83,7 +76,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip&foo.bar.baz=bap');
+    assert.equal(integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip&foo.bar.baz=bap');
   });
 
 
@@ -95,7 +88,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'foo=bip&foo=bap');
+    assert.equal(integration.request(vars).url.split('?')[1], 'foo=bip&foo=bap');
   });
 
 
@@ -106,7 +99,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip&foo.bar.baz=bap');
+    assert.equal(integration.request(vars).url.split('?')[1], 'foo.bar.baz=bip&foo.bar.baz=bap');
   });
 
 
@@ -122,7 +115,7 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'postal_code=78704&phone=5127891111x123&boolean=true&gender=female&number=100000&range=1000-2000');
+    assert.equal(integration.request(vars).url.split('?')[1], 'postal_code=78704&phone=5127891111x123&boolean=true&gender=female&number=100000&range=1000-2000');
   });
 
 
@@ -136,18 +129,18 @@ describe('Outbound GET Query request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'phones=5127891111x123&phones=5127892222x456');
+    assert.equal(integration.request(vars).url.split('?')[1], 'phones=5127891111x123&phones=5127892222x456');
   });
 
 
-  return it('should use raw value for invalid rich types', function() {
+  it('should use raw value for invalid rich types', function() {
     const vars = {
       parameter: {
         number: types.number.parse('foo')
       }
     };
 
-    return assert.equal(integration.request(vars).url.split('?')[1], 'number=foo');
+    assert.equal(integration.request(vars).url.split('?')[1], 'number=foo');
   });
 });
 
@@ -170,5 +163,5 @@ describe('Outbound GET Query validation', function() {
   it('should not allow content-length header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Length': '10' }}), 'Content-Length header is not allowed'));
 
 
-  return it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
+  it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
 });

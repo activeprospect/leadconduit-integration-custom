@@ -1,14 +1,5 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-const {
-  assert
-} = require('chai');
-const integration = require('../src/xml');
+const { assert } = require('chai');
+const integration = require('../lib/xml');
 const types = require('leadconduit-types');
 
 
@@ -38,7 +29,7 @@ describe('Outbound XML request', function() {
 </lead>\
 `
     );
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Content-Type': 'text/xml',
       'Content-Length': 81,
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5',
@@ -57,7 +48,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <lead>
@@ -77,7 +68,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <lead>
@@ -96,7 +87,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Content-Type': 'application/xml',
       'Content-Length': 21,
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
@@ -107,19 +98,19 @@ describe('Outbound XML request', function() {
 
   it('should handle empty xml path', function() {
     const vars = {xml_path: {}};
-    return assert.equal(integration.request(vars).body, '<?xml version="1.0"?>');
+    assert.equal(integration.request(vars).body, '<?xml version="1.0"?>');
   });
 
 
   it('should handle undefined xml path', function() {
     const vars = {};
-    return assert.equal(integration.request(vars).body, '<?xml version="1.0"?>');
+    assert.equal(integration.request(vars).body, '<?xml version="1.0"?>');
   });
 
 
   it('should handle null xml path', function() {
     const vars = {xml_path: undefined};
-    return assert.equal(integration.request(vars).body, '<?xml version="1.0"?>');
+    assert.equal(integration.request(vars).body, '<?xml version="1.0"?>');
   });
 
 
@@ -130,7 +121,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <foo>
@@ -150,7 +141,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <foo>
@@ -172,7 +163,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <foo>
@@ -191,7 +182,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <foo>
@@ -217,7 +208,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, //'{"postal_code":"78704","phone":"5127891111x123","boolean":true,"gender":"female","number":100000,"range":"1000-2000"}'
+    assert.equal(integration.request(vars).body, //'{"postal_code":"78704","phone":"5127891111x123","boolean":true,"gender":"female","number":100000,"range":"1000-2000"}'
       `\
 <?xml version="1.0"?>
 <lead>
@@ -243,7 +234,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <lead>
@@ -262,7 +253,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <number>foo</number>\
@@ -278,7 +269,7 @@ describe('Outbound XML request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body,
+    assert.equal(integration.request(vars).body,
       `\
 <?xml version="1.0"?>
 <foo>
@@ -299,10 +290,10 @@ describe('Outbound XML request', function() {
 
     const req = integration.request(vars);
     assert.equal(req.headers['Content-Type'], 'application/x-www-form-urlencoded');
-    return assert.equal(req.body, 'xmlData=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Clead%3E%0A%20%20%3Cfoo%3Ebar%3C%2Ffoo%3E%0A%20%20%3Cbaz%3Ebip%3C%2Fbaz%3E%0A%3C%2Flead%3E');
+    assert.equal(req.body, 'xmlData=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Clead%3E%0A%20%20%3Cfoo%3Ebar%3C%2Ffoo%3E%0A%20%20%3Cbaz%3Ebip%3C%2Fbaz%3E%0A%3C%2Flead%3E');
   });
 
-  return it('should include additional url encoded body parameters if present', function() {
+  it('should include additional url encoded body parameters if present', function() {
     const vars = {
       xml_path: {
         'lead.foo': 'bar',
@@ -316,7 +307,7 @@ describe('Outbound XML request', function() {
     };
     const req = integration.request(vars);
     assert.equal(req.headers['Content-Type'], 'application/x-www-form-urlencoded');
-    return assert.equal(req.body, 'xmlData=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Clead%3E%0A%20%20%3Cfoo%3Ebar%3C%2Ffoo%3E%0A%20%20%3Cbaz%3Ebip%3C%2Fbaz%3E%0A%3C%2Flead%3E&authtoken=asdf1234asdf1234&scope=crmapi');
+    assert.equal(req.body, 'xmlData=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3Clead%3E%0A%20%20%3Cfoo%3Ebar%3C%2Ffoo%3E%0A%20%20%3Cbaz%3Ebip%3C%2Fbaz%3E%0A%3C%2Flead%3E&authtoken=asdf1234asdf1234&scope=crmapi');
   });
 });
 
@@ -344,5 +335,5 @@ describe('XML validation', function() {
   it('should not allow content-length header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Length': '10' }}), 'Content-Length header is not allowed'));
 
 
-  return it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
+  it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
 });

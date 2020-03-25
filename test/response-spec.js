@@ -1,11 +1,4 @@
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-const {
-  assert
-} = require('chai');
+const { assert } = require('chai');
 const xmlbuilder = require('xmlbuilder');
 const response = require('../lib/response');
 
@@ -20,7 +13,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({}, {}, json({foo: 'bar'})), expected);
+      assert.deepEqual(response({}, {}, json({foo: 'bar'})), expected);
     });
 
 
@@ -30,7 +23,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_on_match: 'failure'}, {}, json({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_on_match: 'failure'}, {}, json({foo: 'bar'})), expected);
     });
 
 
@@ -40,7 +33,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({foo: 'bar'})), expected);
     });
 
 
@@ -50,7 +43,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -60,7 +53,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'bip'}, {}, json({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'bip'}, {}, json({foo: 'bar'})), expected);
     });
 
 
@@ -70,7 +63,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -81,27 +74,27 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: 'baz.bip'}, {}, json({x: 'bip', baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: 'baz.bip'}, {}, json({x: 'bip', baz: { bip: 'foo'}})), expected);
     });
 
 
-    it('should return failure on match per outcome on match', function() {
+    it('should failure on match per outcome on match', function() {
       const expected = {
         outcome: 'failure',
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, json({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, json({foo: 'bar'})), expected);
     });
 
 
-    it('should return failure on match per outcome on match at path', function() {
+    it('should failure on match per outcome on match at path', function() {
       const expected = {
         outcome: 'failure',
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -111,7 +104,7 @@ describe('Response', function() {
         barfoobaz: 'bip',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({barfoobaz: 'bip'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({barfoobaz: 'bip'})), expected);
     });
 
 
@@ -121,7 +114,7 @@ describe('Response', function() {
         baz: { bip: 'barfoobaz' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'barfoobaz' }})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'barfoobaz' }})), expected);
     });
 
 
@@ -131,7 +124,7 @@ describe('Response', function() {
         barfoobaz: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}'}, {}, json({barfoobaz: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}'}, {}, json({barfoobaz: 'bar'})), expected);
     });
 
 
@@ -141,7 +134,7 @@ describe('Response', function() {
         baz: { bip: 'barfoobaz' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'barfoobaz' }})), expected);
+      assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'barfoobaz' }})), expected);
     });
 
 
@@ -151,7 +144,7 @@ describe('Response', function() {
         barfoobaz: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/'}, {}, json({barfoobaz: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/'}, {}, json({barfoobaz: 'bar'})), expected);
     });
 
 
@@ -161,7 +154,7 @@ describe('Response', function() {
         baz: { bip: 'barfoobaz' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'barfoobaz' }})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'barfoobaz' }})), expected);
     });
 
 
@@ -171,7 +164,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[/'}, {}, json({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[/'}, {}, json({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -181,19 +174,19 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[/', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[/', outcome_search_path: 'baz.bip'}, {}, json({baz: { bip: 'foo'}})), expected);
     });
 
 
     it('should find search term with case insensitive match', function() {
       assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({baz: 'FOO'})), {outcome: 'success', baz: 'FOO', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'FOO'}, {}, json({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'FOO'}, {}, json({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
     });
 
 
     it('should find search term with case insensitive match at path', function() {
       assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'baz'}, {}, json({baz: 'FOO'})), {outcome: 'success', baz: 'FOO', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'FOO', outcome_search_path: 'baz'}, {}, json({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'FOO', outcome_search_path: 'baz'}, {}, json({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
     });
 
 
@@ -206,7 +199,7 @@ describe('Response', function() {
         baz: { bip: 'bar' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({baz: { bip: 'bar' }})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo'}, {}, json({baz: { bip: 'bar' }})), expected);
     });
 
 
@@ -221,7 +214,7 @@ describe('Response', function() {
         baz: { bip: 'the reason text!' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: 'the reason text!'}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: 'the reason text!'}})), expected);
     });
 
 
@@ -235,7 +228,7 @@ describe('Response', function() {
         baz: { bip: '' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: ''}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: ''}})), expected);
     });
 
 
@@ -249,7 +242,7 @@ describe('Response', function() {
         baz: { bip: '     ' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: '     '}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: '     '}})), expected);
     });
 
 
@@ -264,7 +257,7 @@ describe('Response', function() {
         baz: { bip: ['the reason text!', 'another reason'] },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: ['the reason text!', 'another reason']}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: ['the reason text!', 'another reason']}})), expected);
     });
 
 
@@ -279,7 +272,7 @@ describe('Response', function() {
         baz: { bip: ['the reason text!', 'another reason'] },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: ['the reason text!', 'another reason']}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: ['the reason text!', 'another reason']}})), expected);
     });
 
 
@@ -293,18 +286,18 @@ describe('Response', function() {
         reason: 'the reason text!',
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json( [ {bip: 'the reason text!'} ] )), expected);
+      assert.deepEqual(response(vars, {}, json( [ {bip: 'the reason text!'} ] )), expected);
     });
 
 
-    it('should return default reason', function() {
+    it('should default reason', function() {
       const expected = {
         outcome: 'success',
         reason: 'just because',
         baz: 'bip',
         price: 0
       };
-      return assert.deepEqual(response({default_reason: 'just because'}, {}, json({baz: 'bip'})), expected);
+      assert.deepEqual(response({default_reason: 'just because'}, {}, json({baz: 'bip'})), expected);
     });
 
 
@@ -318,7 +311,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: 'foo' }})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: 'foo' }})), expected);
     });
 
 
@@ -334,7 +327,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { bip: 'foo' }})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { bip: 'foo' }})), expected);
     });
 
     it('should successfully parse reason with wildcard in path', function() {
@@ -352,7 +345,7 @@ describe('Response', function() {
         },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { foo: { details: 'bad data' }}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { foo: { details: 'bad data' }}})), expected);
     });
 
     it('should successfully parse reason with multiple wildcards in path', function() {
@@ -375,7 +368,7 @@ describe('Response', function() {
         price: 0
       };
          
-      return assert.deepEqual(response(vars, {}, json({baz: { foo: { details: { bip: { more_details : 'really bad data'}}}}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { foo: { details: { bip: { more_details : 'really bad data'}}}}})), expected);
     });
 
 
@@ -383,7 +376,7 @@ describe('Response', function() {
       const vars = {outcome_search_term: 'bar'};
       const res = xml({foo: 'bar'});
       res.headers['Content-Type'] = 'application/json';
-      return assert.deepEqual(response(vars, {}, res).outcome, 'success');
+      assert.deepEqual(response(vars, {}, res).outcome, 'success');
     });
 
 
@@ -395,7 +388,7 @@ describe('Response', function() {
         },
         body: '{"err":1,"message":"PhoneNumber is a required field."}'
       };
-      return assert.equal(response({reason_path: '"message":"([^"]+)"'}, {}, res).reason, 'PhoneNumber is a required field.');
+      assert.equal(response({reason_path: '"message":"([^"]+)"'}, {}, res).reason, 'PhoneNumber is a required field.');
     });
 
     it('should override response Content-Type if override is specified in vars', function() {
@@ -418,7 +411,7 @@ describe('Response', function() {
         reason: "PhoneNumber is a required field.",
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, res), expected);
+      assert.deepEqual(response(vars, {}, res), expected);
     });
 
     it('should capture price on success', function() {
@@ -426,28 +419,28 @@ describe('Response', function() {
         {price_path: 'baz.*.cost'};
       const expected = {
         outcome: 'success',
-        price: '1.5',
+        price: 1.5,
         baz: {
           foo: {
             cost: 1.5
           }
         }
       };
-      return assert.deepEqual(response(vars, {}, json({baz: { foo: { cost: 1.5 }}})), expected);
+      assert.deepEqual(response(vars, {}, json({baz: { foo: { cost: 1.5 }}})), expected);
     });
     
-    return it('should capture price on success with outcome_search_term', function() {
+    it('should capture price on success with outcome_search_term', function() {
       const vars = { 
         price_path: 'price',
         outcome_search_term: 'success'
       };
       const expected = {
         outcome: 'success',
-        price: '18',
+        price: 18,
         status: 'success',
         auth_code: 'abc=='
       };
-      return assert.deepInclude(response(vars, {}, json({ status:"success", price:18, auth_code:"abc==" })), expected);
+      assert.deepInclude(response(vars, {}, json({ status:"success", price:18, auth_code:"abc==" })), expected);
     });
   });
 
@@ -470,7 +463,7 @@ describe('Response', function() {
     it('should not find search term', () => assert.deepEqual(response({outcome_search_term: 'bip'}, {}, text('foo')).outcome, 'failure'));
 
 
-    it('should return failure on match per outcome on match', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, text('foo')).outcome, 'failure'));
+    it('should failure on match per outcome on match', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, text('foo')).outcome, 'failure'));
 
 
     it('should find search term with partial match', () => assert.deepEqual(response({outcome_search_term: 'foo'}, {}, text('barfoobaz')).outcome, 'success'));
@@ -496,7 +489,7 @@ describe('Response', function() {
         outcome_search_term: 'foo',
         reason_path: '[a-z]+:(.*)'
       };
-      return assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', reason: 'the reason text!', price: 0});
+      assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', reason: 'the reason text!', price: 0});
     });
 
 
@@ -505,7 +498,7 @@ describe('Response', function() {
         outcome_search_term: 'foo',
         reason_path: '/[a-z]+:(.*)/'
       };
-      return assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', reason: 'the reason text!', price: 0});
+      assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', reason: 'the reason text!', price: 0});
     });
 
 
@@ -515,11 +508,11 @@ describe('Response', function() {
         reason_path: '[a-z]+:(.*)'
       };
       assert.deepEqual(response(vars, {}, text('bad:')), {outcome: 'failure', price: 0});
-      return assert.deepEqual(response(vars, {}, text('bad:     ')), {outcome: 'failure', price: 0});
+      assert.deepEqual(response(vars, {}, text('bad:     ')), {outcome: 'failure', price: 0});
     });
 
 
-    it('should return default reason', () => assert.deepEqual(response({default_reason: 'just because'}, {}, text('foo')).reason, 'just because'));
+    it('should default reason', () => assert.deepEqual(response({default_reason: 'just because'}, {}, text('foo')).reason, 'just because'));
 
 
     it('should fail to parse reason', function() {
@@ -527,7 +520,7 @@ describe('Response', function() {
         outcome_search_term: 'foo',
         reason_path: 'whatever:(.*)'
       };
-      return assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', price: 0});
+      assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', price: 0});
     });
 
 
@@ -537,7 +530,7 @@ describe('Response', function() {
         reason_path: 'whatever:(.*)',
         default_reason: 'just because'
       };
-      return assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', reason: 'just because', price: 0});
+      assert.deepEqual(response(vars, {}, text('bad:the reason text!')), {outcome: 'failure', reason: 'just because', price: 0});
     });
 
 
@@ -556,7 +549,7 @@ describe('Response', function() {
         price: 0
       };
 
-      return assert.deepEqual(response(vars, {}, text('bad: the reason text!\nwhy: just because')), expected);
+      assert.deepEqual(response(vars, {}, text('bad: the reason text!\nwhy: just because')), expected);
     });
 
 
@@ -567,7 +560,7 @@ describe('Response', function() {
           bad: '/bad: (.*/x'
         }
       };
-      return assert.deepEqual(response(vars, {}, text('bad: the reason text!\nwhy: just because')), {outcome: 'failure', price: 0});
+      assert.deepEqual(response(vars, {}, text('bad: the reason text!\nwhy: just because')), {outcome: 'failure', price: 0});
     });
 
 
@@ -575,17 +568,17 @@ describe('Response', function() {
       const vars = {outcome_search_term: 'bar'};
       const res = json({foo: 'bar'});
       res.headers['Content-Type'] = 'plain/text';
-      return assert.deepEqual(response(vars, {}, res).outcome, 'success');
+      assert.deepEqual(response(vars, {}, res).outcome, 'success');
     });
 
-    return it('should capture price when vars.cost is present', function() {
+    it('should capture price when vars.cost is present', function() {
       const vars = 
         {price_path: '/cost=([0-9]\.[0-9])/'};
       const expected = { 
         outcome: 'success',
-        price: '1.5'
+        price: 1.5
       };
-      return assert.deepEqual(response(vars, {}, text('foo&cost=1.5')), expected);
+      assert.deepEqual(response(vars, {}, text('foo&cost=1.5')), expected);
     });
   });
 
@@ -600,7 +593,7 @@ describe('Response', function() {
     it('should find search term with exact match', function() {
       assert.deepEqual(response({outcome_search_term: 'foo'}, {}, html('<div>foo</div>')), {outcome: 'success', price: 0});
       assert.deepEqual(response({outcome_search_term: 'foo'}, {}, html('<foo>bar</foo>')), {outcome: 'success', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'foo'}, {}, html('<div id="foo">bar</div>')), {outcome: 'success', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'foo'}, {}, html('<div id="foo">bar</div>')), {outcome: 'success', price: 0});
     });
 
 
@@ -608,7 +601,7 @@ describe('Response', function() {
       assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div'}, {}, html('<div>foo</div>')), {outcome: 'success', price: 0});
       assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div span'}, {}, html('<div><span>foo</span></foo>')), {outcome: 'success', price: 0});
       assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div[id="bar"]'}, {}, html('<div id="bar">foo</div>')), {outcome: 'success', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div'}, {}, html('<div>bar</div><div>foo</div>')), {outcome: 'success', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div'}, {}, html('<div>bar</div><div>foo</div>')), {outcome: 'success', price: 0});
     });
 
 
@@ -621,10 +614,10 @@ describe('Response', function() {
     it('should not find search term at different path', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div[id="one"]'}, {}, html('<div id="one">bar</div><div id="other">foo</div>')), {outcome: 'failure', price: 0}));
 
 
-    it('should return failure on match per outcome on match', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, html('<div>foo</div>')), {outcome: 'failure', price: 0}));
+    it('should failure on match per outcome on match', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, html('<div>foo</div>')), {outcome: 'failure', price: 0}));
 
 
-    it('should return failure on match per outcome on match at path', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: 'div'}, {}, html('<div>foo</div>')), {outcome: 'failure', price: 0}));
+    it('should failure on match per outcome on match at path', () => assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: 'div'}, {}, html('<div>foo</div>')), {outcome: 'failure', price: 0}));
 
 
     it('should find search term with partial match', () => assert.deepEqual(response({outcome_search_term: 'foo'}, {}, html('barfoobaz')), {outcome: 'success', price: 0}));
@@ -653,13 +646,13 @@ describe('Response', function() {
 
     it('should find search term with case insensitive match', function() {
       assert.deepEqual(response({outcome_search_term: 'foo'}, {}, html('FOO')), {outcome: 'success', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'FOO'}, {}, html('foo')), {outcome: 'success', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'FOO'}, {}, html('foo')), {outcome: 'success', price: 0});
     });
 
 
     it('should find search term with case insensitive match at path', function() {
       assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: 'div'}, {}, html('<div>FOO</div>')), {outcome: 'success', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'FOO', outcome_search_path: 'div'}, {}, html('<div>foo</div>')), {outcome: 'success', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'FOO', outcome_search_path: 'div'}, {}, html('<div>foo</div>')), {outcome: 'success', price: 0});
     });
 
 
@@ -682,7 +675,7 @@ describe('Response', function() {
         reason: 'just because',
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message">just because</div>')), expected);
+      assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message">just because</div>')), expected);
     });
 
 
@@ -696,7 +689,7 @@ describe('Response', function() {
         reason: 'just because',
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message" reason="just because"></div>')), expected);
+      assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message" reason="just because"></div>')), expected);
     });
 
 
@@ -705,7 +698,7 @@ describe('Response', function() {
         outcome_search_term: 'foo',
         reason_path: 'div[id="message"]'
       };
-      return assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message"></div>')), {outcome: 'failure', price: 0});
+      assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message"></div>')), {outcome: 'failure', price: 0});
     });
 
 
@@ -714,7 +707,7 @@ describe('Response', function() {
         outcome_search_term: 'foo',
         reason_path: 'div[id="message"]'
       };
-      return assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message">      </div>')), {outcome: 'failure', price: 0});
+      assert.deepEqual(response(vars, {}, html('<div>bar</div><div id="message">      </div>')), {outcome: 'failure', price: 0});
     });
 
 
@@ -728,17 +721,17 @@ describe('Response', function() {
         reason: 'another reason, the reason text!',
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, html('<div class="message">the reason text!</div><div class="message">another reason</div>')), expected);
+      assert.deepEqual(response(vars, {}, html('<div class="message">the reason text!</div><div class="message">another reason</div>')), expected);
     });
 
 
-    it('should return default reason', function() {
+    it('should default reason', function() {
       const expected = {
         outcome: 'success',
         reason: 'just because',
         price: 0
       };
-      return assert.deepEqual(response({default_reason: 'just because'}, {}, html()), expected);
+      assert.deepEqual(response({default_reason: 'just because'}, {}, html()), expected);
     });
 
 
@@ -747,7 +740,7 @@ describe('Response', function() {
         outcome_search_term: 'bar',
         reason_path: 'div.message'
       };
-      return assert.deepEqual(response(vars, {}, html('foo')), {outcome: 'failure', price: 0});
+      assert.deepEqual(response(vars, {}, html('foo')), {outcome: 'failure', price: 0});
     });
 
 
@@ -757,7 +750,7 @@ describe('Response', function() {
         reason_path: 'div.message',
         default_reason: 'just because'
       };
-      return assert.deepEqual(response(vars, {}, html('foo')), {outcome: 'failure', reason: 'just because', price: 0});
+      assert.deepEqual(response(vars, {}, html('foo')), {outcome: 'failure', reason: 'just because', price: 0});
     });
 
 
@@ -765,7 +758,7 @@ describe('Response', function() {
       const vars = {outcome_search_term: 'bar'};
       const res = json({foo: 'bar'});
       res.headers['Content-Type'] = 'text/html';
-      return assert.deepEqual(response(vars, {}, res).outcome, 'success');
+      assert.deepEqual(response(vars, {}, res).outcome, 'success');
     });
 
 
@@ -780,17 +773,17 @@ describe('Response', function() {
         number_records: '42',
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, html('<div>result: matched 42 records.</div>')), expected);
+      assert.deepEqual(response(vars, {}, html('<div>result: matched 42 records.</div>')), expected);
     });
 
-    return it('should capture price when price_path is present', function() {
+    it('should capture price when price_path is present', function() {
       const vars =
         {price_path: 'div.cost'};
       const expected = { 
         outcome: 'success',
-        price: "1.5"
+        price: 1.5
       };
-      return assert.deepEqual(response(vars, {}, html('<div class="cost">1.5</div>')), expected);
+      assert.deepEqual(response(vars, {}, html('<div class="cost">1.5</div>')), expected);
     });
   });
 
@@ -802,7 +795,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({}, {}, xml({foo: 'bar'})), expected);
+      assert.deepEqual(response({}, {}, xml({foo: 'bar'})), expected);
     });
 
 
@@ -812,7 +805,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_on_match: 'failure'}, {}, xml({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_on_match: 'failure'}, {}, xml({foo: 'bar'})), expected);
     });
 
 
@@ -822,7 +815,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo'}, {}, xml({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo'}, {}, xml({foo: 'bar'})), expected);
     });
 
 
@@ -832,7 +825,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -842,7 +835,7 @@ describe('Response', function() {
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'bip'}, {}, xml({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'bip'}, {}, xml({foo: 'bar'})), expected);
     });
 
 
@@ -852,7 +845,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -865,27 +858,27 @@ describe('Response', function() {
           baz: { bip: 'foo' }
         }
       };
-      return assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: '/baz/bip/text()'}, {}, xml({y: { x: 'bip', baz: { bip: 'foo'}}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'bip', outcome_search_path: '/baz/bip/text()'}, {}, xml({y: { x: 'bip', baz: { bip: 'foo'}}})), expected);
     });
 
 
-    it('should return failure on match per outcome on match', function() {
+    it('should failure on match per outcome on match', function() {
       const expected = {
         outcome: 'failure',
         foo: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, xml({foo: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure'}, {}, xml({foo: 'bar'})), expected);
     });
 
 
-    it('should return failure on match per outcome on match at path', function() {
+    it('should failure on match per outcome on match at path', function() {
       const expected = {
         outcome: 'failure',
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_on_match: 'failure', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -895,7 +888,7 @@ describe('Response', function() {
         barfoobaz: 'bip',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo'}, {}, xml({barfoobaz: 'bip'})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo'}, {}, xml({barfoobaz: 'bip'})), expected);
     });
 
 
@@ -905,7 +898,7 @@ describe('Response', function() {
         baz: { bip: 'barfoobaz' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'barfoobaz' }})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'barfoobaz' }})), expected);
     });
 
 
@@ -915,7 +908,7 @@ describe('Response', function() {
         barfoobaz: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}'}, {}, xml({barfoobaz: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}'}, {}, xml({barfoobaz: 'bar'})), expected);
     });
 
 
@@ -925,7 +918,7 @@ describe('Response', function() {
         baz: { bip: 'barfoobaz' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'barfoobaz' }})), expected);
+      assert.deepEqual(response({outcome_search_term: '[a-z]{3}foo[a-z]{3}', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'barfoobaz' }})), expected);
     });
 
 
@@ -935,7 +928,7 @@ describe('Response', function() {
         barfoobaz: 'bar',
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/'}, {}, xml({barfoobaz: 'bar'})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/'}, {}, xml({barfoobaz: 'bar'})), expected);
     });
 
 
@@ -945,7 +938,7 @@ describe('Response', function() {
         baz: { bip: 'barfoobaz' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'barfoobaz' }})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[a-z]{3}foo[a-z]{3}/', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'barfoobaz' }})), expected);
     });
 
 
@@ -955,7 +948,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[/'}, {}, xml({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[/'}, {}, xml({baz: { bip: 'foo'}})), expected);
     });
 
 
@@ -965,19 +958,19 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: '/[/', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
+      assert.deepEqual(response({outcome_search_term: '/[/', outcome_search_path: '/baz/bip/text()'}, {}, xml({baz: { bip: 'foo'}})), expected);
     });
 
 
     it('should find search term with case insensitive match', function() {
       assert.deepEqual(response({outcome_search_term: 'foo'}, {}, xml({baz: 'FOO'})), {outcome: 'success', baz: 'FOO', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'FOO'}, {}, xml({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'FOO'}, {}, xml({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
     });
 
 
     it('should find search term with case insensitive match at path', function() {
       assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/baz'}, {}, xml({baz: 'FOO'})), {outcome: 'success', baz: 'FOO', price: 0});
-      return assert.deepEqual(response({outcome_search_term: 'FOO', outcome_search_path: '/baz'}, {}, xml({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
+      assert.deepEqual(response({outcome_search_term: 'FOO', outcome_search_path: '/baz'}, {}, xml({baz: 'foo'})), {outcome: 'success', baz: 'foo', price: 0});
     });
 
 
@@ -990,7 +983,7 @@ describe('Response', function() {
         baz: { bip: 'bar' },
         price: 0
       };
-      return assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/bip/text()'}, {}, xml({baz: { bip: 'bar' }})), expected);
+      assert.deepEqual(response({outcome_search_term: 'foo', outcome_search_path: '/bip/text()'}, {}, xml({baz: { bip: 'bar' }})), expected);
     });
 
 
@@ -1005,7 +998,7 @@ describe('Response', function() {
         baz: { bip: 'the reason text!' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: 'the reason text!'}})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: 'the reason text!'}})), expected);
     });
 
 
@@ -1033,7 +1026,7 @@ describe('Response', function() {
 
       const event = response(vars, {}, res);
       assert.equal(event.outcome, 'failure');
-      return assert.equal(event.reason, 'the reason character data!');
+      assert.equal(event.reason, 'the reason character data!');
     });
 
 
@@ -1047,7 +1040,7 @@ describe('Response', function() {
         baz: { bip: '' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: ''}})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: ''}})), expected);
     });
 
 
@@ -1061,7 +1054,7 @@ describe('Response', function() {
         baz: { bip: '     ' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: '     '}})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: '     '}})), expected);
     });
 
 
@@ -1076,18 +1069,18 @@ describe('Response', function() {
         baz: { bip: ['the reason text!', 'another reason'] },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: ['the reason text!', 'another reason']}})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: ['the reason text!', 'another reason']}})), expected);
     });
 
 
-    it('should return default reason', function() {
+    it('should default reason', function() {
       const expected = {
         outcome: 'success',
         reason: 'just because',
         baz: 'bip',
         price: 0
       };
-      return assert.deepEqual(response({default_reason: 'just because'}, {}, xml({baz: 'bip'})), expected);
+      assert.deepEqual(response({default_reason: 'just because'}, {}, xml({baz: 'bip'})), expected);
     });
 
 
@@ -1101,7 +1094,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: 'foo' }})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: 'foo' }})), expected);
     });
 
 
@@ -1117,7 +1110,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: 'foo' }})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: 'foo' }})), expected);
     });
 
 
@@ -1133,7 +1126,7 @@ describe('Response', function() {
         baz: { bip: 'foo' },
         price: 0
       };
-      return assert.deepEqual(response(vars, {}, xml({baz: { bip: 'foo' }})), expected);
+      assert.deepEqual(response(vars, {}, xml({baz: { bip: 'foo' }})), expected);
     });
 
 
@@ -1141,20 +1134,20 @@ describe('Response', function() {
       const vars = {outcome_search_term: 'bar'};
       const res = json({foo: { bar: 'baz'}});
       res.headers['Content-Type'] = 'text/xml';
-      return assert.deepEqual(response(vars, {}, res), {outcome: 'success', price: 0});
+      assert.deepEqual(response(vars, {}, res), {outcome: 'success', price: 0});
     });
 
-    return it('should capture price', function() {
+    it('should capture price', function() {
       const vars =
         {price_path: 'bar/cost/text()'};
       const expected = {
-        price: '1.5',
+        price: 1.5,
         bar: {
           cost: '1.5'
         },
         outcome: 'success'
       };
-      return assert.deepEqual(response(vars, {}, xml({bar: { cost: '1.5'}})), expected);
+      assert.deepEqual(response(vars, {}, xml({bar: { cost: '1.5'}})), expected);
     });
   });
 
@@ -1169,7 +1162,7 @@ describe('Response', function() {
         },
         body: 'oh no!'
       };
-      return assert.deepEqual(response({}, {}, res), {outcome: 'error', reason: 'Server error'});
+      assert.deepEqual(response({}, {}, res), {outcome: 'error', reason: 'Server error'});
     });
 
 
@@ -1182,7 +1175,7 @@ describe('Response', function() {
         },
         body: 'oh no!'
       };
-      return assert.deepEqual(response({}, {}, res), {outcome: 'error', reason: 'Server error'});
+      assert.deepEqual(response({}, {}, res), {outcome: 'error', reason: 'Server error'});
     });
 
 
@@ -1195,7 +1188,7 @@ describe('Response', function() {
         },
         body: 'oh no!'
       };
-      return assert.deepEqual(response({}, {}, res), {outcome: 'error', reason: 'Server error'});
+      assert.deepEqual(response({}, {}, res), {outcome: 'error', reason: 'Server error'});
     });
 
 
@@ -1208,10 +1201,10 @@ describe('Response', function() {
         },
         body: 'oh no!'
       };
-      return assert.deepEqual(response({}, {}, res).outcome, 'success');
+      assert.deepEqual(response({}, {}, res).outcome, 'success');
     });
 
-    return it('should return success on HTTP 200 if no outcome and search term are specified', function() {
+    it('should success on HTTP 200 if no outcome and search term are specified', function() {
       const res = {
         status: 200,
         headers: {
@@ -1220,15 +1213,15 @@ describe('Response', function() {
         },
         body: ''
       };
-      return assert.deepEqual(response({outcome_search_term: null, outcome_on_match: null}, {}, res).outcome, 'success');
+      assert.deepEqual(response({outcome_search_term: null, outcome_on_match: null}, {}, res).outcome, 'success');
     });
   });
 
-  return describe('cookie capture', function() {
+  describe('cookie capture', function() {
 
     before(function() {
       this.cookie = 'Session_id=678; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly';
-      return this.res = {
+      this.res = {
         status: 200,
         headers: {
           'Set-Cookie': this.cookie
@@ -1237,33 +1230,33 @@ describe('Response', function() {
     });
 
     it('should not capture anything with no search-term', function() {
-      return assert.deepEqual(response({}, {}, this.res), {outcome: 'success', price: 0});
+      assert.deepEqual(response({}, {}, this.res), {outcome: 'success', price: 0});
     });
 
 
     it('should not capture anything when search-term does not match', function() {
-      return assert.deepEqual(response({cookie_search_term: 'login_info'}, {}, this.res), {outcome: 'success', price: 0});
+      assert.deepEqual(response({cookie_search_term: 'login_info'}, {}, this.res), {outcome: 'success', price: 0});
     });
 
 
     it('should not capture anything when regex search-term does not match', function() {
-      return assert.deepEqual(response({cookie_search_term: 'domain=.x[0-9]{7}'}, {}, this.res), {outcome: 'success', price: 0});
+      assert.deepEqual(response({cookie_search_term: 'domain=.x[0-9]{7}'}, {}, this.res), {outcome: 'success', price: 0});
     });
 
 
     it('should capture a cookie that matches string search-term', function() {
-      return assert.deepEqual(response({cookie_search_term: 'session_id'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
+      assert.deepEqual(response({cookie_search_term: 'session_id'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
     });
 
 
     it('should capture a cookie regardless of search-term case', function() {
       assert.deepEqual(response({cookie_search_term: 'session_id'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
-      return assert.deepEqual(response({cookie_search_term: 'SESSION_ID'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
+      assert.deepEqual(response({cookie_search_term: 'SESSION_ID'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
     });
 
 
     it('should capture a cookie that matches regex search-term', function() {
-      return assert.deepEqual(response({cookie_search_term: 'session.*domain=.fizzbuzz'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
+      assert.deepEqual(response({cookie_search_term: 'session.*domain=.fizzbuzz'}, {}, this.res), {outcome: 'success', cookie: this.cookie, price: 0});
     });
 
 
@@ -1275,10 +1268,10 @@ describe('Response', function() {
         cookie2,
         cookie3
       ];
-      return assert.deepEqual(response({cookie_search_term: 'session_id'}, {}, this.res), {outcome: 'success', cookie: cookie2, price: 0});
+      assert.deepEqual(response({cookie_search_term: 'session_id'}, {}, this.res), {outcome: 'success', cookie: cookie2, price: 0});
     });
 
-    return it('should capture the first cookie (sorted lexicographically) when multiples match regex search-term', function() {
+    it('should capture the first cookie (sorted lexicographically) when multiples match regex search-term', function() {
       const cookie2 = 'Session_id=123; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly';
       const cookie3 = 'Session_id=9AB; path=/; domain=.fizzbuzz.com; expires=Sat, 01-Jan-2022 16:39:03 GMT; Max-Age=155520000; secure; httpOnly';
       this.res.headers['Set-Cookie'] = [
@@ -1286,7 +1279,7 @@ describe('Response', function() {
         cookie2,
         cookie3
       ];
-      return assert.deepEqual(response({cookie_search_term: 'session.*domain=.fizzbuzz'}, {}, this.res), {outcome: 'success', cookie: cookie2, price: 0});
+     assert.deepEqual(response({cookie_search_term: 'session.*domain=.fizzbuzz'}, {}, this.res), {outcome: 'success', cookie: cookie2, price: 0});
     });
   });
 });

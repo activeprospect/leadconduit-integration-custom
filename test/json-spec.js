@@ -1,14 +1,7 @@
-// TODO: This file was created by bulk-decaffeinate.
-// Sanity-check the conversion and remove this comment.
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const {
   assert
 } = require('chai');
-const integration = require('../src/json');
+const integration = require('../lib/json');
 const types = require('leadconduit-types');
 
 
@@ -30,7 +23,7 @@ describe('Outbound JSON request', function() {
     assert.equal(integration.request(vars).url, 'http://foo.bar');
     assert.equal(integration.request(vars).method, 'POST');
     assert.equal(integration.request(vars).body, '{"fname":"Mel","lname":"Gibson"}');
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Content-Type': 'application/json; charset=utf-8',
       'Content-Length': 32,
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5',
@@ -50,7 +43,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"fname":"Mel","lname":"Gibson"}');
+    assert.equal(integration.request(vars).body, '{"fname":"Mel","lname":"Gibson"}');
   });
 
 
@@ -63,7 +56,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"fname":"Mêl","lname":"Gibson"}');
+    assert.equal(integration.request(vars).body, '{"fname":"Mêl","lname":"Gibson"}');
   });
 
 
@@ -75,7 +68,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Content-Type': 'application/json',
       'Content-Length': 2,
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
@@ -91,7 +84,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":"bip"}}}');
+    assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":"bip"}}}');
   });
 
 
@@ -103,7 +96,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}');
+    assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}');
   });
 
 
@@ -114,7 +107,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}');
+    assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}');
   });
 
 
@@ -130,7 +123,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"postal_code":"78704","phone":"5127891111x123","boolean":true,"gender":"female","number":100000,"range":"1000-2000"}');
+    assert.equal(integration.request(vars).body, '{"postal_code":"78704","phone":"5127891111x123","boolean":true,"gender":"female","number":100000,"range":"1000-2000"}');
   });
 
 
@@ -144,7 +137,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"phones":["5127891111x123","5127892222x456"]}');
+    assert.equal(integration.request(vars).body, '{"phones":["5127891111x123","5127892222x456"]}');
   });
 
 
@@ -155,7 +148,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"number":"foo"}');
+    assert.equal(integration.request(vars).body, '{"number":"foo"}');
   });
 
   it('should stuff JSON into url-encoded body parameter and include any additional parameters', function() {
@@ -177,7 +170,7 @@ describe('Outbound JSON request', function() {
     };
 
     assert.equal(integration.request(vars).headers['Content-Type'], 'application/x-www-form-urlencoded');
-    return assert.equal(integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead');
+    assert.equal(integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead');
   });
 
 
@@ -190,7 +183,7 @@ describe('Outbound JSON request', function() {
         'foo.2': 'bip'
       }
     };
-    return assert.equal(integration.request(vars).body, '{"foo":["baz","bip"]}');
+    assert.equal(integration.request(vars).body, '{"foo":["baz","bip"]}');
   });
 
 
@@ -202,7 +195,7 @@ describe('Outbound JSON request', function() {
         '1.foo.bar': 'bip'
       }
     };
-    return assert.equal(integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]');
+    assert.equal(integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]');
   });
 
 
@@ -213,7 +206,7 @@ describe('Outbound JSON request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, '{"foo":{"bar[what_is_your_interest]":"astrophysics"}}');
+    assert.equal(integration.request(vars).body, '{"foo":{"bar[what_is_your_interest]":"astrophysics"}}');
   });
 
 
@@ -225,18 +218,18 @@ describe('Outbound JSON request', function() {
         '2.foo.bar': 'bip'
       }
     };
-    return assert.equal(integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]');
+    assert.equal(integration.request(vars).body, '[{"foo":{"bar":"baz"}},{"foo":{"bip":"bap","bar":"bip"}}]');
   });
 
 
-  return it('should build object even though a json property has a leading digit', function() {
+  it('should build object even though a json property has a leading digit', function() {
     const vars = {
       json_property: {
         '0.foo.bar': 'baz',
         'bip': 'bap'
       }
     };
-    return assert.equal(integration.request(vars).body, '{"0":{"foo":{"bar":"baz"}},"bip":"bap"}');
+    assert.equal(integration.request(vars).body, '{"0":{"foo":{"bar":"baz"}},"bip":"bap"}');
   });
 });
 
@@ -246,15 +239,11 @@ describe('JSON validation', function() {
 
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 
-
   it('should require not require method', () => assert.isUndefined(integration.validate({url: 'http://foo'})));
-
 
   it('should require valid method', () => assert.equal(integration.validate({url: 'http://foo', method: 'HEAD'}), 'Unsupported HTTP method - use POST, PUT, DELETE'));
 
-
   it('should require valid search outcome', () => assert.equal(integration.validate({url: 'http://foo', outcome_on_match: 'donkey'}), "Outcome on match must be 'success' or 'failure'"));
-
 
   it('should pass validation', () => assert.isUndefined(integration.validate({url: 'http://foo'})));
 
@@ -262,9 +251,7 @@ describe('JSON validation', function() {
 
   it('should not allow invalid content-type header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Type': 'text/xml' }}), 'Invalid Content-Type header value'));
 
-
   it('should not allow content-length header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Length': '10' }}), 'Content-Length header is not allowed'));
 
-
-  return it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
+  it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
 });

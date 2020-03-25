@@ -8,7 +8,7 @@
 const {
   assert
 } = require('chai');
-const integration = require('../src/form');
+const integration = require('../lib/form');
 const types = require('leadconduit-types');
 
 
@@ -30,7 +30,7 @@ describe('Outbound Form POST request', function() {
     assert.equal(integration.request(vars).url, 'http://foo.bar');
     assert.equal(integration.request(vars).method, 'POST');
     assert.equal(integration.request(vars).body, 'fname=Mel&lname=Gibson');
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
       'Content-Length': 22,
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5',
@@ -50,7 +50,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'fname=Mel&lname=Gibson');
+    assert.equal(integration.request(vars).body, 'fname=Mel&lname=Gibson');
   });
 
 
@@ -63,7 +63,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'fname=M%C3%AAl&lname=Gibson');
+    assert.equal(integration.request(vars).body, 'fname=M%C3%AAl&lname=Gibson');
   });
 
 
@@ -75,7 +75,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.deepEqual(integration.request(vars).headers, {
+    assert.deepEqual(integration.request(vars).headers, {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': 0,
       'Accept': 'application/json;q=0.9,text/xml;q=0.8,application/xml;q=0.7,text/html;q=0.6,text/plain;q=0.5'
@@ -91,7 +91,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'foo.bar.baz=bip');
+    assert.equal(integration.request(vars).body, 'foo.bar.baz=bip');
   });
 
 
@@ -102,7 +102,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'profile%5Bwhat_is_your_interest%5D=whatever');
+    assert.equal(integration.request(vars).body, 'profile%5Bwhat_is_your_interest%5D=whatever');
   });
 
 
@@ -114,7 +114,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'foo.bar.baz=bip&foo.bar.baz=bap');
+    assert.equal(integration.request(vars).body, 'foo.bar.baz=bip&foo.bar.baz=bap');
   });
 
 
@@ -128,7 +128,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'foo=bip&foo=bap&bar.baz=42&bar.baz=55');
+    assert.equal(integration.request(vars).body, 'foo=bip&foo=bap&bar.baz=42&bar.baz=55');
   });
 
 
@@ -139,7 +139,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'foo.bar.baz=bip&foo.bar.baz=bap');
+    assert.equal(integration.request(vars).body, 'foo.bar.baz=bip&foo.bar.baz=bap');
   });
 
 
@@ -155,7 +155,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'postal_code=78704&phone=5127891111x123&boolean=true&gender=female&number=100000&range=1000-2000');
+    assert.equal(integration.request(vars).body, 'postal_code=78704&phone=5127891111x123&boolean=true&gender=female&number=100000&range=1000-2000');
   });
 
 
@@ -169,7 +169,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'phones=5127891111x123&phones=5127892222x456');
+    assert.equal(integration.request(vars).body, 'phones=5127891111x123&phones=5127892222x456');
   });
 
 
@@ -180,7 +180,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'number=foo');
+    assert.equal(integration.request(vars).body, 'number=foo');
   });
 
 
@@ -192,11 +192,11 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'foo%5Bbar%5D=42&foo%5Bbaz%5D=zippity%5Bdo%5D');
+    assert.equal(integration.request(vars).body, 'foo%5Bbar%5D=42&foo%5Bbaz%5D=zippity%5Bdo%5D');
   });
 
 
-  return it('should not encode form_field names when told not to', function() {
+  it('should not encode form_field names when told not to', function() {
     const vars = {
       encode_form_field_names: false,
       form_field: {
@@ -205,7 +205,7 @@ describe('Outbound Form POST request', function() {
       }
     };
 
-    return assert.equal(integration.request(vars).body, 'foo[bar]=42&foo[baz]=zippity%5Bdo%5D');
+    assert.equal(integration.request(vars).body, 'foo[bar]=42&foo[baz]=zippity%5Bdo%5D');
   });
 });
 
@@ -229,5 +229,5 @@ describe('Outbound Form POST validation', function() {
   it('should not allow content-length header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Length': '10' }}), 'Content-Length header is not allowed'));
 
 
-  return it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
+  it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
 });

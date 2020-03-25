@@ -1,23 +1,27 @@
-assert = require('chai').assert
-compact = require('../src/compact')
+/*
+ * decaffeinate suggestions:
+ * DS102: Remove unnecessary code created because of implicit returns
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const {
+  assert
+} = require('chai');
+const compact = require('../src/compact');
 
-describe 'Compact', ->
-
-
-  it 'should compact array', ->
-    assert.deepEqual compact([1, 2, null, 4]), [1, 2, 4]
-
-
-  it 'should compact object property array', ->
-    assert.deepEqual compact(foo: [1, 2, null, 4]), foo: [1, 2, 4]
-
-
-  it 'should compact nested array', ->
-    assert.deepEqual compact([1, 2, ['a', null, 'c'], 4]), [1, 2, ['a', 'c'], 4]
+describe('Compact', function() {
 
 
-  it 'should compact array nested in object property array', ->
-    assert.deepEqual compact(foo: [1, 2, { bar: [ 'a', null, 'c' ]}, 4]), foo: [1, 2, { bar: ['a', 'c'] }, 4]
+  it('should compact array', () => assert.deepEqual(compact([1, 2, null, 4]), [1, 2, 4]));
+
+
+  it('should compact object property array', () => assert.deepEqual(compact({foo: [1, 2, null, 4]}), {foo: [1, 2, 4]}));
+
+
+  it('should compact nested array', () => assert.deepEqual(compact([1, 2, ['a', null, 'c'], 4]), [1, 2, ['a', 'c'], 4]));
+
+
+  return it('should compact array nested in object property array', () => assert.deepEqual(compact({foo: [1, 2, { bar: [ 'a', null, 'c' ]}, 4]}), {foo: [1, 2, { bar: ['a', 'c'] }, 4]}));
+});
 
 
 

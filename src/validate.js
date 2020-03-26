@@ -1,50 +1,66 @@
-_ = require('lodash')
-u = require('url')
+/*
+ * decaffeinate suggestions:
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS207: Consider shorter variations of null checks
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const _ = require('lodash');
+const u = require('url');
 
-isValidUrl = (url) ->
-  url.protocol? and
-    url.protocol.match(/^http[s]?:/) and
-    url.slashes and
-    url.hostname?
-
-
-module.exports =
-  url: (vars) ->
-    # validate URL
-    unless vars.url?
-      return 'URL is required'
-
-    url = u.parse(vars.url)
-
-    unless isValidUrl(url)
-      return 'URL must be valid'
+const isValidUrl = url => (url.protocol != null) &&
+  url.protocol.match(/^http[s]?:/) &&
+  url.slashes &&
+  (url.hostname != null);
 
 
-  method: (vars, allowed) ->
-    method = vars.method?.toUpperCase()
-    return unless method
-    unless allowed.indexOf(method) >= 0
-      return "Unsupported HTTP method - use #{allowed.join(', ')}"
+module.exports = {
+  url(vars) {
+    // validate URL
+    if (vars.url == null) {
+      return 'URL is required';
+    }
+
+    const url = u.parse(vars.url);
+
+    if (!isValidUrl(url)) {
+      return 'URL must be valid';
+    }
+  },
 
 
-  outcome: (vars) ->
-    return unless vars.outcome_on_match
+  method(vars, allowed) {
+    const method = vars.method != null ? vars.method.toUpperCase() : undefined;
+    if (!method) { return; }
+    if (!(allowed.indexOf(method) >= 0)) {
+      return `Unsupported HTTP method - use ${allowed.join(', ')}`;
+    }
+  },
 
-    unless vars.outcome_on_match == 'success' or vars.outcome_on_match == 'failure'
-      "Outcome on match must be 'success' or 'failure'"
+
+  outcome(vars) {
+    if (!vars.outcome_on_match) { return; }
+
+    if ((vars.outcome_on_match !== 'success') && (vars.outcome_on_match !== 'failure')) {
+      return "Outcome on match must be 'success' or 'failure'";
+    }
+  },
 
 
-  headers: (vars, contentTypeBase = '') ->
-    return unless _.isPlainObject(vars.header)
+  headers(vars, contentTypeBase) {
+    if (contentTypeBase == null) { contentTypeBase = ''; }
+    if (!_.isPlainObject(vars.header)) { return; }
 
-    headers = _.mapKeys vars.header, (v, k) ->
-        k.toLowerCase()
+    const headers = _.mapKeys(vars.header, (v, k) => k.toLowerCase());
 
-    for disallowedHeader in ['Content-Length', 'Accept']
-      return "#{disallowedHeader} header is not allowed" if headers[disallowedHeader.toLowerCase()]
+    for (let disallowedHeader of ['Content-Length', 'Accept']) {
+      if (headers[disallowedHeader.toLowerCase()]) { return `${disallowedHeader} header is not allowed`; }
+    }
 
-    # ensure that user-specified Content-Type is similar to what's allowed
-    if headers['content-type']? and !headers['content-type']?.match(new RegExp(contentTypeBase, 'i'))
-      return "Invalid Content-Type header value"
+    // ensure that user-specified Content-Type is similar to what's allowed
+    if ((headers['content-type'] != null) && !(headers['content-type'] != null ? headers['content-type'].match(new RegExp(contentTypeBase, 'i')) : undefined)) {
+      return "Invalid Content-Type header value";
+    }
+  }
+};
 
 

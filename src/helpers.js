@@ -1,35 +1,49 @@
-_ = require('lodash')
-flat = require('flat')
-normalize = require('./normalize')
-querystring = require('querystring')
-regexParser = require('regex-parser')
+/*
+ * decaffeinate suggestions:
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS207: Consider shorter variations of null checks
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const _ = require('lodash');
+const flat = require('flat');
+const normalize = require('./normalize');
+const querystring = require('querystring');
+const regexParser = require('regex-parser');
 
-module.exports =
-  inverseOutcome: (outcome) ->
-    switch outcome
-      when 'success' then 'failure'
-      when 'failure' then 'success'
-      else 'success'
+module.exports = {
+  inverseOutcome(outcome) {
+    switch (outcome) {
+      case 'success': return 'failure';
+      case 'failure': return 'success';
+      default: return 'success';
+    }
+  },
 
-  ensureArray: (val) ->
-    return [] unless val?
-    val = [val] if !_.isArray(val)
-    val
+  ensureArray(val) {
+    if (val == null) { return []; }
+    if (!_.isArray(val)) { val = [val]; }
+    return val;
+  },
 
-  toRegex: (expression) ->
-    expression = expression?.trim().toLowerCase()
-    return regexParser('.*') unless expression
-    try
-      regexParser(expression)
-    catch err
-      null
+  toRegex(expression) {
+    expression = expression != null ? expression.trim().toLowerCase() : undefined;
+    if (!expression) { return regexParser('.*'); }
+    try {
+      return regexParser(expression);
+    } catch (err) {
+      return null;
+    }
+  },
 
-  # stuff formatted body (e.g., XML or JSON) into a named parameter, along with any "extra" parameters
-  parameterize: (param, body, extraParams) ->
-    b = {}
-    b[param] = body
-    if extraParams
-      params = flat.flatten(normalize(extraParams), safe:true)
-      querystring.stringify(_.merge(b,params))
-    else
-      querystring.stringify(b)
+  // stuff formatted body (e.g., XML or JSON) into a named parameter, along with any "extra" parameters
+  parameterize(param, body, extraParams) {
+    const b = {};
+    b[param] = body;
+    if (extraParams) {
+      const params = flat.flatten(normalize(extraParams), {safe:true});
+      return querystring.stringify(_.merge(b,params));
+    } else {
+      return querystring.stringify(b);
+    }
+  }
+};

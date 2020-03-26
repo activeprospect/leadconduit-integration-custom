@@ -1,18 +1,23 @@
-_ = require('lodash')
-normalize = require('./normalize')
+/*
+ * decaffeinate suggestions:
+ * DS102: Remove unnecessary code created because of implicit returns
+ * DS207: Consider shorter variations of null checks
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const _ = require('lodash');
+const normalize = require('./normalize');
 
 
-module.exports = (header) ->
-  return {} unless _.isPlainObject(header)
+module.exports = function(header) {
+  if (!_.isPlainObject(header)) { return {}; }
 
-  _(normalize(header))
-    .mapValues (v) ->
-      if _.isArray(v)
-        v.join(', ')
-      else if _.isPlainObject(v)
-        ''
-      else
-        v.toString()
-    .omitBy (v, k) ->
-      !v?.trim() or !k?.trim()
-    .value()
+  return _(normalize(header))
+    .mapValues(function(v) {
+      if (_.isArray(v)) {
+        return v.join(', ');
+      } else if (_.isPlainObject(v)) {
+        return '';
+      } else {
+        return v.toString();
+      }}).omitBy((v, k) => !(v != null ? v.trim() : undefined) || !(k != null ? k.trim() : undefined)).value();
+};

@@ -1,6 +1,4 @@
-const {
-  assert
-} = require('chai');
+const { assert } = require('chai');
 const integration = require('../lib/query');
 const types = require('leadconduit-types');
 

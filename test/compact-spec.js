@@ -1,6 +1,4 @@
-const {
-  assert
-} = require('chai');
+const { assert } = require('chai');
 const compact = require('../lib/compact');
 
 describe('Compact', function() {

@@ -419,7 +419,7 @@ describe('Response', function() {
         {price_path: 'baz.*.cost'};
       const expected = {
         outcome: 'success',
-        price: 1.5,
+        price: '1.5',
         baz: {
           foo: {
             cost: 1.5
@@ -436,7 +436,7 @@ describe('Response', function() {
       };
       const expected = {
         outcome: 'success',
-        price: 18,
+        price: '18',
         status: 'success',
         auth_code: 'abc=='
       };
@@ -576,7 +576,7 @@ describe('Response', function() {
         {price_path: '/cost=([0-9]\.[0-9])/'};
       const expected = { 
         outcome: 'success',
-        price: 1.5
+        price: '1.5'
       };
       assert.deepEqual(response(vars, {}, text('foo&cost=1.5')), expected);
     });
@@ -781,7 +781,7 @@ describe('Response', function() {
         {price_path: 'div.cost'};
       const expected = { 
         outcome: 'success',
-        price: 1.5
+        price: "1.5"
       };
       assert.deepEqual(response(vars, {}, html('<div class="cost">1.5</div>')), expected);
     });
@@ -1141,7 +1141,7 @@ describe('Response', function() {
       const vars =
         {price_path: 'bar/cost/text()'};
       const expected = {
-        price: 1.5,
+        price: '1.5',
         bar: {
           cost: '1.5'
         },

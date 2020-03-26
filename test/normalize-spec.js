@@ -1,6 +1,4 @@
-const {
-  assert
-} = require('chai');
+const { assert } = require('chai');
 const normalize = require('../lib/normalize');
 const types = require('leadconduit-types');
 

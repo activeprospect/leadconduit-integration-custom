@@ -1,6 +1,7 @@
 const { assert } = require('chai');
 const soap = require('../lib/soap');
 const nock = require('nock');
+const _ = require('lodash');
 const types = require('leadconduit-types');
 const fs = require('fs');
 const wsdl = fs.readFileSync(`${__dirname}/soap-wsdl.xml`);
@@ -178,8 +179,8 @@ describe('Outbound SOAP', function() {
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx', body => (body.indexOf('<bar>bip</bar>') >= 0) &&
     (body.indexOf('<bar>bap</bar>') >= 0) &&
-    (__guard__(body.match(/\<bar\>/g), x => x.length) === 2)).reply(200, success, {'Content-Type': 'text/xml'});
-
+    (typeof body  === 'string' && body.match(/\<bar\>/g).length === 2)).reply(200, success, {'Content-Type': 'text/xml'});
+    
     soap.handle(vars, function(err, event) {
       if (err) { done(err); }
       assert.equal(event.outcome, 'success');
@@ -902,10 +903,3 @@ describe('Outbound SOAP', function() {
     it('should require valid SOAP version', () => assert.equal(soap.validate({url: 'http://foo', function: 'whatever', version: '0'}), 'Must be valid SOAP version: 1.1 or 1.2'));
   });
 });
-
-
-
-
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}

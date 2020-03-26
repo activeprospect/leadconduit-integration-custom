@@ -1,6 +1,4 @@
-const {
-  assert
-} = require('chai');
+const { assert } = require('chai');
 const headers = require('../lib/headers');
 const types = require('leadconduit-types');
 

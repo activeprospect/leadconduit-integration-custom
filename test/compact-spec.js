@@ -15,6 +15,3 @@ describe('Compact', function() {
 
   it('should compact array nested in object property array', () => assert.deepEqual(compact({foo: [1, 2, { bar: [ 'a', null, 'c' ]}, 4]}), {foo: [1, 2, { bar: ['a', 'c'] }, 4]}));
 });
-
-
-

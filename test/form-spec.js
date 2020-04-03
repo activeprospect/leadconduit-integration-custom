@@ -44,6 +44,14 @@ describe('Outbound Form POST request', function() {
     assert.equal(integration.request(vars).body, 'fname=Mel&lname=Gibson');
   });
 
+  it('should accept and encode basic username and password', function() {
+    const vars = {
+      basic_username: 'test',
+      basic_password: 1234,
+    }
+    assert.equal(integration.request(vars).headers.Authorization, 'Basic dGVzdDoxMjM0')
+  });
+
 
   it('should send data as original UTF-8 when told to', function() {
     const vars = {

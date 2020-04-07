@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [2.18.4] - 2020-04-02
+### Added
+- JSON, XML, Form and Post integration now support basic username and password authorization
+
 ## [2.18.3] - 2020-03-27
 ### Fixed
 - Decaffeinated the integration

@@ -229,6 +229,14 @@ describe('Outbound JSON request', function() {
     };
     assert.equal(integration.request(vars).body, '{"0":{"foo":{"bar":"baz"}},"bip":"bap"}');
   });
+
+  it('should accept and encode basic username and password', function() {
+    const vars = {
+      basic_username: 'test',
+      basic_password: 1234,
+    }
+    assert.equal(integration.request(vars).headers.Authorization, 'Basic dGVzdDoxMjM0')
+  })
 });
 
 

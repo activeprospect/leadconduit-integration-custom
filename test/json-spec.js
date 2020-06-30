@@ -108,6 +108,33 @@ describe('Outbound JSON request', function() {
     assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}');
   });
 
+  it('should support the dot-notation preferences mapping and convert it to a nested object', function () {
+    const vars = {
+      url: 'http://foo.bar',
+      header: {
+        Whatever: 'foo',
+        Bar: 'baz'
+      },
+      json_property: {
+        fname: 'Mel',
+        lname: 'Gibson'
+      },
+      'preferences.terms.test.isGranted': true,
+      'preferences.terms.test_two.isGranted': false,
+    }
+    const expectedBody = {
+      fname: 'Mel',
+      lname: 'Gibson',
+      preferences: {
+        terms: {
+          test: { isGranted: true },
+          test_two: { isGranted: false },
+        }
+      }
+    }
+    assert.equal(integration.request(vars).body, JSON.stringify(expectedBody));
+  });
+
 
   it('should normalize rich types', function() {
     const vars = {

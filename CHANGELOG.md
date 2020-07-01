@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.18.5] - 2020-06-30
 ### Added
-- JSON integration now supports the preferences variable
+- JSON integration now supports the nested_value variable
 
 ## [2.18.4] - 2020-04-02
 ### Added

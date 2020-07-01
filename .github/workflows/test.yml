@@ -1,0 +1,54 @@
+name: Testing
+
+on: push
+
+jobs:
+  test:
+
+    runs-on: ubuntu-16.04
+
+    strategy:
+      matrix:
+        node-version: [8.15, 10.x, 12.x, 14.x]
+      
+    services:
+      mongo:
+        image: mongo:3.6.5
+        ports:
+        - 27017:27017
+    
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npx nyc --reporter=lcov npm test
+      env: 
+        MONGODB_HOST: "localhost:27017" 
+        KEEN_PROJECT_ID: foo
+        KEEN_MASTER_KEY: bar
+        KEEN_READ_KEY: baz
+        KEEN_WRITE_KEY: bip
+        COOKIE_SECRET: nomnomnom
+        SHARED_SECRET: sekret
+        HONEYBADGER_APIKEY: notnecessary
+        CLEARBIT_KEY: notnecessary
+        ELASTICSEARCH_AWS_ACCESS_KEY_ID: 123
+        ELASTICSEARCH_AWS_SECRET_ACCESS_KEY: abc
+        BILLING_ACCESS_KEY_ID: ${{ secrets.BILLING_ACCESS_KEY_ID }}
+        BILLING_SECRET_ACCESS_KEY: ${{ secrets.BILLING_SECRET_ACCESS_KEY }}
+        EXPORTS_AWS_ACCESS_KEY_ID: ${{ secrets.EXPORTS_AWS_ACCESS_KEY_ID }}
+        EXPORTS_AWS_SECRET_ACCESS_KEY: ${{ secrets.EXPORTS_AWS_SECRET_ACCESS_KEY }}
+        EXPORTS_BUCKET: ${{ secrets.EXPORTS_BUCKET }}
+        SPOOLER_AWS_ACCESS_KEY_ID: ${{ secrets.SPOOLER_AWS_ACCESS_KEY_ID }}
+        SPOOLER_AWS_REGION: ${{ secrets.SPOOLER_AWS_REGION }}
+        SPOOLER_AWS_SECRET_ACCESS_KEY: ${{ secrets.SPOOLER_AWS_SECRET_ACCESS_KEY }}
+
+    - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} 

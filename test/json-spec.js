@@ -119,8 +119,18 @@ describe('Outbound JSON request', function() {
         fname: 'Mel',
         lname: 'Gibson'
       },
-      'nested_value.preferences.terms.test.isGranted': true,
-      'nested_value.preferences.terms.test_two.isGranted': false,
+      nested_value: {
+        preferences: {
+          terms: {
+            test: {
+              isGranted: true,
+            },
+            test_two: {
+              isGranted: false,
+            }
+          }
+        }
+      }
     }
     const expectedBody = {
       fname: 'Mel',

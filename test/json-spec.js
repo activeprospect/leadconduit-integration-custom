@@ -108,43 +108,6 @@ describe('Outbound JSON request', function() {
     assert.equal(integration.request(vars).body, '{"foo":{"bar":{"baz":["bip","bap"]}}}');
   });
 
-  it('should support the dot-notation preferences mapping and convert it to a nested object', function () {
-    const vars = {
-      url: 'http://foo.bar',
-      header: {
-        Whatever: 'foo',
-        Bar: 'baz'
-      },
-      json_property: {
-        fname: 'Mel',
-        lname: 'Gibson'
-      },
-      nested_value: {
-        preferences: {
-          terms: {
-            test: {
-              isGranted: true,
-            },
-            test_two: {
-              isGranted: false,
-            }
-          }
-        }
-      }
-    }
-    const expectedBody = {
-      fname: 'Mel',
-      lname: 'Gibson',
-      preferences: {
-        terms: {
-          test: { isGranted: true },
-          test_two: { isGranted: false },
-        }
-      }
-    }
-    assert.equal(integration.request(vars).body, JSON.stringify(expectedBody));
-  });
-
 
   it('should normalize rich types', function() {
     const vars = {
@@ -197,6 +160,18 @@ describe('Outbound JSON request', function() {
         range: types.range.parse('1,000-2,000')
       },
       json_parameter: 'element',
+      nested_extra_parameter: {
+        preference: {
+          terms: {
+            isGranted: true
+          },
+        },
+        preference_two: {
+          terms: {
+            isGranted: false
+          },
+        },
+      },
       extra_parameter: {
         'sessionName': 'asdf1234asdf1234',
         'operation': 'create',
@@ -205,10 +180,8 @@ describe('Outbound JSON request', function() {
     };
 
     assert.equal(integration.request(vars).headers['Content-Type'], 'application/x-www-form-urlencoded');
-    assert.equal(integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead');
+    assert.equal(integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&preference=%7B%22terms%22%3A%7B%22isGranted%22%3Atrue%7D%7D&preference_two=%7B%22terms%22%3A%7B%22isGranted%22%3Afalse%7D%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead');
   });
-
-
 
   it('should compact array', function() {
     const vars = {

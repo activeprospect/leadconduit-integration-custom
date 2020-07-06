@@ -183,6 +183,32 @@ describe('Outbound JSON request', function() {
     assert.equal(integration.request(vars).body, 'element=%7B%22postal_code%22%3A%2278704%22%2C%22phone%22%3A%225127891111x123%22%2C%22boolean%22%3Atrue%2C%22gender%22%3A%22female%22%2C%22number%22%3A100000%2C%22range%22%3A%221000-2000%22%7D&preference=%7B%22terms%22%3A%7B%22isGranted%22%3Atrue%7D%7D&preference_two=%7B%22terms%22%3A%7B%22isGranted%22%3Afalse%7D%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead');
   });
 
+  it('should include extra parameters but not json parameter if json property is absent', function() {
+    const vars = {
+      json_parameter: 'element',
+      nested_extra_parameter: {
+        preference: {
+          terms: {
+            isGranted: true
+          },
+        },
+        preference_two: {
+          terms: {
+            isGranted: false
+          },
+        },
+      },
+      extra_parameter: {
+        'sessionName': 'asdf1234asdf1234',
+        'operation': 'create',
+        'elementType': 'lead'
+      }
+    };
+
+    assert.equal(integration.request(vars).headers['Content-Type'], 'application/x-www-form-urlencoded');
+    assert.equal(integration.request(vars).body, 'preference=%7B%22terms%22%3A%7B%22isGranted%22%3Atrue%7D%7D&preference_two=%7B%22terms%22%3A%7B%22isGranted%22%3Afalse%7D%7D&sessionName=asdf1234asdf1234&operation=create&elementType=lead');
+  });
+
   it('should compact array', function() {
     const vars = {
       json_property: {

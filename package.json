@@ -10,7 +10,8 @@
     "url": "https://github.com/activeprospect/leadconduit-integration-custom.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test:coverage:lcov": "nyc --reporter=lcov npm test"
   },
   "dependencies": {
     "dot-wild": "^3.0.1",

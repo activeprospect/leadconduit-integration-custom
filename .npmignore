@@ -1,4 +1,9 @@
-src
-spec
 Cakefile
 .idea
+lambda.js
+serverless.yml
+.github/
+test/
+.rip/
+coverage/
+.nyc_output/

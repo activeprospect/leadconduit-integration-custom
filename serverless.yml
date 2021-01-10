@@ -1,0 +1,82 @@
+
+# LeadConduit custom integration
+# generated on Sun Jan 10 2021 16:36:41 GMT-0500 (Eastern Standard Time)
+
+service: leadconduit-custom
+
+# Pin serverless framework to v2
+frameworkVersion: ">=2.1.0 <3.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 30
+  environment:
+    NODE_ENV: ${opt:stage,'development'}
+
+package:
+  exclude:
+  - .git/**
+  - .github/**
+  - .rip/pkg/*
+  - .serverless/**
+  - coverage/**
+  - docs/**
+  - lib/ui/**
+  - pkg/**
+  - spec/**
+  - src/**
+  - test/**
+  - .eslintrc.js
+  - .gitignore
+  - .npmignore
+  - .npmrc
+  - .nyc_output
+  - .travis.yml
+  - Cakefile
+  - CHANGELOG.md
+  - Readme.md
+  - README.md
+
+functions:
+  form:
+    handler: lambda.form
+    name: leadconduit-custom-outbound-form
+    events:
+      - http:
+          path: form
+          method: POST
+
+  json:
+    handler: lambda.json
+    name: leadconduit-custom-outbound-json
+    events:
+      - http:
+          path: json
+          method: POST
+
+  query:
+    handler: lambda.query
+    name: leadconduit-custom-outbound-query
+    events:
+      - http:
+          path: query
+          method: POST
+
+  xml:
+    handler: lambda.xml
+    name: leadconduit-custom-outbound-xml
+    events:
+      - http:
+          path: xml
+          method: POST
+
+  soap:
+    handler: lambda.soap
+    name: leadconduit-custom-outbound-soap
+    events:
+      - http:
+          path: soap
+          method: POST
+

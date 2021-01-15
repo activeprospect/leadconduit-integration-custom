@@ -1,7 +1,7 @@
 .idea
 .DS_Store
 .nyc_output/
-.rip/pkg/leadconduit-custom.zip
+.rip/pkg/*.zip
 .vscode
 coverage/
 node_modules

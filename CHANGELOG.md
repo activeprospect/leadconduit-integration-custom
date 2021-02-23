@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.18.6] - 2021-02-22
+### Added
+- Allow setting outcome on match to `error`
+
 ## [2.18.5] - 2020-06-30
 ### Added
 - JSON integration now supports the extra nested parameters variable

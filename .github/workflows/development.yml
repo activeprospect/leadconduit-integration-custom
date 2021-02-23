@@ -22,7 +22,7 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - name: Run rip deploy
-      run: rip deploy
+      run: blerg blerg
       env: 
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AUTOMATED_RETRIES_AWS_ACCESS_KEY_ID_DEVELOPMENT }}

@@ -157,7 +157,7 @@ describe('Outbound GET Query validation', function() {
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 
 
-  it('should require valid search outcome', () => assert.equal(integration.validate({url: 'http://foo', outcome_on_match: 'donkey'}), "Outcome on match must be 'success' or 'failure'"));
+  it('should require valid search outcome', () => assert.equal(integration.validate({url: 'http://foo', outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
 
   it('should allow setting error outcome', () => assert.isUndefined(integration.validate({url: 'http://foo', outcome_on_match: 'error'})));
 

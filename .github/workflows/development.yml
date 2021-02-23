@@ -21,6 +21,9 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+    - name: which
+      run: which rip
+
     - name: Run rip deploy
       run: mkdir .rip && rip deploy development && ls -la
       env: 

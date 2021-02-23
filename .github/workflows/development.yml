@@ -1,6 +1,6 @@
 name: Deploy Integration as a Lambda to Development AWS Account
 
-# on: workflow_dispatch
+on: workflow_dispatch
 
 jobs:
   deploy:

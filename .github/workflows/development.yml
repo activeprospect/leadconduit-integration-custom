@@ -34,7 +34,7 @@ jobs:
       working-directory: ./layer/nodejs
 
     - name: debug
-      run: ls layer/nodejs
+      run: ls -la ./layer/nodejs
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli

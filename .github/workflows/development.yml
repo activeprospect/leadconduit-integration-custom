@@ -16,6 +16,11 @@ jobs:
         registry-url: https://registry.npmjs.org
         scope: '@activeprospect'
 
+    - name: Install integration dependencies
+      run: npm i
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli
       env:

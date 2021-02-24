@@ -33,6 +33,9 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       working-directory: /tmp/layer/nodejs
 
+    - name: debug
+      run: ls -la /tmp/layer
+
     - name: move layer directory to repository root
       run: mv /tmp/layer .
 

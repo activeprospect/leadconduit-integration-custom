@@ -21,6 +21,9 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+    - name: Install Serverless Framework
+      run: npm i serverless
+
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli
       env:

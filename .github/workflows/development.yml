@@ -21,12 +21,8 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - name: make tmp dir for deploy
-      run: mkdir -p /tmp/code && cp -R . /tmp/code
-
     - name: Run rip deploy
-      run: rip deploy development && ls -la
+      run: rip info
       env: 
         AWS_ACCESS_KEY_ID: ${{ secrets.AUTOMATED_RETRIES_AWS_ACCESS_KEY_ID_DEVELOPMENT }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AUTOMATED_RETRIES_AWS_SECRET_ACCESS_KEY_DEVELOPMENT }}
-      working-directory: /tmp/code

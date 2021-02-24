@@ -25,7 +25,7 @@ jobs:
       run: npm i serverless
 
     - name: Create layer directory
-      run: mkdir -p layer/nodejs
+      run: mkdir -p ./layer/nodejs
 
     - name: Install layer
       run: npm i -g @activeprospect/rip-runtime
@@ -34,7 +34,7 @@ jobs:
       working-directory: ./layer/nodejs
 
     - name: debug
-      run: ls && ls layer && ls layer/nodejs
+      run: ls layer/nodejs
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli

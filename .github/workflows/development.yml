@@ -37,7 +37,7 @@ jobs:
       run: mv /tmp/layer .
 
     - name: debug
-      run: ls -la layer/nodejs
+      run: ls -la layer/nodejs/@activeprospect/rip-runtime
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli
@@ -45,7 +45,7 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - name: Run rip deploy
-      run: rip deploy
+      run: rip deploy development
       env: 
         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID_DEVELOPMENT }}
         AWS_REGION: 'us-east-1'

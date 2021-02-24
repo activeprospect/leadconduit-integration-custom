@@ -31,7 +31,10 @@ jobs:
       run: npm i -g @activeprospect/rip-runtime
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      working-directory: layer/nodejs
+      working-directory: ./layer/nodejs
+
+    - name: debug
+      run: ls && ls layer && ls layer/nodejs
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli

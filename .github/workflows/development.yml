@@ -37,7 +37,7 @@ jobs:
       run: mv /tmp/layer .
 
     - name: debug
-      run: ls -la layer/nodejs/node_modules/@activeprospect/rip-runtime
+      run: ls -la
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli

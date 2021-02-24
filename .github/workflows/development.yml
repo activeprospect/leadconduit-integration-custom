@@ -28,7 +28,7 @@ jobs:
       run: mkdir -p ./layer/nodejs
 
     - name: Install layer
-      run: npm i -g @activeprospect/rip-runtime
+      run: npm i @activeprospect/rip-runtime
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       working-directory: ./layer/nodejs

@@ -33,8 +33,11 @@ jobs:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       working-directory: /tmp/layer/nodejs
 
+    - name: move layer directory to repository root
+      run: mv /tmp/layer .
+
     - name: debug
-      run: ls -la /tmp/layer/nodejs
+      run: ls -la layer/nodejs
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli

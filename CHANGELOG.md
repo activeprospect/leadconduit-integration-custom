@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.19.1] - 2021-02-25
+### Fixed
+- fix npm vulnerabilities
+
 ## [2.18.6] - 2021-02-22
 ### Added
 - Allow setting outcome on match to `error`

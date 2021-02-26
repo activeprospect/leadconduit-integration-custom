@@ -29,6 +29,11 @@ jobs:
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+    - name: Install rip-runtime
+      run: npm i @activeprospect/rip-runtime
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
     - name: Run rip deploy
       run: rip deploy staging
       env: 

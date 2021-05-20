@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.19.3] - 2022-05-20
+### Fixed
+- array responses are now appended under an `array.` property
+
 ## [2.19.1] - 2021-02-25
 ### Fixed
 - fix npm vulnerabilities

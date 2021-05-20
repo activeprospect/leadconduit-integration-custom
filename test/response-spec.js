@@ -279,12 +279,15 @@ describe('Response', function() {
     it('should parse reason from array response', function() {
       const vars = {
         outcome_search_term: 'foo',
-        reason_path: '0.bip'
+        reason_path: 'array.0.bip'
       };
       const expected = {
         outcome: 'failure',
         reason: 'the reason text!',
-        price: 0
+        price: 0,
+        array: [
+          { bip: 'the reason text!' }
+        ]
       };
       assert.deepEqual(response(vars, {}, json( [ {bip: 'the reason text!'} ] )), expected);
     });
@@ -367,7 +370,7 @@ describe('Response', function() {
         },
         price: 0
       };
-         
+
       assert.deepEqual(response(vars, {}, json({baz: { foo: { details: { bip: { more_details : 'really bad data'}}}}})), expected);
     });
 
@@ -415,7 +418,7 @@ describe('Response', function() {
     });
 
     it('should capture price on success', function() {
-      const vars = 
+      const vars =
         {price_path: 'baz.*.cost'};
       const expected = {
         outcome: 'success',
@@ -428,9 +431,9 @@ describe('Response', function() {
       };
       assert.deepEqual(response(vars, {}, json({baz: { foo: { cost: 1.5 }}})), expected);
     });
-    
+
     it('should capture price on success with outcome_search_term', function() {
-      const vars = { 
+      const vars = {
         price_path: 'price',
         outcome_search_term: 'success'
       };
@@ -442,9 +445,25 @@ describe('Response', function() {
       };
       assert.deepInclude(response(vars, {}, json({ status:"success", price:18, auth_code:"abc==" })), expected);
     });
+
+    it('should capture json array body', () => {
+      const expected = {
+        outcome: 'success',
+        price: 0,
+        array: [
+          {
+            foo: 'foo'
+          },
+          {
+            bar: 'bar'
+          }
+        ]
+      }
+      assert.deepEqual(response({}, {}, json([{foo: 'foo'}, {bar: 'bar'}])), expected)
+    });
   });
 
- 
+
 
   describe('with plain text body', function() {
 
@@ -572,9 +591,9 @@ describe('Response', function() {
     });
 
     it('should capture price when vars.cost is present', function() {
-      const vars = 
+      const vars =
         {price_path: '/cost=([0-9]\.[0-9])/'};
-      const expected = { 
+      const expected = {
         outcome: 'success',
         price: '1.5'
       };
@@ -779,7 +798,7 @@ describe('Response', function() {
     it('should capture price when price_path is present', function() {
       const vars =
         {price_path: 'div.cost'};
-      const expected = { 
+      const expected = {
         outcome: 'success',
         price: "1.5"
       };

@@ -461,6 +461,17 @@ describe('Response', function() {
       }
       assert.deepEqual(response({}, {}, json([{foo: 'foo'}, {bar: 'bar'}])), expected)
     });
+
+    it('should correctly handle numeric JSON strings', () => {
+      const expected = {
+        outcome: 'success',
+        price: 0,
+        '0': {
+          foo: 'foo'
+        }
+      };
+      assert.deepEqual(response({}, {}, json({ '0': { foo: 'foo' }})), expected);
+    })
   });
 
 

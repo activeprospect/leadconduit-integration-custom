@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.19.3] - 2022-05-20
+## [2.20.0] - 2021-06-23
+### Added
+- added support for basic auth credentials for JSON integration
+
+## [2.19.3] - 2021-05-20
 ### Fixed
 - array responses are now appended under an `array.` property
 

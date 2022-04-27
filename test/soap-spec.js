@@ -180,7 +180,7 @@ describe('Outbound SOAP', function() {
       .post('/login/ws/ws.asmx', body => (body.indexOf('<bar>bip</bar>') >= 0) &&
     (body.indexOf('<bar>bap</bar>') >= 0) &&
     (typeof body  === 'string' && body.match(/\<bar\>/g).length === 2)).reply(200, success, {'Content-Type': 'text/xml'});
-    
+
     soap.handle(vars, function(err, event) {
       if (err) { done(err); }
       assert.equal(event.outcome, 'success');
@@ -266,7 +266,7 @@ describe('Outbound SOAP', function() {
   it('should timeout', function(done) {
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx')
-      .socketDelay(10000)
+      .delayConnection(10000)
       .reply(200, success, {'Content-Type': 'text/xml'});
 
     const vars = {
@@ -284,9 +284,10 @@ describe('Outbound SOAP', function() {
 
 
   it('should not timeout', function(done) {
+    this.timeout(0);
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx')
-      .socketDelay(10000)
+      .delayConnection(10000)
       .reply(200, success, {'Content-Type': 'text/xml'});
 
     const vars = {
@@ -570,7 +571,7 @@ describe('Outbound SOAP', function() {
       this.vars.outcome_search_term = 'foo';
 
       const invokeHandle = () => {
-        soap.handle(this.vars, (err, event) => {}); 
+        soap.handle(this.vars, (err, event) => {});
       };
 
       assert.doesNotThrow(invokeHandle);

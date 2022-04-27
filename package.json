@@ -11,7 +11,9 @@
   },
   "scripts": {
     "test": "mocha",
-    "test:coverage:lcov": "nyc --reporter=lcov npm test"
+    "test:coverage:lcov": "nyc --reporter=lcov npm test",
+    "fixlint": "eslint . --fix",
+    "lint": "eslint ."
   },
   "dependencies": {
     "dot-wild": "^3.0.1",
@@ -27,10 +29,7 @@
     "xmlbuilder": "^7.0.0"
   },
   "devDependencies": {
-    "chai": ">= 1.9.0",
-    "leadconduit-types": "^4.5.0",
-    "mocha": "^7.1.1",
-    "nock": "^12.0.0",
-    "nyc": "^15.1.0"
+    "@activeprospect/integration-dev-dependencies": "^1.1.11",
+    "leadconduit-types": "^4.5.0"
   }
 }

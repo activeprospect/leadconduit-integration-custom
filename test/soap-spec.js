@@ -284,6 +284,7 @@ describe('Outbound SOAP', function() {
 
 
   it('should not timeout', function(done) {
+    // disable mocha timeout for this test
     this.timeout(0);
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx')
@@ -572,11 +573,10 @@ describe('Outbound SOAP', function() {
       this.vars.outcome_search_term = 'foo';
 
       const invokeHandle = () => {
-        soap.handle(this.vars, (err, event) => {});
+        soap.handle(this.vars, (err, event) => { done(); });
       };
 
       assert.doesNotThrow(invokeHandle);
-      done();
     });
 
     it('should not find search term at different path', function(done) {

@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.21.0] - 2022-05-02
+### Added
+- added support for capturing a reference ID
+
 ## [2.20.0] - 2021-06-23
 ### Added
 - added support for basic auth credentials for JSON integration

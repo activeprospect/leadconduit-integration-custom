@@ -446,6 +446,22 @@ describe('Response', function() {
       assert.deepInclude(response(vars, {}, json({ status:"success", price:18, auth_code:"abc==" })), expected);
     });
 
+    it('should capture reference on success', function() {
+      const vars = {
+        reference_path: 'baz.*.reference'
+      };
+      const expected = {
+        outcome: 'success',
+        price: 0,
+        baz: {
+          foo: {
+            reference: '1234'
+          }
+        }
+      };
+      assert.deepInclude(response(vars, {}, json({ baz: { foo: { reference: '1234' } } })), expected);
+    });
+
     it('should capture json array body', () => {
       const expected = {
         outcome: 'success',

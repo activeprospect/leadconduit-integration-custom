@@ -495,6 +495,7 @@ describe('Outbound SOAP', function() {
           LeadId: 12345,
           Empty: null,
           Cost: "1.5",
+          Reference: '1234',
           Multi: {
             Foo: [ '1', '2' ]
           }
@@ -878,6 +879,16 @@ describe('Outbound SOAP', function() {
         done();
       });
     });
+
+    it('should capture reference', function(done) {
+      this.vars.reference_path = 'AddLeadResult.Reference';
+      soap.handle(this.vars, (err, event) => {
+        if (err) { done(err); }
+        assert.equal(event.outcome, 'success');
+        assert.equal(event.reference, '1234');
+        done();
+      });
+    })
   });
 
 

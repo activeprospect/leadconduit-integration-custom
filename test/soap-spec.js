@@ -1,14 +1,12 @@
 const { assert } = require('chai');
 const soap = require('../lib/soap');
 const nock = require('nock');
-const _ = require('lodash');
 const types = require('leadconduit-types');
 const fs = require('fs');
 const wsdl = fs.readFileSync(`${__dirname}/soap-wsdl.xml`);
 const success = fs.readFileSync(`${__dirname}/soap-success.xml`);
 const failure = fs.readFileSync(`${__dirname}/soap-failure.xml`);
 const encoded = fs.readFileSync(`${__dirname}/soap-encoded.xml`);
-
 
 describe('Outbound SOAP', function() {
   beforeEach(function() {
@@ -179,7 +177,7 @@ describe('Outbound SOAP', function() {
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx', body => (body.indexOf('<bar>bip</bar>') >= 0) &&
     (body.indexOf('<bar>bap</bar>') >= 0) &&
-    (typeof body  === 'string' && body.match(/\<bar\>/g).length === 2)).reply(200, success, {'Content-Type': 'text/xml'});
+    (typeof body  === 'string' && body.match(/<bar>/g).length === 2)).reply(200, success, {'Content-Type': 'text/xml'});
 
     soap.handle(vars, function(err, event) {
       if (err) { done(err); }
@@ -888,7 +886,7 @@ describe('Outbound SOAP', function() {
         assert.equal(event.reference, '1234');
         done();
       });
-    })
+    });
   });
 
 

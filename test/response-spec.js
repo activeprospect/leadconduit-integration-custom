@@ -474,8 +474,8 @@ describe('Response', function() {
             bar: 'bar'
           }
         ]
-      }
-      assert.deepEqual(response({}, {}, json([{foo: 'foo'}, {bar: 'bar'}])), expected)
+      };
+      assert.deepEqual(response({}, {}, json([{foo: 'foo'}, {bar: 'bar'}])), expected);
     });
 
     it('should correctly handle numeric JSON strings', () => {
@@ -487,7 +487,7 @@ describe('Response', function() {
         }
       };
       assert.deepEqual(response({}, {}, json({ '0': { foo: 'foo' }})), expected);
-    })
+    });
   });
 
 

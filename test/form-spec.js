@@ -48,8 +48,8 @@ describe('Outbound Form POST request', function() {
     const vars = {
       basic_username: 'test',
       basic_password: 1234,
-    }
-    assert.equal(integration.request(vars).headers.Authorization, 'Basic dGVzdDoxMjM0')
+    };
+    assert.equal(integration.request(vars).headers.Authorization, 'Basic dGVzdDoxMjM0');
   });
 
 

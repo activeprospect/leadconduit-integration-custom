@@ -1,14 +1,12 @@
 const { assert } = require('chai');
 const soap = require('../lib/soap');
 const nock = require('nock');
-const _ = require('lodash');
 const types = require('leadconduit-types');
 const fs = require('fs');
 const wsdl = fs.readFileSync(`${__dirname}/soap-wsdl.xml`);
 const success = fs.readFileSync(`${__dirname}/soap-success.xml`);
 const failure = fs.readFileSync(`${__dirname}/soap-failure.xml`);
 const encoded = fs.readFileSync(`${__dirname}/soap-encoded.xml`);
-
 
 describe('Outbound SOAP', function() {
   beforeEach(function() {
@@ -179,8 +177,8 @@ describe('Outbound SOAP', function() {
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx', body => (body.indexOf('<bar>bip</bar>') >= 0) &&
     (body.indexOf('<bar>bap</bar>') >= 0) &&
-    (typeof body  === 'string' && body.match(/\<bar\>/g).length === 2)).reply(200, success, {'Content-Type': 'text/xml'});
-    
+    (typeof body  === 'string' && body.match(/<bar>/g).length === 2)).reply(200, success, {'Content-Type': 'text/xml'});
+
     soap.handle(vars, function(err, event) {
       if (err) { done(err); }
       assert.equal(event.outcome, 'success');
@@ -266,7 +264,7 @@ describe('Outbound SOAP', function() {
   it('should timeout', function(done) {
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx')
-      .socketDelay(10000)
+      .delayConnection(10000)
       .reply(200, success, {'Content-Type': 'text/xml'});
 
     const vars = {
@@ -284,9 +282,11 @@ describe('Outbound SOAP', function() {
 
 
   it('should not timeout', function(done) {
+    // disable mocha timeout for this test
+    this.timeout(0);
     this.service = nock('http://donkey')
       .post('/login/ws/ws.asmx')
-      .socketDelay(10000)
+      .delayConnection(10000)
       .reply(200, success, {'Content-Type': 'text/xml'});
 
     const vars = {
@@ -494,6 +494,7 @@ describe('Outbound SOAP', function() {
           LeadId: 12345,
           Empty: null,
           Cost: "1.5",
+          Reference: '1234',
           Multi: {
             Foo: [ '1', '2' ]
           }
@@ -570,11 +571,10 @@ describe('Outbound SOAP', function() {
       this.vars.outcome_search_term = 'foo';
 
       const invokeHandle = () => {
-        soap.handle(this.vars, (err, event) => {}); 
+        soap.handle(this.vars, (err, event) => { done(); });
       };
 
       assert.doesNotThrow(invokeHandle);
-      done();
     });
 
     it('should not find search term at different path', function(done) {
@@ -874,6 +874,16 @@ describe('Outbound SOAP', function() {
         if (err) { done(err); }
         assert.equal(event.outcome, 'success');
         assert.equal(event.price, 1.5);
+        done();
+      });
+    });
+
+    it('should capture reference', function(done) {
+      this.vars.reference_path = 'AddLeadResult.Reference';
+      soap.handle(this.vars, (err, event) => {
+        if (err) { done(err); }
+        assert.equal(event.outcome, 'success');
+        assert.equal(event.reference, '1234');
         done();
       });
     });

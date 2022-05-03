@@ -7,6 +7,7 @@
                 <Message>some message</Message>
                 <LeadId>12345</LeadId>
                 <Cost>1.5</Cost>
+                <Reference>1234</Reference>
                 <Empty/>
                 <Multi>
                     <Foo>1</Foo>

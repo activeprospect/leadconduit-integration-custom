@@ -63,9 +63,9 @@ describe('Outbound XML request', function() {
     const vars = {
       basic_username: 'test',
       basic_password: 1234,
-    }
-    assert.equal(integration.request(vars).headers.Authorization, 'Basic dGVzdDoxMjM0')
-  })
+    };
+    assert.equal(integration.request(vars).headers.Authorization, 'Basic dGVzdDoxMjM0');
+  });
 
   it('should send data as original UTF-8 when told to', function() {
     const vars = {

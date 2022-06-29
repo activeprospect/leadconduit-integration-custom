@@ -891,7 +891,7 @@ describe('Outbound SOAP', function() {
 
 
   describe('validation', function() {
-    const url = 'http://foo.com'
+    const url = 'http://foo.com';
 
     it('should require valid URL', function() {
       assert.equal(soap.validate({}), 'URL is required');

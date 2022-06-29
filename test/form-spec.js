@@ -210,7 +210,7 @@ describe('Outbound Form POST request', function() {
 
 
 describe('Outbound Form POST validation', function() {
-  const url = 'http://foo.com'
+  const url = 'http://foo.com';
 
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 

@@ -278,7 +278,7 @@ describe('Outbound JSON request', function() {
 
 
 describe('JSON validation', function() {
-  const url = 'http://foo.com'
+  const url = 'http://foo.com';
 
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 

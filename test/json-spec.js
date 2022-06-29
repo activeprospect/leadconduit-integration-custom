@@ -282,9 +282,9 @@ describe('JSON validation', function() {
 
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 
-  it('should require valid public domain', () => assert.equal(integration.validate({url: 'http://foo'}), 'URL must be valid'));
+  it('should require valid public domain', () => assert.equal(integration.validate({url: 'http://foo.zzz'}), 'URL must be public'));
 
-  it('should require valid public ip', () => assert.equal(integration.validate({url: 'http://172.0.0.1'}), 'URL must be valid'));
+  it('should require valid public ip', () => assert.equal(integration.validate({url: 'http://10.0.0.1'}), 'URL must be public'));
 
   it('should require not require method', () => assert.isUndefined(integration.validate({url})));
 

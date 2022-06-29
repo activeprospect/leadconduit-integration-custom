@@ -278,24 +278,25 @@ describe('Outbound JSON request', function() {
 
 
 describe('JSON validation', function() {
+  const url = 'http://foo.com'
 
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 
-  it('should require not require method', () => assert.isUndefined(integration.validate({url: 'http://foo'})));
+  it('should require not require method', () => assert.isUndefined(integration.validate({url})));
 
-  it('should require valid method', () => assert.equal(integration.validate({url: 'http://foo', method: 'HEAD'}), 'Unsupported HTTP method - use POST, PUT, DELETE'));
+  it('should require valid method', () => assert.equal(integration.validate({url, method: 'HEAD'}), 'Unsupported HTTP method - use POST, PUT, DELETE'));
 
-  it('should require valid search outcome', () => assert.equal(integration.validate({url: 'http://foo', outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
+  it('should require valid search outcome', () => assert.equal(integration.validate({url, outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
 
-  it('should allow setting error outcome', () => assert.isUndefined(integration.validate({url: 'http://foo', outcome_on_match: 'error'})));
+  it('should allow setting error outcome', () => assert.isUndefined(integration.validate({url, outcome_on_match: 'error'})));
 
-  it('should pass validation', () => assert.isUndefined(integration.validate({url: 'http://foo'})));
+  it('should pass validation', () => assert.isUndefined(integration.validate({url})));
 
-  it('should allow valid content-type header', () => assert.isUndefined(integration.validate({url: 'http://foo', header: { 'Content-Type': 'application/json' }})));
+  it('should allow valid content-type header', () => assert.isUndefined(integration.validate({url, header: { 'Content-Type': 'application/json' }})));
 
-  it('should not allow invalid content-type header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Type': 'text/xml' }}), 'Invalid Content-Type header value'));
+  it('should not allow invalid content-type header', () => assert.equal(integration.validate({url, header: { 'Content-Type': 'text/xml' }}), 'Invalid Content-Type header value'));
 
-  it('should not allow content-length header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Content-Length': '10' }}), 'Content-Length header is not allowed'));
+  it('should not allow content-length header', () => assert.equal(integration.validate({url, header: { 'Content-Length': '10' }}), 'Content-Length header is not allowed'));
 
-  it('should not allow accept header', () => assert.equal(integration.validate({url: 'http://foo', header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
+  it('should not allow accept header', () => assert.equal(integration.validate({url, header: { 'Accept': 'text/whatever' }}), 'Accept header is not allowed'));
 });

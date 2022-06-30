@@ -296,8 +296,6 @@ describe('JSON validation', function() {
 
   it('should allow setting error outcome', () => assert.isUndefined(integration.validate({url, outcome_on_match: 'error'})));
 
-  it('should pass validation', () => assert.isUndefined(integration.validate({url})));
-
   it('should allow valid content-type header', () => assert.isUndefined(integration.validate({url, header: { 'Content-Type': 'application/json' }})));
 
   it('should not allow invalid content-type header', () => assert.equal(integration.validate({url, header: { 'Content-Type': 'text/xml' }}), 'Invalid Content-Type header value'));

@@ -335,8 +335,6 @@ describe('XML validation', function() {
 
   it('should require valid search outcome', () => assert.isUndefined(integration.validate({url, outcome_on_match: 'error'})));
 
-  it('should pass validation', () => assert.isUndefined(integration.validate({url})));
-
   it('should allow valid content-type header', () => assert.isUndefined(integration.validate({url, header: { 'Content-Type': 'application/xml' }})));
 
   it('should not allow invalid content-type header', () => assert.equal(integration.validate({url, header: { 'Content-Type': 'text/plain' }}), 'Invalid Content-Type header value'));

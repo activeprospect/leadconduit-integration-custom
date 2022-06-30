@@ -288,13 +288,13 @@ describe('JSON validation', function() {
 
   it('should require valid public ip', () => assert.equal(integration.validate({url: 'http://10.0.0.1'}), 'URL must be public'));
 
-  it('should require not require method', () => assert.isUndefined(integration.validate({url})));
-
   it('should require valid method', () => assert.equal(integration.validate({url, method: 'HEAD'}), 'Unsupported HTTP method - use POST, PUT, DELETE'));
 
   it('should require valid search outcome', () => assert.equal(integration.validate({url, outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
 
   it('should allow setting error outcome', () => assert.isUndefined(integration.validate({url, outcome_on_match: 'error'})));
+
+  it('should pass validation', () => assert.isUndefined(integration.validate({url})));
 
   it('should allow valid content-type header', () => assert.isUndefined(integration.validate({url, header: { 'Content-Type': 'application/json' }})));
 

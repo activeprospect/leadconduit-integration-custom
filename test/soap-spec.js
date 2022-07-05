@@ -891,6 +891,7 @@ describe('Outbound SOAP', function() {
 
 
   describe('validation', function() {
+    const url = 'http://foo.com';
 
     it('should require valid URL', function() {
       assert.equal(soap.validate({}), 'URL is required');
@@ -899,18 +900,18 @@ describe('Outbound SOAP', function() {
 
 
     it('should require function', function() {
-      assert.equal(soap.validate({url: 'http://foo'}), 'Function is required');
-      assert.equal(soap.validate({url: 'http://foo', function: 'donkey/kong'}), 'Function must have valid name');
+      assert.equal(soap.validate({url}), 'Function is required');
+      assert.equal(soap.validate({url, function: 'donkey/kong'}), 'Function must have valid name');
     });
 
 
-    it('should require valid search outcome', () => assert.equal(soap.validate({url: 'http://foo', outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
+    it('should require valid search outcome', () => assert.equal(soap.validate({url, outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
 
-    it('should allow setting error outcome', () => assert.isUndefined(soap.validate({url: 'http://foo', outcome_on_match: 'error', function: 'whatever'})));
+    it('should allow setting error outcome', () => assert.isUndefined(soap.validate({url, outcome_on_match: 'error', function: 'whatever'})));
 
-    it('should pass validation', () => assert.isUndefined(soap.validate({url: 'http://foo', function: 'whatever'})));
+    it('should pass validation', () => assert.isUndefined(soap.validate({url, function: 'whatever'})));
 
 
-    it('should require valid SOAP version', () => assert.equal(soap.validate({url: 'http://foo', function: 'whatever', version: '0'}), 'Must be valid SOAP version: 1.1 or 1.2'));
+    it('should require valid SOAP version', () => assert.equal(soap.validate({url, function: 'whatever', version: '0'}), 'Must be valid SOAP version: 1.1 or 1.2'));
   });
 });

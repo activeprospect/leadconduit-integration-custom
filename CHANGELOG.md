@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.22.0]- 2022-08-25
+### Added
+- added support for fallback_price
+
 ## [2.21.2] - 2022-07-05
 ### Fixed
 - allow private IP/domains for local and test Node Environments

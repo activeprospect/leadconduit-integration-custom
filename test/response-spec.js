@@ -446,6 +446,40 @@ describe('Response', function() {
       assert.deepInclude(response(vars, {}, json({ status:"success", price:18, auth_code:"abc==" })), expected);
     });
 
+    it('does not use fallback_price if price_path can be evaluated', function () {
+      const vars = {
+        price_path: 'baz.foo.cost',
+        fallback_price: '12.50'
+      };
+      const expected = {
+        outcome: 'success',
+        price: '1.5',
+        baz: {
+          foo: {
+            cost: 1.5
+          }
+        }
+      };
+      assert.deepEqual(response(vars, {}, json({ baz: { foo: { cost: 1.5 } } })), expected);
+    });
+
+    it('uses fallback_price if price_path cannot be evaluated', function () {
+      const vars = {
+        price_path: 'invalid_path',
+        fallback_price: '12.50'
+      };
+      const expected = {
+        outcome: 'success',
+        price: '12.50',
+        baz: {
+          foo: {
+            cost: 1.5
+          }
+        }
+      };
+      assert.deepEqual(response(vars, {}, json({ baz: { foo: { cost: 1.5 } } })), expected);
+    });
+
     it('should capture reference on success', function() {
       const vars = {
         reference_path: 'baz.*.reference'

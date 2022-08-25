@@ -878,6 +878,17 @@ describe('Outbound SOAP', function() {
       });
     });
 
+    it('uses fallback_price if price_path cannot be evaluated', function(done) {
+      this.vars.price_path = 'InvalidPath';
+      this.vars.fallback_price = '12.50';
+      soap.handle(this.vars, (err, event) => {
+        if (err) { done(err); }
+        assert.equal(event.outcome, 'success');
+        assert.equal(event.price, 12.50);
+        done();
+      });
+    });
+
     it('should capture reference', function(done) {
       this.vars.reference_path = 'AddLeadResult.Reference';
       soap.handle(this.vars, (err, event) => {

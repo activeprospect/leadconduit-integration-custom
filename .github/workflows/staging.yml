@@ -30,7 +30,7 @@ jobs:
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli
       env:
-        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
     - name: Install rip-runtime
       run: npm i @activeprospect/rip-runtime

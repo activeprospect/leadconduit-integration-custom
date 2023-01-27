@@ -20,22 +20,22 @@ jobs:
     - name: Install integration dependencies
       run: npm i
       env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
     - name: Install Serverless Framework
       run: npm i serverless@2
       env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
     - name: Install rip-cli
       run: npm i -g @activeprospect/rip-cli
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
     - name: Install rip-runtime
       run: npm i @activeprospect/rip-runtime
       env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
     - name: Run rip deploy
       run: rip deploy development
@@ -44,4 +44,4 @@ jobs:
         AWS_REGION: 'us-east-1'
         AWS_ACCESS_KEY_ID: ${{ secrets.AUTOMATED_RETRIES_AWS_ACCESS_KEY_ID_DEVELOPMENT }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AUTOMATED_RETRIES_AWS_SECRET_ACCESS_KEY_DEVELOPMENT }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}

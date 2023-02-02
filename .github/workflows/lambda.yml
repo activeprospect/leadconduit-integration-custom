@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy:
-    uses: activeprospect/leadconduit-integration-json/.github/workflows/lambda-deploy.yml
+    uses: activeprospect/leadconduit-integration-json/.github/workflows/lambda-deploy.yml@master
     with:
       deploy_to: ${{ inputs.deploy_to }}
     secrets: inherit

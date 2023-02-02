@@ -1,5 +1,5 @@
 # also used by workflows in several other integration repos
-name: \[common callable lambda deployment workflow]
+name: (common callable lambda deployment workflow)
 
 on:
   workflow_call:

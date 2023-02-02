@@ -1,4 +1,4 @@
-name: Deploy Integration as a Lambda to AWS
+name: Deploy Integration Lambda to AWS
 
 on:
   workflow_dispatch:

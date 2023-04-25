@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.23.0]- 2023-04-25
+### Added
+- add support for `follow_redirects` request variable flag to JSON, form, and XML integrations ([sc-51845](https://app.shortcut.com/active-prospect/story/51845/make-custom-integration-able-to-follow-all-redirects)
+
 ## [2.22.0]- 2022-08-25
 ### Added
 - added support for fallback_price

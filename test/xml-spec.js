@@ -103,6 +103,15 @@ describe('Outbound XML request', function() {
     );
   });
 
+  it('should set redirect-follow option', function() {
+    const vars = {
+      url: 'http://foo.bar'
+    };
+    assert.equal(integration.request(vars).followAllRedirects, false);
+
+    vars.follow_redirects = true;
+    assert.equal(integration.request(vars).followAllRedirects, true);
+  });
 
   it('should handle empty xml path', function() {
     const vars = {xml_path: {}};

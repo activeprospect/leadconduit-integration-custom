@@ -62,6 +62,17 @@ describe('Outbound GET Query request', function() {
     assert.equal(integration.request(vars).url, 'http://foo.bar?fname=M%C3%AAl&lname=Gibson');
   });
 
+  it('should set redirect-follow option', function() {
+    const vars = {
+      url: 'http://foo.bar'
+    };
+    // these boolean assertions are the opposite of those for JSON, form, etc.,
+    // because the default for a GET should be true, to follow redirects
+    assert.equal(integration.request(vars).followAllRedirects, true);
+
+    vars.follow_redirects = false;
+    assert.equal(integration.request(vars).followAllRedirects, false);
+  });
 
   it('should support simple dot-notation', function() {
     const vars = {

@@ -82,6 +82,15 @@ describe('Outbound Form POST request', function() {
     );
   });
 
+  it('should set redirect-follow option', function() {
+    const vars = {
+      url: 'http://foo.bar'
+    };
+    assert.equal(integration.request(vars).followAllRedirects, false);
+
+    vars.follow_redirects = true;
+    assert.equal(integration.request(vars).followAllRedirects, true);
+  });
 
   it('should support simple dot-notation', function() {
     const vars = {

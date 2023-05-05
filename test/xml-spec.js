@@ -296,11 +296,29 @@ describe('Outbound XML request', function() {
     );
   });
 
-  it('should set attributes on arrays', function() {
+  it('should set attributes on arrays the new way', function() {
     const vars = {
       xml_path: {
         'foo.bar.0.@id': '123',
         'foo.bar.0.#text': 'baz'
+      }
+    };
+
+    assert.equal(integration.request(vars).body,
+      `\
+<?xml version="1.0"?>
+<foo>
+  <bar id="123">baz</bar>
+</foo>\
+`
+    );
+  });
+
+  it('should set attributes on arrays the old way', function() {
+    const vars = {
+      xml_path: {
+        'foo.bar.0@id': '123',
+        'foo.bar.0': 'baz'
       }
     };
 

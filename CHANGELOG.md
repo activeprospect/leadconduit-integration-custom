@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.23.1]- 2023-05-04
 ### Fixed
-- upgrade to `flat` in previous PR broke XPath parsing
+- roll back upgrade to `flat` in previous PR that broke XPath parsing
 
 ## [2.23.0]- 2023-04-25
 ### Added

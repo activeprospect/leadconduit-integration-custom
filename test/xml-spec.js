@@ -369,7 +369,7 @@ describe('XML validation', function() {
 
   it('should require valid URL', () => assert.equal(integration.validate({}), 'URL is required'));
 
-  it('should require valid method', () => assert.equal(integration.validate({url, method: 'HEAD'}), 'Unsupported HTTP method - use POST, PUT'));
+  it('should require valid method', () => assert.equal(integration.validate({url, method: 'HEAD'}), 'Unsupported HTTP method - use POST, PUT, PATCH'));
 
   it('should require valid search outcome', () => assert.equal(integration.validate({url, outcome_on_match: 'donkey'}), "Outcome on match must be 'success', 'failure', or 'error'"));
 

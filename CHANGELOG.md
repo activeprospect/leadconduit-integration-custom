@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.23.1]- 2023-05-04
+## [2.23.3] - 2023-01-30
+### Added
+- added support for `PATCH` requests for JSON and XML integrations ([sc-47206](https://app.shortcut.com/active-prospect/story/47206/add-support-for-patch-to-custom-integrations))
+
+## [2.23.2]- 2023-05-04
 ### Fixed
 - roll back upgrade to `flat` in previous PR that broke XPath parsing
 

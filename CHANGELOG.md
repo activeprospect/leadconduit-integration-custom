@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.23.3] - 2023-01-30
+## [2.23.4] - 2023-01-30
 ### Added
 - added support for `PATCH` requests for JSON and XML integrations ([sc-47206](https://app.shortcut.com/active-prospect/story/47206/add-support-for-patch-to-custom-integrations))
 

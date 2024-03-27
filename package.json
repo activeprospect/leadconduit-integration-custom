@@ -1,7 +1,6 @@
 {
   "name": "leadconduit-custom",
   "description": "LeadConduit custom integration",
-  "author": "Alex Wolfe <alex@activeprospect.com>",
   "version": "2.23.4",
   "main": "index.js",
   "license": "CC-BY-NC-ND-4.0",
@@ -20,7 +19,6 @@
     "flat": "^1.6.1",
     "ipaddr.js": "^2.0.1",
     "is-valid-domain": "^0.1.6",
-    "leadconduit-integration": "^0.1.0",
     "lodash": "^4.0.0",
     "mime-content": ">=0.0.7",
     "mimeparse": "*",
@@ -29,7 +27,6 @@
     "soap": "^0.36.0",
     "tlds": "^1.231.0",
     "unidecode": "^0.1.8",
-    "xml2js": "^0.5.0",
     "xmlbuilder": "^7.0.0"
   },
   "devDependencies": {

@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "dot-wild": "^3.0.1",
-    "flat": "^1.6.1",
+    "flat": "^5.0.2",
     "ipaddr.js": "^2.0.1",
     "is-valid-domain": "^0.1.6",
     "lodash": "^4.0.0",

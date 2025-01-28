@@ -20,7 +20,7 @@
     "ipaddr.js": "^2.0.1",
     "is-valid-domain": "^0.1.6",
     "lodash": "^4.0.0",
-    "mime-content": ">=0.0.7",
+    "mime-content": "~0.0.10",
     "mimeparse": "*",
     "private-ip": "^2.3.3",
     "regex-parser": "^2.2.1",
@@ -30,7 +30,7 @@
     "xmlbuilder": "^7.0.0"
   },
   "devDependencies": {
-    "@activeprospect/integration-dev-dependencies": "^1.1.11",
+    "@activeprospect/integration-dev-dependencies": "^2.0.1",
     "leadconduit-types": "^4.5.0"
   }
 }

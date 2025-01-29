@@ -1,6 +1,8 @@
 const { assert } = require('chai');
 const xmlbuilder = require('xmlbuilder');
 const response = require('../lib/response');
+const flat = require('flat');
+const { isArray } = require('lodash');
 
 describe('Response', function() {
 
@@ -516,11 +518,40 @@ describe('Response', function() {
       const expected = {
         outcome: 'success',
         price: 0,
-        '0': {
+        "'0'": {
           foo: 'foo'
         }
       };
       assert.deepEqual(response({}, {}, json({ '0': { foo: 'foo' }})), expected);
+    });
+
+    it('should quote numeric JSON keys', () => {
+      const jsonResponse = {
+        "buyers": [{"name": "Buyer 1"}, {"name": "Buyer 2"}],
+        "foo": {
+          "42": {
+            "id": 42
+          }
+        }
+      };
+      const expected = {
+        "buyers": [{"name": "Buyer 1"}, {"name": "Buyer 2"}],
+        "foo": {
+          "'42'": {
+            "id": 42
+          }
+        },
+        "outcome": "success",
+        "price": 0
+      };
+      const actual = response({}, {}, json(jsonResponse));
+      assert.deepEqual(actual, expected);
+
+      // also put the result through flatten() and unflatten() to make sure
+      // the numeric key doesn't get treated as an array index
+      const flatUnflat = flat.unflatten(flat.flatten(actual));
+      assert.isFalse(isArray(flatUnflat.foo));
+      assert.deepEqual(flatUnflat, expected);
     });
   });
 
@@ -653,7 +684,7 @@ describe('Response', function() {
 
     it('should capture price when vars.cost is present', function() {
       const vars =
-        {price_path: '/cost=([0-9]\.[0-9])/'};
+        {price_path: '/cost=([0-9].[0-9])/'};
       const expected = {
         outcome: 'success',
         price: '1.5'
@@ -1097,11 +1128,6 @@ describe('Response', function() {
           'Content-Length': body.length
         },
         body
-      };
-
-      const expected = {
-        outcome: 'failure',
-        reason: 'the reason text!'
       };
 
       const event = response(vars, {}, res);

@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.23.6] - 2025-01-28
+### Fixed
+- fixed JSON response parsing to wrap numeric keys in quotes ([sc-85635](https://app.shortcut.com/active-prospect/story/85635/error-when-clicking-on-first-step-of-lead-details))
+- minor package updates & a few lint fixes
+
 ## [2.23.4] - 2023-01-30
 ### Added
 - added support for `PATCH` requests for JSON and XML integrations ([sc-47206](https://app.shortcut.com/active-prospect/story/47206/add-support-for-patch-to-custom-integrations))

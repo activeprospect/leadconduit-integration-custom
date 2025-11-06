@@ -11,12 +11,10 @@ on:
     secrets:
       NPM_TOKEN:
         required: true
-      AWS_ACCOUNT_ID:
-        required: true
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
@@ -49,10 +47,32 @@ jobs:
       - name: Install rip-runtime
         run: npm i @activeprospect/rip-runtime
 
+      - name: Set AWS account ID and role ARN based on environment
+        run: |
+          if [ "${{ inputs.deploy_to }}" = "development" ]; then
+            echo "AWS_ACCOUNT_ID=948304120319" >> $GITHUB_ENV
+            echo "AWS_ROLE_ARN=arn:aws:iam::948304120319:role/lambda-deploy-role" >> $GITHUB_ENV
+          elif [ "${{ inputs.deploy_to }}" = "staging" ]; then
+            echo "AWS_ACCOUNT_ID=371005981288" >> $GITHUB_ENV
+            echo "AWS_ROLE_ARN=arn:aws:iam::371005981288:role/lambda-deploy-role" >> $GITHUB_ENV
+          elif [ "${{ inputs.deploy_to }}" = "production" ]; then
+            echo "AWS_ACCOUNT_ID=239238779152" >> $GITHUB_ENV
+            echo "AWS_ROLE_ARN=arn:aws:iam::239238779152:role/lambda-deploy-role" >> $GITHUB_ENV
+          else
+            echo "Unknown environment: ${{ inputs.deploy_to }}"
+            exit 1
+          fi
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+      
+
       - name: Run rip deploy
         run: rip deploy ${{ inputs.deploy_to }}
         env:
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
           AWS_REGION: 'us-east-1'
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+

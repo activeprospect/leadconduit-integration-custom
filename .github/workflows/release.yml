@@ -10,7 +10,7 @@ on:
 
 jobs:
   publish:
-    uses: activeprospect/leadconduit-integration-acoustic/.github/workflows/release.yml@master
+    uses: activeprospect/github-action-workflows/.github/workflows/release.yml@master
     with:
       version: ${{ github.event.inputs.version }}
     secrets:

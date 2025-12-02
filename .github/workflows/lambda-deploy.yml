@@ -68,7 +68,7 @@ jobs:
       
 
       - name: Remove UI bundles before deploy
-        run: rm -rf dist lib/ui/dist lib/**/dist 
+        run: rm -rf dist lib/ui/dist lib/**/dist
 
       - name: Run rip deploy
         run: rip deploy ${{ inputs.deploy_to }}

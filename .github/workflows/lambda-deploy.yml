@@ -36,9 +36,6 @@ jobs:
       - name: Install integration dependencies
         run: npm i
 
-      - name: Install Serverless Framework
-        run: npm i serverless@2
-
       - name: Install rip-cli
         run: npm i -g @activeprospect/rip-cli
         env:
@@ -71,7 +68,7 @@ jobs:
       
 
       - name: Remove UI bundles before deploy
-        run: rm -rf dist lib/ui/dist lib/**/dist
+        run: rm -rf dist lib/ui/dist lib/**/dist 
 
       - name: Run rip deploy
         run: rip deploy ${{ inputs.deploy_to }}

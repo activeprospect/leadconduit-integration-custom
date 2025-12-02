@@ -70,9 +70,11 @@ jobs:
           aws-region: us-east-1
       
 
+      - name: Remove UI bundles before deploy
+        run: rm -rf dist lib/ui/dist lib/**/dist
+
       - name: Run rip deploy
         run: rip deploy ${{ inputs.deploy_to }}
         env:
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
           AWS_REGION: 'us-east-1'
-

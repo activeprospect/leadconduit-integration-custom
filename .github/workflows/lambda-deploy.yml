@@ -36,6 +36,9 @@ jobs:
       - name: Install integration dependencies
         run: npm i
 
+      - name: Install Serverless Framework
+        run: npm i serverless@2
+
       - name: Install rip-cli
         run: npm i -g @activeprospect/rip-cli
         env:
